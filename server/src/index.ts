@@ -1,5 +1,9 @@
+import "dotenv/config";
+import { drizzle } from "drizzle-orm/node-postgres";
 import Fastify from "fastify";
 import mercurius from "mercurius";
+
+const db = drizzle(process.env.DATABASE_URL!);
 
 const app = Fastify({
   logger: true,
