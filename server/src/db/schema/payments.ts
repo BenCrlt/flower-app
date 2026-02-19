@@ -1,5 +1,5 @@
 import { date, integer, pgTable, smallint, text } from "drizzle-orm/pg-core";
-import { budgetLinesTable } from "./budget/lines";
+import { budgetLinesTable } from "./budget-lines";
 import { eventsTable } from "./events";
 import { receiptsTable } from "./receipts";
 import { usersTable } from "./users";

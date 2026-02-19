@@ -1,5 +1,5 @@
 import { integer, pgTable, smallint, varchar } from "drizzle-orm/pg-core";
-import { budgetLinesTable } from "./budget/lines";
+import { budgetLinesTable } from "./budget-lines";
 import { eventsTable } from "./events";
 
 export const productsTable = pgTable("products", {

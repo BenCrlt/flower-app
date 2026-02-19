@@ -6,8 +6,8 @@ import {
   text,
   varchar,
 } from "drizzle-orm/pg-core";
-import { eventsTable } from "../events";
-import { budgetCategoriesTable } from "./categories";
+import { budgetCategoriesTable } from "./budget-categories";
+import { eventsTable } from "./events";
 
 export const lineType = pgEnum("lineType", ["income", "expense"]);
 export type LineType = (typeof lineType.enumValues)[number];
