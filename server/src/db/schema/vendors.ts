@@ -1,4 +1,6 @@
+import { relations } from "drizzle-orm";
 import { integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
+import { receiptsTable } from "./receipts.js";
 
 export const vendorsTable = pgTable("vendors", {
   id: integer().primaryKey().generatedAlwaysAsIdentity(),
@@ -8,3 +10,7 @@ export const vendorsTable = pgTable("vendors", {
   address: varchar({ length: 255 }),
   description: text(),
 });
+
+export const vendorsRelations = relations(vendorsTable, ({ many }) => ({
+  receipts: many(receiptsTable),
+}));

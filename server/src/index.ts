@@ -1,7 +1,7 @@
 import "dotenv/config";
 import Fastify from "fastify";
 import mercurius from "mercurius";
-export * from "./db/index";
+export * from "./db/index.js";
 
 const app = Fastify({
   logger: true,
