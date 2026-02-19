@@ -8,15 +8,15 @@ import {
   text,
   varchar,
 } from "drizzle-orm/pg-core";
-import { budgetCategories } from "./budget-categories.js";
-import { events } from "./events.js";
-import { payments } from "./payments.js";
-import { products } from "./products.js";
+import { budgetCategoriesTable } from "./budget-categories.js";
+import { eventsTable } from "./events.js";
+import { paymentsTable } from "./payments.js";
+import { productsTable } from "./products.js";
 
 export const lineType = pgEnum("lineType", ["income", "expense"]);
 export type LineType = (typeof lineType.enumValues)[number];
 
-export const budgetLines = drizzleSilk(
+export const budgetLinesTable = drizzleSilk(
   pgTable("budget_lines", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
@@ -24,24 +24,27 @@ export const budgetLines = drizzleSilk(
     lineType: lineType().notNull(),
     eventId: integer()
       .notNull()
-      .references(() => events.id),
+      .references(() => eventsTable.id),
     budgetCategoryId: integer()
       .notNull()
-      .references(() => budgetCategories.id),
+      .references(() => budgetCategoriesTable.id),
     estimatedQuantity: smallint().default(1).notNull(),
     estimatedUnitPrice: smallint().default(0).notNull(),
   }),
 );
 
-export const budgetLinesRelations = relations(budgetLines, ({ one, many }) => ({
-  budgetCategory: one(budgetCategories, {
-    fields: [budgetLines.budgetCategoryId],
-    references: [budgetCategories.id],
+export const budgetLinesRelations = relations(
+  budgetLinesTable,
+  ({ one, many }) => ({
+    budgetCategory: one(budgetCategoriesTable, {
+      fields: [budgetLinesTable.budgetCategoryId],
+      references: [budgetCategoriesTable.id],
+    }),
+    event: one(eventsTable, {
+      fields: [budgetLinesTable.eventId],
+      references: [eventsTable.id],
+    }),
+    products: many(productsTable),
+    payments: many(paymentsTable),
   }),
-  event: one(events, {
-    fields: [budgetLines.eventId],
-    references: [events.id],
-  }),
-  products: many(products),
-  payments: many(payments),
-}));
+);

@@ -1,32 +1,32 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { relations } from "drizzle-orm";
 import { integer, pgTable, smallint, varchar } from "drizzle-orm/pg-core";
-import { budgetLines } from "./budget-lines.js";
-import { events } from "./events.js";
-import { sales } from "./sales.js";
+import { budgetLinesTable } from "./budget-lines.js";
+import { eventsTable } from "./events.js";
+import { salesTable } from "./sales.js";
 
-export const products = drizzleSilk(
+export const productsTable = drizzleSilk(
   pgTable("products", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
     unitPrice: smallint().notNull().default(0),
     budgetLineId: integer()
       .notNull()
-      .references(() => budgetLines.id),
+      .references(() => budgetLinesTable.id),
     eventId: integer()
       .notNull()
-      .references(() => events.id),
+      .references(() => eventsTable.id),
   }),
 );
 
-export const productsRelations = relations(products, ({ one, many }) => ({
-  budgetLine: one(budgetLines, {
-    fields: [products.budgetLineId],
-    references: [budgetLines.id],
+export const productsRelations = relations(productsTable, ({ one, many }) => ({
+  budgetLine: one(budgetLinesTable, {
+    fields: [productsTable.budgetLineId],
+    references: [budgetLinesTable.id],
   }),
-  event: one(events, {
-    fields: [products.eventId],
-    references: [events.id],
+  event: one(eventsTable, {
+    fields: [productsTable.eventId],
+    references: [eventsTable.id],
   }),
-  sales: many(sales),
+  sales: many(salesTable),
 }));

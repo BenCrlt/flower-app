@@ -1,13 +1,13 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { relations } from "drizzle-orm";
 import { date, integer, pgTable, varchar } from "drizzle-orm/pg-core";
-import { budgetLines } from "./budget-lines.js";
-import { payments } from "./payments.js";
-import { products } from "./products.js";
-import { receipts } from "./receipts.js";
-import { sales } from "./sales.js";
+import { budgetLinesTable } from "./budget-lines.js";
+import { paymentsTable } from "./payments.js";
+import { productsTable } from "./products.js";
+import { receiptsTable } from "./receipts.js";
+import { salesTable } from "./sales.js";
 
-export const events = drizzleSilk(
+export const eventsTable = drizzleSilk(
   pgTable("events", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
@@ -15,10 +15,10 @@ export const events = drizzleSilk(
   }),
 );
 
-export const eventsRelations = relations(events, ({ many }) => ({
-  budgetLines: many(budgetLines),
-  products: many(products),
-  sales: many(sales),
-  payments: many(payments),
-  receipts: many(receipts),
+export const eventsRelations = relations(eventsTable, ({ many }) => ({
+  budgetLines: many(budgetLinesTable),
+  products: many(productsTable),
+  sales: many(salesTable),
+  payments: many(paymentsTable),
+  receipts: many(receiptsTable),
 }));

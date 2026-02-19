@@ -7,41 +7,41 @@ import {
   smallint,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { events } from "./events.js";
-import { products } from "./products.js";
-import { users } from "./users.js";
+import { eventsTable } from "./events.js";
+import { productsTable } from "./products.js";
+import { usersTable } from "./users.js";
 
 export const paymentMethod = pgEnum("payment_method", ["cash", "card"]);
 export type PaymentMethod = (typeof paymentMethod.enumValues)[number];
 
-export const sales = drizzleSilk(
+export const salesTable = drizzleSilk(
   pgTable("sales", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     quantity: smallint().notNull().default(0),
     executedAt: timestamp().notNull().defaultNow(),
     productId: integer()
       .notNull()
-      .references(() => products.id),
+      .references(() => productsTable.id),
     eventId: integer()
       .notNull()
-      .references(() => events.id),
+      .references(() => eventsTable.id),
     authorId: integer()
       .notNull()
-      .references(() => users.id),
+      .references(() => usersTable.id),
   }),
 );
 
-export const salesRelations = relations(sales, ({ one }) => ({
-  product: one(products, {
-    fields: [sales.productId],
-    references: [products.id],
+export const salesRelations = relations(salesTable, ({ one }) => ({
+  product: one(productsTable, {
+    fields: [salesTable.productId],
+    references: [productsTable.id],
   }),
-  event: one(events, {
-    fields: [sales.eventId],
-    references: [events.id],
+  event: one(eventsTable, {
+    fields: [salesTable.eventId],
+    references: [eventsTable.id],
   }),
-  author: one(users, {
-    fields: [sales.authorId],
-    references: [users.id],
+  author: one(usersTable, {
+    fields: [salesTable.authorId],
+    references: [usersTable.id],
   }),
 }));
