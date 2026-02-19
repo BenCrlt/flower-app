@@ -1,3 +1,4 @@
+import { drizzleSilk } from "@gqloom/drizzle";
 import { relations } from "drizzle-orm";
 import {
   integer,
@@ -7,41 +8,40 @@ import {
   text,
   varchar,
 } from "drizzle-orm/pg-core";
-import { budgetCategoriesTable } from "./budget-categories.js";
-import { eventsTable } from "./events.js";
-import { paymentsTable } from "./payments.js";
-import { productsTable } from "./products.js";
+import { budgetCategories } from "./budget-categories.js";
+import { events } from "./events.js";
+import { payments } from "./payments.js";
+import { products } from "./products.js";
 
 export const lineType = pgEnum("lineType", ["income", "expense"]);
 export type LineType = (typeof lineType.enumValues)[number];
 
-export const budgetLinesTable = pgTable("budget_lines", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  name: varchar({ length: 255 }).notNull(),
-  description: text(),
-  lineType: lineType().notNull(),
-  eventId: integer()
-    .notNull()
-    .references(() => eventsTable.id),
-  budgetCategoryId: integer()
-    .notNull()
-    .references(() => budgetCategoriesTable.id),
-  estimatedQuantity: smallint().default(1).notNull(),
-  estimatedUnitPrice: smallint().default(0).notNull(),
-});
-
-export const budgetLinesRelations = relations(
-  budgetLinesTable,
-  ({ one, many }) => ({
-    budgetCategory: one(budgetCategoriesTable, {
-      fields: [budgetLinesTable.budgetCategoryId],
-      references: [budgetCategoriesTable.id],
-    }),
-    event: one(eventsTable, {
-      fields: [budgetLinesTable.eventId],
-      references: [eventsTable.id],
-    }),
-    products: many(productsTable),
-    payments: many(paymentsTable),
+export const budgetLines = drizzleSilk(
+  pgTable("budget_lines", {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    name: varchar({ length: 255 }).notNull(),
+    description: text(),
+    lineType: lineType().notNull(),
+    eventId: integer()
+      .notNull()
+      .references(() => events.id),
+    budgetCategoryId: integer()
+      .notNull()
+      .references(() => budgetCategories.id),
+    estimatedQuantity: smallint().default(1).notNull(),
+    estimatedUnitPrice: smallint().default(0).notNull(),
   }),
 );
+
+export const budgetLinesRelations = relations(budgetLines, ({ one, many }) => ({
+  budgetCategory: one(budgetCategories, {
+    fields: [budgetLines.budgetCategoryId],
+    references: [budgetCategories.id],
+  }),
+  event: one(events, {
+    fields: [budgetLines.eventId],
+    references: [events.id],
+  }),
+  products: many(products),
+  payments: many(payments),
+}));

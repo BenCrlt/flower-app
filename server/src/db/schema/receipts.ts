@@ -1,38 +1,41 @@
+import { drizzleSilk } from "@gqloom/drizzle";
 import { relations } from "drizzle-orm";
 import { date, integer, pgTable, smallint, text } from "drizzle-orm/pg-core";
-import { eventsTable } from "./events.js";
-import { paymentsTable } from "./payments.js";
-import { usersTable } from "./users.js";
-import { vendorsTable } from "./vendors.js";
+import { events } from "./events.js";
+import { payments } from "./payments.js";
+import { users } from "./users.js";
+import { vendors } from "./vendors.js";
 
-export const receiptsTable = pgTable("receipts", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  eventId: integer()
-    .notNull()
-    .references(() => eventsTable.id),
-  vendorId: integer()
-    .notNull()
-    .references(() => vendorsTable.id),
-  totalAmount: smallint().notNull().default(0),
-  note: text(),
-  executedAt: date().notNull().defaultNow(),
-  authorId: integer()
-    .notNull()
-    .references(() => usersTable.id),
-});
+export const receipts = drizzleSilk(
+  pgTable("receipts", {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    eventId: integer()
+      .notNull()
+      .references(() => events.id),
+    vendorId: integer()
+      .notNull()
+      .references(() => vendors.id),
+    totalAmount: smallint().notNull().default(0),
+    note: text(),
+    executedAt: date().notNull().defaultNow(),
+    authorId: integer()
+      .notNull()
+      .references(() => users.id),
+  }),
+);
 
-export const receiptsRelations = relations(receiptsTable, ({ one, many }) => ({
-  event: one(eventsTable, {
-    fields: [receiptsTable.eventId],
-    references: [eventsTable.id],
+export const receiptsRelations = relations(receipts, ({ one, many }) => ({
+  event: one(events, {
+    fields: [receipts.eventId],
+    references: [events.id],
   }),
-  vendor: one(vendorsTable, {
-    fields: [receiptsTable.vendorId],
-    references: [vendorsTable.id],
+  vendor: one(vendors, {
+    fields: [receipts.vendorId],
+    references: [vendors.id],
   }),
-  author: one(usersTable, {
-    fields: [receiptsTable.authorId],
-    references: [usersTable.id],
+  author: one(users, {
+    fields: [receipts.authorId],
+    references: [users.id],
   }),
-  payments: many(paymentsTable),
+  payments: many(payments),
 }));

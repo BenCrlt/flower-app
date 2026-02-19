@@ -11,6 +11,9 @@ importers:
       '@gqloom/core':
         specifier: ^0.16.1
         version: 0.16.1(graphql@16.12.0)
+      '@gqloom/drizzle':
+        specifier: ^0.11.0
+        version: 0.11.0(@gqloom/core@0.16.1(graphql@16.12.0))(drizzle-orm@0.45.1(@types/pg@8.16.0)(pg@8.18.0))(graphql@16.12.0)
       '@gqloom/zod':
         specifier: ^0.15.2
         version: 0.15.2(@gqloom/core@0.16.1(graphql@16.12.0))(graphql@16.12.0)(zod@4.3.6)
@@ -605,6 +608,13 @@ packages:
   '@gqloom/core@0.16.1':
     resolution: {integrity: sha512-B2WPYjXXr0LzMajQcJkbv307OaimW07YjSsn7SqTUvwQThTF5KPx9C4XvTq3osz5rb1W5cYshOhEEybK+5jNkA==}
     peerDependencies:
+      graphql: '>= 16.8.0'
+
+  '@gqloom/drizzle@0.11.0':
+    resolution: {integrity: sha512-XwTHjhS6O7aEeSX4R3ExfaxaqvSg+JS15erQhNiDgQtu39rTuQ8VhpwzLaJ7nR5Co1FZQRoBrB0U6VL8Rp3Sow==}
+    peerDependencies:
+      '@gqloom/core': '>= 0.10.0'
+      drizzle-orm: '>= 0.38.0'
       graphql: '>= 16.8.0'
 
   '@gqloom/zod@0.15.2':
@@ -1871,6 +1881,12 @@ snapshots:
 
   '@gqloom/core@0.16.1(graphql@16.12.0)':
     dependencies:
+      graphql: 16.12.0
+
+  '@gqloom/drizzle@0.11.0(@gqloom/core@0.16.1(graphql@16.12.0))(drizzle-orm@0.45.1(@types/pg@8.16.0)(pg@8.18.0))(graphql@16.12.0)':
+    dependencies:
+      '@gqloom/core': 0.16.1(graphql@16.12.0)
+      drizzle-orm: 0.45.1(@types/pg@8.16.0)(pg@8.18.0)
       graphql: 16.12.0
 
   '@gqloom/zod@0.15.2(@gqloom/core@0.16.1(graphql@16.12.0))(graphql@16.12.0)(zod@4.3.6)':

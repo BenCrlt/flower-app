@@ -1,3 +1,4 @@
+import { drizzleSilk } from "@gqloom/drizzle";
 import { relations } from "drizzle-orm";
 import {
   integer,
@@ -6,39 +7,41 @@ import {
   smallint,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { eventsTable } from "./events.js";
-import { productsTable } from "./products.js";
-import { usersTable } from "./users.js";
+import { events } from "./events.js";
+import { products } from "./products.js";
+import { users } from "./users.js";
 
 export const paymentMethod = pgEnum("payment_method", ["cash", "card"]);
 export type PaymentMethod = (typeof paymentMethod.enumValues)[number];
 
-export const salesTable = pgTable("sales", {
-  id: integer().primaryKey().generatedAlwaysAsIdentity(),
-  quantity: smallint().notNull().default(0),
-  executedAt: timestamp().notNull().defaultNow(),
-  productId: integer()
-    .notNull()
-    .references(() => productsTable.id),
-  eventId: integer()
-    .notNull()
-    .references(() => eventsTable.id),
-  authorId: integer()
-    .notNull()
-    .references(() => usersTable.id),
-});
+export const sales = drizzleSilk(
+  pgTable("sales", {
+    id: integer().primaryKey().generatedAlwaysAsIdentity(),
+    quantity: smallint().notNull().default(0),
+    executedAt: timestamp().notNull().defaultNow(),
+    productId: integer()
+      .notNull()
+      .references(() => products.id),
+    eventId: integer()
+      .notNull()
+      .references(() => events.id),
+    authorId: integer()
+      .notNull()
+      .references(() => users.id),
+  }),
+);
 
-export const salesRelations = relations(salesTable, ({ one }) => ({
-  product: one(productsTable, {
-    fields: [salesTable.productId],
-    references: [productsTable.id],
+export const salesRelations = relations(sales, ({ one }) => ({
+  product: one(products, {
+    fields: [sales.productId],
+    references: [products.id],
   }),
-  event: one(eventsTable, {
-    fields: [salesTable.eventId],
-    references: [eventsTable.id],
+  event: one(events, {
+    fields: [sales.eventId],
+    references: [events.id],
   }),
-  author: one(usersTable, {
-    fields: [salesTable.authorId],
-    references: [usersTable.id],
+  author: one(users, {
+    fields: [sales.authorId],
+    references: [users.id],
   }),
 }));
