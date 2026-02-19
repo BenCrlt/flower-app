@@ -1,5 +1,5 @@
-CREATE TYPE "lineType" AS ENUM('income', 'expense');--> statement-breakpoint
-CREATE TYPE "payment_method" AS ENUM('cash', 'card');--> statement-breakpoint
+CREATE TYPE "public"."lineType" AS ENUM('income', 'expense');--> statement-breakpoint
+CREATE TYPE "public"."payment_method" AS ENUM('cash', 'card');--> statement-breakpoint
 CREATE TABLE "budget_categories" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "budget_categories_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"name" varchar(255) NOT NULL
@@ -64,7 +64,8 @@ CREATE TABLE "users" (
 	"id" integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY (sequence name "users_id_seq" INCREMENT BY 1 MINVALUE 1 MAXVALUE 2147483647 START WITH 1 CACHE 1),
 	"firstName" varchar(255) NOT NULL,
 	"lastName" varchar(255) NOT NULL,
-	"email" varchar(255) NOT NULL UNIQUE
+	"email" varchar(255) NOT NULL,
+	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 CREATE TABLE "vendors" (
@@ -76,17 +77,17 @@ CREATE TABLE "vendors" (
 	"description" text
 );
 --> statement-breakpoint
-ALTER TABLE "budget_lines" ADD CONSTRAINT "budget_lines_editionId_editions_id_fkey" FOREIGN KEY ("editionId") REFERENCES "editions"("id");--> statement-breakpoint
-ALTER TABLE "budget_lines" ADD CONSTRAINT "budget_lines_budgetCategoryId_budget_categories_id_fkey" FOREIGN KEY ("budgetCategoryId") REFERENCES "budget_categories"("id");--> statement-breakpoint
-ALTER TABLE "payments" ADD CONSTRAINT "payments_editionId_editions_id_fkey" FOREIGN KEY ("editionId") REFERENCES "editions"("id");--> statement-breakpoint
-ALTER TABLE "payments" ADD CONSTRAINT "payments_budgetLineId_budget_lines_id_fkey" FOREIGN KEY ("budgetLineId") REFERENCES "budget_lines"("id");--> statement-breakpoint
-ALTER TABLE "payments" ADD CONSTRAINT "payments_receiptId_receipts_id_fkey" FOREIGN KEY ("receiptId") REFERENCES "receipts"("id");--> statement-breakpoint
-ALTER TABLE "payments" ADD CONSTRAINT "payments_authorId_users_id_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id");--> statement-breakpoint
-ALTER TABLE "products" ADD CONSTRAINT "products_budgetLineId_budget_lines_id_fkey" FOREIGN KEY ("budgetLineId") REFERENCES "budget_lines"("id");--> statement-breakpoint
-ALTER TABLE "products" ADD CONSTRAINT "products_editionId_editions_id_fkey" FOREIGN KEY ("editionId") REFERENCES "editions"("id");--> statement-breakpoint
-ALTER TABLE "receipts" ADD CONSTRAINT "receipts_editionId_editions_id_fkey" FOREIGN KEY ("editionId") REFERENCES "editions"("id");--> statement-breakpoint
-ALTER TABLE "receipts" ADD CONSTRAINT "receipts_vendorId_vendors_id_fkey" FOREIGN KEY ("vendorId") REFERENCES "vendors"("id");--> statement-breakpoint
-ALTER TABLE "receipts" ADD CONSTRAINT "receipts_authorId_users_id_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id");--> statement-breakpoint
-ALTER TABLE "sales" ADD CONSTRAINT "sales_productId_products_id_fkey" FOREIGN KEY ("productId") REFERENCES "products"("id");--> statement-breakpoint
-ALTER TABLE "sales" ADD CONSTRAINT "sales_editionId_editions_id_fkey" FOREIGN KEY ("editionId") REFERENCES "editions"("id");--> statement-breakpoint
-ALTER TABLE "sales" ADD CONSTRAINT "sales_authorId_users_id_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id");
+ALTER TABLE "budget_lines" ADD CONSTRAINT "budget_lines_editionId_editions_id_fk" FOREIGN KEY ("editionId") REFERENCES "public"."editions"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "budget_lines" ADD CONSTRAINT "budget_lines_budgetCategoryId_budget_categories_id_fk" FOREIGN KEY ("budgetCategoryId") REFERENCES "public"."budget_categories"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "payments" ADD CONSTRAINT "payments_editionId_editions_id_fk" FOREIGN KEY ("editionId") REFERENCES "public"."editions"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "payments" ADD CONSTRAINT "payments_budgetLineId_budget_lines_id_fk" FOREIGN KEY ("budgetLineId") REFERENCES "public"."budget_lines"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "payments" ADD CONSTRAINT "payments_receiptId_receipts_id_fk" FOREIGN KEY ("receiptId") REFERENCES "public"."receipts"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "payments" ADD CONSTRAINT "payments_authorId_users_id_fk" FOREIGN KEY ("authorId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "products" ADD CONSTRAINT "products_budgetLineId_budget_lines_id_fk" FOREIGN KEY ("budgetLineId") REFERENCES "public"."budget_lines"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "products" ADD CONSTRAINT "products_editionId_editions_id_fk" FOREIGN KEY ("editionId") REFERENCES "public"."editions"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "receipts" ADD CONSTRAINT "receipts_editionId_editions_id_fk" FOREIGN KEY ("editionId") REFERENCES "public"."editions"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "receipts" ADD CONSTRAINT "receipts_vendorId_vendors_id_fk" FOREIGN KEY ("vendorId") REFERENCES "public"."vendors"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "receipts" ADD CONSTRAINT "receipts_authorId_users_id_fk" FOREIGN KEY ("authorId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "sales" ADD CONSTRAINT "sales_productId_products_id_fk" FOREIGN KEY ("productId") REFERENCES "public"."products"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "sales" ADD CONSTRAINT "sales_editionId_editions_id_fk" FOREIGN KEY ("editionId") REFERENCES "public"."editions"("id") ON DELETE no action ON UPDATE no action;--> statement-breakpoint
+ALTER TABLE "sales" ADD CONSTRAINT "sales_authorId_users_id_fk" FOREIGN KEY ("authorId") REFERENCES "public"."users"("id") ON DELETE no action ON UPDATE no action;

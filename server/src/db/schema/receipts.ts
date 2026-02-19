@@ -1,8 +1,8 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { date, integer, pgTable, smallint, text } from "drizzle-orm/pg-core";
-import { editionsTable } from "./editions.js";
-import { usersTable } from "./users.js";
-import { vendorsTable } from "./vendors.js";
+import { editionsTable } from "./editions";
+import { usersTable } from "./users";
+import { vendorsTable } from "./vendors";
 
 export const receiptsTable = drizzleSilk(
   pgTable("receipts", {

@@ -1,156 +1,134 @@
-import { defineRelations } from "drizzle-orm";
-import { budgetCategoriesTable } from "./budget-categories.js";
-import { budgetLinesTable } from "./budget-lines.js";
-import { editionsTable } from "./editions.js";
-import { paymentsTable } from "./payments.js";
-import { productsTable } from "./products.js";
-import { receiptsTable } from "./receipts.js";
-import { salesTable } from "./sales.js";
-import { usersTable } from "./users.js";
-import { vendorsTable } from "./vendors.js";
+import { relations } from "drizzle-orm";
+import { budgetCategoriesTable } from "./budget-categories";
+import { budgetLinesTable } from "./budget-lines";
+import { editionsTable } from "./editions";
+import { paymentsTable } from "./payments";
+import { productsTable } from "./products";
+import { receiptsTable } from "./receipts";
+import { salesTable } from "./sales";
+import { usersTable } from "./users";
+import { vendorsTable } from "./vendors";
 
-export const relations = defineRelations(
-  {
-    budgetCategoriesTable,
-    budgetLinesTable,
-    editionsTable,
-    paymentsTable,
-    productsTable,
-    receiptsTable,
-    salesTable,
-    usersTable,
-    vendorsTable,
-  },
-  (r) => ({
-    budgetCategoriesTable: {
-      budgetLines: r.many.budgetLinesTable({
-        from: r.budgetCategoriesTable.id,
-        to: r.budgetLinesTable.budgetCategoryId,
-      }),
-    },
-    budgetLinesTable: {
-      budgetCategory: r.one.budgetCategoriesTable({
-        from: r.budgetLinesTable.budgetCategoryId,
-        to: r.budgetCategoriesTable.id,
-      }),
-      edition: r.one.editionsTable({
-        from: r.budgetLinesTable.editionId,
-        to: r.editionsTable.id,
-      }),
-      products: r.many.productsTable({
-        from: r.budgetLinesTable.id,
-        to: r.productsTable.budgetLineId,
-      }),
-      payments: r.many.paymentsTable({
-        from: r.budgetLinesTable.id,
-        to: r.paymentsTable.budgetLineId,
-      }),
-    },
-    editionsTable: {
-      budgetLines: r.many.budgetLinesTable({
-        from: r.editionsTable.id,
-        to: r.budgetLinesTable.editionId,
-      }),
-      products: r.many.productsTable({
-        from: r.editionsTable.id,
-        to: r.productsTable.editionId,
-      }),
-      sales: r.many.salesTable({
-        from: r.editionsTable.id,
-        to: r.salesTable.editionId,
-      }),
-      payments: r.many.paymentsTable({
-        from: r.editionsTable.id,
-        to: r.paymentsTable.editionId,
-      }),
-      receipts: r.many.receiptsTable({
-        from: r.editionsTable.id,
-        to: r.receiptsTable.editionId,
-      }),
-    },
-    paymentsTable: {
-      edition: r.one.editionsTable({
-        from: r.paymentsTable.editionId,
-        to: r.editionsTable.id,
-      }),
-      budgetLine: r.one.budgetLinesTable({
-        from: r.paymentsTable.budgetLineId,
-        to: r.budgetLinesTable.id,
-      }),
-      receipt: r.one.receiptsTable({
-        from: r.paymentsTable.receiptId,
-        to: r.receiptsTable.id,
-      }),
-      author: r.one.usersTable({
-        from: r.paymentsTable.authorId,
-        to: r.usersTable.id,
-      }),
-    },
-    productsTable: {
-      budgetLine: r.one.budgetLinesTable({
-        from: r.productsTable.budgetLineId,
-        to: r.budgetLinesTable.id,
-      }),
-      edition: r.one.editionsTable({
-        from: r.productsTable.editionId,
-        to: r.editionsTable.id,
-      }),
-      sales: r.many.salesTable({
-        from: r.productsTable.id,
-        to: r.salesTable.productId,
-      }),
-    },
-    receiptsTable: {
-      edition: r.one.editionsTable({
-        from: r.receiptsTable.editionId,
-        to: r.editionsTable.id,
-      }),
-      vendor: r.one.vendorsTable({
-        from: r.receiptsTable.vendorId,
-        to: r.vendorsTable.id,
-      }),
-      author: r.one.usersTable({
-        from: r.receiptsTable.authorId,
-        to: r.usersTable.id,
-      }),
-      payments: r.many.paymentsTable({
-        from: r.receiptsTable.id,
-        to: r.paymentsTable.receiptId,
-      }),
-    },
-    salesTable: {
-      product: r.one.productsTable({
-        from: r.salesTable.productId,
-        to: r.productsTable.id,
-      }),
-      edition: r.one.editionsTable({
-        from: r.salesTable.editionId,
-        to: r.editionsTable.id,
-      }),
-      author: r.one.usersTable({
-        from: r.salesTable.authorId,
-        to: r.usersTable.id,
-      }),
-    },
-    usersTable: {
-      sales: r.many.salesTable({
-        from: r.usersTable.id,
-        to: r.salesTable.authorId,
-      }),
-      payments: r.many.paymentsTable({
-        from: r.usersTable.id,
-        to: r.paymentsTable.authorId,
-      }),
-      receipts: r.many.receiptsTable({
-        from: r.usersTable.id,
-        to: r.receiptsTable.authorId,
-      }),
-    },
-    vendorsTable: {
-      receipts: r.many.receiptsTable({
-        from: r.vendorsTable.id,
-        to: r.receiptsTable.vendorId,
-      }),
-    },
+export const budgetCategoriesRelations = relations(
+  budgetCategoriesTable,
+  ({ many }) => ({
+    budgetLines: many(budgetLinesTable),
+  }),
+);
+
+export const budgetLinesRelations = relations(
+  budgetLinesTable,
+  ({ one, many }) => ({
+    budgetCategory: one(budgetCategoriesTable, {
+      fields: [budgetLinesTable.budgetCategoryId],
+      references: [budgetCategoriesTable.id],
+    }),
+    edition: one(editionsTable, {
+      fields: [budgetLinesTable.editionId],
+      references: [editionsTable.id],
+    }),
+    products: many(productsTable),
+    payments: many(paymentsTable),
+  }),
+);
+
+export const editionsRelations = relations(
+  editionsTable,
+  ({ many }) => ({
+    budgetLines: many(budgetLinesTable),
+    products: many(productsTable),
+    sales: many(salesTable),
+    payments: many(paymentsTable),
+    receipts: many(receiptsTable),
+  }),
+);
+
+export const paymentsRelations = relations(
+  paymentsTable,
+  ({ one }) => ({
+    edition: one(editionsTable, {
+      fields: [paymentsTable.editionId],
+      references: [editionsTable.id],
+    }),
+    budgetLine: one(budgetLinesTable, {
+      fields: [paymentsTable.budgetLineId],
+      references: [budgetLinesTable.id],
+    }),
+    receipt: one(receiptsTable, {
+      fields: [paymentsTable.receiptId],
+      references: [receiptsTable.id],
+    }),
+    author: one(usersTable, {
+      fields: [paymentsTable.authorId],
+      references: [usersTable.id],
+    }),
+  }),
+);
+
+export const productsRelations = relations(
+  productsTable,
+  ({ one, many }) => ({
+    budgetLine: one(budgetLinesTable, {
+      fields: [productsTable.budgetLineId],
+      references: [budgetLinesTable.id],
+    }),
+    edition: one(editionsTable, {
+      fields: [productsTable.editionId],
+      references: [editionsTable.id],
+    }),
+    sales: many(salesTable),
+  }),
+);
+
+export const receiptsRelations = relations(
+  receiptsTable,
+  ({ one, many }) => ({
+    edition: one(editionsTable, {
+      fields: [receiptsTable.editionId],
+      references: [editionsTable.id],
+    }),
+    vendor: one(vendorsTable, {
+      fields: [receiptsTable.vendorId],
+      references: [vendorsTable.id],
+    }),
+    author: one(usersTable, {
+      fields: [receiptsTable.authorId],
+      references: [usersTable.id],
+    }),
+    payments: many(paymentsTable),
+  }),
+);
+
+export const salesRelations = relations(
+  salesTable,
+  ({ one }) => ({
+    product: one(productsTable, {
+      fields: [salesTable.productId],
+      references: [productsTable.id],
+    }),
+    edition: one(editionsTable, {
+      fields: [salesTable.editionId],
+      references: [editionsTable.id],
+    }),
+    author: one(usersTable, {
+      fields: [salesTable.authorId],
+      references: [usersTable.id],
+    }),
+  }),
+);
+
+export const usersRelations = relations(
+  usersTable,
+  ({ many }) => ({
+    sales: many(salesTable),
+    payments: many(paymentsTable),
+    receipts: many(receiptsTable),
+  }),
+);
+
+export const vendorsRelations = relations(
+  vendorsTable,
+  ({ many }) => ({
+    receipts: many(receiptsTable),
   }),
 );

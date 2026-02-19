@@ -1,32 +1,20 @@
 import "dotenv/config";
 import Fastify from "fastify";
 import mercurius from "mercurius";
-export * from "./db/index.js";
+import { schema } from "./schema";
+export * from "./db/index";
 
 const app = Fastify({
   logger: true,
 });
 
-const schema = `
-  type Query {
-    hello: String
-  }
-`;
-
-const resolvers = {
-  Query: {
-    hello: () => "Hello, world!",
-  },
-};
-
 app.register(mercurius, {
   schema,
-  resolvers,
   graphiql: true,
 });
 
 app.get("/", async function (req, reply) {
-  const query = "{ hello }";
+  const query = "{ editions { total data { id name } } }";
   return reply.graphql(query);
 });
 
