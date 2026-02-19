@@ -1,9 +1,5 @@
 import { drizzleSilk } from "@gqloom/drizzle";
-import { relations } from "drizzle-orm";
 import { integer, pgTable, varchar } from "drizzle-orm/pg-core";
-import { paymentsTable } from "./payments.js";
-import { receiptsTable } from "./receipts.js";
-import { salesTable } from "./sales.js";
 
 export const usersTable = drizzleSilk(
   pgTable("users", {
@@ -13,9 +9,3 @@ export const usersTable = drizzleSilk(
     email: varchar({ length: 255 }).notNull().unique(),
   }),
 );
-
-export const usersRelations = relations(usersTable, ({ many }) => ({
-  sales: many(salesTable),
-  payments: many(paymentsTable),
-  receipts: many(receiptsTable),
-}));

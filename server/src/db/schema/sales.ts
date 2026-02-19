@@ -1,5 +1,4 @@
 import { drizzleSilk } from "@gqloom/drizzle";
-import { relations } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -7,7 +6,7 @@ import {
   smallint,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { eventsTable } from "./events.js";
+import { editionsTable } from "./editions.js";
 import { productsTable } from "./products.js";
 import { usersTable } from "./users.js";
 
@@ -22,26 +21,11 @@ export const salesTable = drizzleSilk(
     productId: integer()
       .notNull()
       .references(() => productsTable.id),
-    eventId: integer()
+    editionId: integer()
       .notNull()
-      .references(() => eventsTable.id),
+      .references(() => editionsTable.id),
     authorId: integer()
       .notNull()
       .references(() => usersTable.id),
   }),
 );
-
-export const salesRelations = relations(salesTable, ({ one }) => ({
-  product: one(productsTable, {
-    fields: [salesTable.productId],
-    references: [productsTable.id],
-  }),
-  event: one(eventsTable, {
-    fields: [salesTable.eventId],
-    references: [eventsTable.id],
-  }),
-  author: one(usersTable, {
-    fields: [salesTable.authorId],
-    references: [usersTable.id],
-  }),
-}));

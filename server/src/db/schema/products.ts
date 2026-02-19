@@ -1,9 +1,7 @@
 import { drizzleSilk } from "@gqloom/drizzle";
-import { relations } from "drizzle-orm";
 import { integer, pgTable, smallint, varchar } from "drizzle-orm/pg-core";
 import { budgetLinesTable } from "./budget-lines.js";
-import { eventsTable } from "./events.js";
-import { salesTable } from "./sales.js";
+import { editionsTable } from "./editions.js";
 
 export const productsTable = drizzleSilk(
   pgTable("products", {
@@ -13,20 +11,8 @@ export const productsTable = drizzleSilk(
     budgetLineId: integer()
       .notNull()
       .references(() => budgetLinesTable.id),
-    eventId: integer()
+    editionId: integer()
       .notNull()
-      .references(() => eventsTable.id),
+      .references(() => editionsTable.id),
   }),
 );
-
-export const productsRelations = relations(productsTable, ({ one, many }) => ({
-  budgetLine: one(budgetLinesTable, {
-    fields: [productsTable.budgetLineId],
-    references: [budgetLinesTable.id],
-  }),
-  event: one(eventsTable, {
-    fields: [productsTable.eventId],
-    references: [eventsTable.id],
-  }),
-  sales: many(salesTable),
-}));
