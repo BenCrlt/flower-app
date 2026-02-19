@@ -12,8 +12,8 @@ importers:
         specifier: ^0.16.1
         version: 0.16.1(graphql@16.12.0)
       '@gqloom/drizzle':
-        specifier: ^0.11.0
-        version: 0.11.0(@gqloom/core@0.16.1(graphql@16.12.0))(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9(@azure/core-client@1.10.1))(@types/pg@8.16.0)(mssql@11.0.1(@azure/core-client@1.10.1))(pg@8.18.0)(zod@4.3.6))(graphql@16.12.0)
+        specifier: 0.11.0-beta.0
+        version: 0.11.0-beta.0(@gqloom/core@0.16.1(graphql@16.12.0))(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9(@azure/core-client@1.10.1))(@types/pg@8.16.0)(mssql@11.0.1(@azure/core-client@1.10.1))(pg@8.18.0)(zod@4.3.6))(graphql@16.12.0)
       '@gqloom/zod':
         specifier: ^0.15.2
         version: 0.15.2(@gqloom/core@0.16.1(graphql@16.12.0))(graphql@16.12.0)(zod@4.3.6)
@@ -541,11 +541,11 @@ packages:
     peerDependencies:
       graphql: '>= 16.8.0'
 
-  '@gqloom/drizzle@0.11.0':
-    resolution: {integrity: sha512-XwTHjhS6O7aEeSX4R3ExfaxaqvSg+JS15erQhNiDgQtu39rTuQ8VhpwzLaJ7nR5Co1FZQRoBrB0U6VL8Rp3Sow==}
+  '@gqloom/drizzle@0.11.0-beta.0':
+    resolution: {integrity: sha512-isRGP27zEpoEOJQ10DTyFY1DFcvDTxXQBaAfmmqZdVfJbZLBfsh4I026GXcbmFxXXtpywu68KxeJ4Ve4S8L/fA==}
     peerDependencies:
       '@gqloom/core': '>= 0.10.0'
-      drizzle-orm: '>= 0.38.0'
+      drizzle-orm: '>= 1.0.0-beta.1'
       graphql: '>= 16.8.0'
 
   '@gqloom/zod@0.15.2':
@@ -2056,7 +2056,7 @@ snapshots:
     dependencies:
       graphql: 16.12.0
 
-  '@gqloom/drizzle@0.11.0(@gqloom/core@0.16.1(graphql@16.12.0))(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9(@azure/core-client@1.10.1))(@types/pg@8.16.0)(mssql@11.0.1(@azure/core-client@1.10.1))(pg@8.18.0)(zod@4.3.6))(graphql@16.12.0)':
+  '@gqloom/drizzle@0.11.0-beta.0(@gqloom/core@0.16.1(graphql@16.12.0))(drizzle-orm@1.0.0-beta.15-859cf75(@types/mssql@9.1.9(@azure/core-client@1.10.1))(@types/pg@8.16.0)(mssql@11.0.1(@azure/core-client@1.10.1))(pg@8.18.0)(zod@4.3.6))(graphql@16.12.0)':
     dependencies:
       '@gqloom/core': 0.16.1(graphql@16.12.0)
       drizzle-orm: 1.0.0-beta.15-859cf75(@types/mssql@9.1.9(@azure/core-client@1.10.1))(@types/pg@8.16.0)(mssql@11.0.1(@azure/core-client@1.10.1))(pg@8.18.0)(zod@4.3.6)

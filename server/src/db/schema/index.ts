@@ -4,7 +4,6 @@ export * from "./editions.js";
 export * from "./payments.js";
 export * from "./products.js";
 export * from "./receipts.js";
-export * from "./relations.js";
 export * from "./sales.js";
 export * from "./users.js";
 export * from "./vendors.js";

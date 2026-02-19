@@ -9,8 +9,18 @@ import { salesTable } from "./sales.js";
 import { usersTable } from "./users.js";
 import { vendorsTable } from "./vendors.js";
 
-export const budgetCategoriesRelations = defineRelations(
-  { budgetCategoriesTable, budgetLinesTable },
+export const relations = defineRelations(
+  {
+    budgetCategoriesTable,
+    budgetLinesTable,
+    editionsTable,
+    paymentsTable,
+    productsTable,
+    receiptsTable,
+    salesTable,
+    usersTable,
+    vendorsTable,
+  },
   (r) => ({
     budgetCategoriesTable: {
       budgetLines: r.many.budgetLinesTable({
@@ -18,18 +28,6 @@ export const budgetCategoriesRelations = defineRelations(
         to: r.budgetLinesTable.budgetCategoryId,
       }),
     },
-  }),
-);
-
-export const budgetLinesRelations = defineRelations(
-  {
-    budgetLinesTable,
-    budgetCategoriesTable,
-    editionsTable,
-    productsTable,
-    paymentsTable,
-  },
-  (r) => ({
     budgetLinesTable: {
       budgetCategory: r.one.budgetCategoriesTable({
         from: r.budgetLinesTable.budgetCategoryId,
@@ -48,19 +46,6 @@ export const budgetLinesRelations = defineRelations(
         to: r.paymentsTable.budgetLineId,
       }),
     },
-  }),
-);
-
-export const editionsRelations = defineRelations(
-  {
-    editionsTable,
-    budgetLinesTable,
-    productsTable,
-    salesTable,
-    paymentsTable,
-    receiptsTable,
-  },
-  (r) => ({
     editionsTable: {
       budgetLines: r.many.budgetLinesTable({
         from: r.editionsTable.id,
@@ -83,18 +68,6 @@ export const editionsRelations = defineRelations(
         to: r.receiptsTable.editionId,
       }),
     },
-  }),
-);
-
-export const paymentsRelations = defineRelations(
-  {
-    paymentsTable,
-    editionsTable,
-    budgetLinesTable,
-    receiptsTable,
-    usersTable,
-  },
-  (r) => ({
     paymentsTable: {
       edition: r.one.editionsTable({
         from: r.paymentsTable.editionId,
@@ -113,12 +86,6 @@ export const paymentsRelations = defineRelations(
         to: r.usersTable.id,
       }),
     },
-  }),
-);
-
-export const productsRelations = defineRelations(
-  { productsTable, budgetLinesTable, editionsTable, salesTable },
-  (r) => ({
     productsTable: {
       budgetLine: r.one.budgetLinesTable({
         from: r.productsTable.budgetLineId,
@@ -133,12 +100,6 @@ export const productsRelations = defineRelations(
         to: r.salesTable.productId,
       }),
     },
-  }),
-);
-
-export const receiptsRelations = defineRelations(
-  { receiptsTable, editionsTable, vendorsTable, usersTable, paymentsTable },
-  (r) => ({
     receiptsTable: {
       edition: r.one.editionsTable({
         from: r.receiptsTable.editionId,
@@ -157,12 +118,6 @@ export const receiptsRelations = defineRelations(
         to: r.paymentsTable.receiptId,
       }),
     },
-  }),
-);
-
-export const salesRelations = defineRelations(
-  { salesTable, productsTable, editionsTable, usersTable },
-  (r) => ({
     salesTable: {
       product: r.one.productsTable({
         from: r.salesTable.productId,
@@ -177,12 +132,6 @@ export const salesRelations = defineRelations(
         to: r.usersTable.id,
       }),
     },
-  }),
-);
-
-export const usersRelations = defineRelations(
-  { usersTable, salesTable, paymentsTable, receiptsTable },
-  (r) => ({
     usersTable: {
       sales: r.many.salesTable({
         from: r.usersTable.id,
@@ -197,12 +146,6 @@ export const usersRelations = defineRelations(
         to: r.receiptsTable.authorId,
       }),
     },
-  }),
-);
-
-export const vendorsRelations = defineRelations(
-  { vendorsTable, receiptsTable },
-  (r) => ({
     vendorsTable: {
       receipts: r.many.receiptsTable({
         from: r.vendorsTable.id,
