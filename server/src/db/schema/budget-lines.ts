@@ -1,4 +1,5 @@
 import { drizzleSilk } from "@gqloom/drizzle";
+import { InferSelectModel } from "drizzle-orm";
 import {
   integer,
   pgEnum,
@@ -29,3 +30,5 @@ export const budgetLinesTable = drizzleSilk(
     estimatedUnitPrice: smallint().default(0).notNull(),
   }),
 );
+
+export type BudgetLine = InferSelectModel<typeof budgetLinesTable>;
