@@ -1,27 +1,21 @@
-import { query, resolver } from "@gqloom/core";
-import { count } from "drizzle-orm";
-import { z } from "zod";
+import { mutation, query, resolver } from "@gqloom/core";
 import { db } from "../../db/index";
 import { editionsTable } from "../../db/schema/editions";
-import { paginatedOutput } from "../../db/types";
-
-const editionSchema = z.object({
-  id: z.number(),
-  name: z.string(),
-  startDate: z.string(),
-});
+import { addEdition, addEditionInput } from "./utils/addEdition";
+import { deleteEdition, deleteEditionInput } from "./utils/deleteEdition";
+import { updateEdition, updateEditionInput } from "./utils/updateEdition";
 
 export const editionsResolver = resolver.of(editionsTable, {
-  editions: query
-    .output(paginatedOutput(editionSchema))
-    // .input(paginatedInput)
-    .resolve(async () => {
-      // const offset = (page - 1) * limit;
-      const offset = 0;
-      const limit = 10;
-      const data = await db.query.editionsTable.findMany({ limit, offset });
-      const result = await db.select({ count: count() }).from(editionsTable);
-      const total = result[0]?.count ?? 0;
-      return { data, total };
-    }),
+  editions: query(editionsTable.$list()).resolve(() =>
+    db.query.editionsTable.findMany(),
+  ),
+  addEdition: mutation(editionsTable.$nullable())
+    .input(addEditionInput)
+    .resolve(addEdition),
+  updateEdition: mutation(editionsTable.$nullable())
+    .input(updateEditionInput)
+    .resolve(updateEdition),
+  deleteEdition: mutation(editionsTable.$nullable())
+    .input(deleteEditionInput)
+    .resolve(deleteEdition),
 });
