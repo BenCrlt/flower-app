@@ -4,6 +4,10 @@ import { db } from "../../db/index";
 import { editionsTable } from "../../db/schema/editions";
 import { addEdition, addEditionInput } from "./utils/addEdition";
 import { deleteEdition, deleteEditionInput } from "./utils/deleteEdition";
+import {
+  getBudgetStatsByCategories,
+  statsByCategoryOutput,
+} from "./utils/getBudgetStatsByCategories";
 import { getTotalEstimatedForEditions } from "./utils/getTotalEstimatedForEditions";
 import { updateEdition, updateEditionInput } from "./utils/updateEdition";
 
@@ -11,6 +15,16 @@ export const editionsResolver = resolver.of(editionsTable, {
   editions: query(editionsTable.$list()).resolve(() =>
     db.query.editionsTable.findMany(),
   ),
+  getBudgetStatsByCategoriesForIncome: query(statsByCategoryOutput)
+    .input({ editionId: z.number().min(1) })
+    .resolve(async ({ editionId }) =>
+      getBudgetStatsByCategories(editionId, "income"),
+    ),
+  getBudgetStatsByCategoriesForExpense: query(statsByCategoryOutput)
+    .input({ editionId: z.number().min(1) })
+    .resolve(async ({ editionId }) =>
+      getBudgetStatsByCategories(editionId, "expense"),
+    ),
 
   totalPrevisionnalIncome: field(z.number())
     .derivedFrom("id")
@@ -28,6 +42,14 @@ export const editionsResolver = resolver.of(editionsTable, {
         "expense",
       ),
     ),
+  // TODO: When payment module is done
+  totalExpense: field(z.number())
+    .derivedFrom("id")
+    .resolve(() => 0),
+  // TODO: When sales module is done
+  totalIncome: field(z.number())
+    .derivedFrom("id")
+    .resolve(() => 0),
 
   addEdition: mutation(editionsTable.$nullable())
     .input(addEditionInput)
