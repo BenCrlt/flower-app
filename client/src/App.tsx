@@ -1,17 +1,16 @@
-import { useState } from "react";
-import "./App.css";
-import { Button } from "./components/ui/button";
+import { RouterProvider, createRouter } from "@tanstack/react-router";
+import { routeTree } from "./routeTree.gen";
+
+const router = createRouter({ routeTree });
+
+declare module "@tanstack/react-router" {
+  interface Register {
+    router: typeof router;
+  }
+}
 
 function App() {
-  const [count, setCount] = useState(0);
-
-  return (
-    <div className="card">
-      <Button onClick={() => setCount((count) => count + 1)}>
-        count is {count}
-      </Button>
-    </div>
-  );
+  return <RouterProvider router={router} />;
 }
 
 export default App;
