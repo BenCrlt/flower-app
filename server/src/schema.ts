@@ -12,4 +12,3 @@ export const schema = weave(
   budgetCategoriesResolver,
   budgetLinesResolver,
 );
-console.log("Schema created", schema);
