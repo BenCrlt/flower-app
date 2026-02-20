@@ -8,7 +8,7 @@ import {
 
 export const updateBudgetCategoryInput = z.object({
   id: z.number().min(1),
-  name: z.string().min(1).max(255).optional(),
+  name: z.string().min(1).max(255),
 });
 
 export const updateBudgetCategory = async (

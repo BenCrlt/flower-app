@@ -1,13 +1,17 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../../db";
-import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines";
+import {
+  BudgetLine,
+  budgetLinesTable,
+  lineTypeEnum,
+} from "../../../db/schema/budget-lines";
 
 export const updateBudgetLineInput = z.object({
   id: z.number().min(1),
   name: z.string().min(1).max(255).optional(),
   description: z.string().optional(),
-  lineType: z.enum(["income", "expense"]).optional(),
+  lineType: z.enum(lineTypeEnum.enumValues).optional(),
   editionId: z.number().min(1).optional(),
   budgetCategoryId: z.number().min(1).optional(),
   estimatedQuantity: z.number().int().min(0).optional(),

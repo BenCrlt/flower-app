@@ -6,19 +6,20 @@ import {
   addBudgetCategory,
   addBudgetCategoryInput,
 } from "./utils/addBudgetCategory";
+import { addBudgetLine, addBudgetLineInput } from "./utils/addBudgetLine";
 import {
   deleteBudgetCategory,
   deleteBudgetCategoryInput,
 } from "./utils/deleteBudgetCategory";
 import {
-  updateBudgetCategory,
-  updateBudgetCategoryInput,
-} from "./utils/updateBudgetCategory";
-import { addBudgetLine, addBudgetLineInput } from "./utils/addBudgetLine";
-import {
   deleteBudgetLine,
   deleteBudgetLineInput,
 } from "./utils/deleteBudgetLine";
+import { getBudgetLines, getBudgetLinesInput } from "./utils/getBudgetLines";
+import {
+  updateBudgetCategory,
+  updateBudgetCategoryInput,
+} from "./utils/updateBudgetCategory";
 import {
   updateBudgetLine,
   updateBudgetLineInput,
@@ -40,9 +41,9 @@ export const budgetCategoriesResolver = resolver.of(budgetCategoriesTable, {
 });
 
 export const budgetLinesResolver = resolver.of(budgetLinesTable, {
-  budgetLines: query(budgetLinesTable.$list()).resolve(() =>
-    db.query.budgetLinesTable.findMany(),
-  ),
+  budgetLines: query(budgetLinesTable.$list())
+    .input(getBudgetLinesInput)
+    .resolve(getBudgetLines),
   addBudgetLine: mutation(budgetLinesTable.$nullable())
     .input(addBudgetLineInput)
     .resolve(addBudgetLine),

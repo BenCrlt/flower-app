@@ -11,15 +11,15 @@ import {
 import { budgetCategoriesTable } from "./budget-categories";
 import { editionsTable } from "./editions";
 
-export const lineType = pgEnum("lineType", ["income", "expense"]);
-export type LineType = (typeof lineType.enumValues)[number];
+export const lineTypeEnum = pgEnum("lineType", ["income", "expense"]);
+export type LineType = (typeof lineTypeEnum.enumValues)[number];
 
 export const budgetLinesTable = drizzleSilk(
   pgTable("budget_lines", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
     description: text(),
-    lineType: lineType().notNull(),
+    lineType: lineTypeEnum().notNull(),
     editionId: integer()
       .notNull()
       .references(() => editionsTable.id),

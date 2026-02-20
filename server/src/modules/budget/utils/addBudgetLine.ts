@@ -1,11 +1,15 @@
 import z from "zod";
 import { db } from "../../../db";
-import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines";
+import {
+  BudgetLine,
+  budgetLinesTable,
+  lineTypeEnum,
+} from "../../../db/schema/budget-lines";
 
 export const addBudgetLineInput = z.object({
   name: z.string().min(1).max(255),
   description: z.string().optional(),
-  lineType: z.enum(["income", "expense"]),
+  lineType: z.enum(lineTypeEnum.enumValues),
   editionId: z.number(),
   budgetCategoryId: z.number(),
   estimatedQuantity: z.number().int().min(0).optional(),
