@@ -2,9 +2,11 @@
 
 ## Vue d'ensemble
 
-Backend GraphQL pour une application de gestion d'événements floraux (éditions, budget, ventes, paiements).
+Application de gestion d'événements floraux (éditions, budget, ventes, paiements) avec un backend GraphQL et un frontend React.
 
 ## Stack technique
+
+### Backend (`server/`)
 
 | Couche | Technologie |
 |--------|-------------|
@@ -16,10 +18,27 @@ Backend GraphQL pour une application de gestion d'événements floraux (édition
 | Base de données | PostgreSQL 14 (Docker) |
 | Runtime dev | tsx (watch mode) |
 
+### Frontend (`client/`)
+
+| Couche | Technologie |
+|--------|-------------|
+| Langage | TypeScript ~5.9 |
+| Framework UI | React 19 |
+| Build tool | Vite 7 |
+| Styles | Tailwind CSS 4 |
+| Composants | shadcn/ui (Radix UI) |
+| Icônes | Lucide React |
+
 ## Structure du projet
 
 ```
 flower-app/
+├── client/
+│   └── src/
+│       ├── main.tsx          # Point d'entrée React
+│       ├── App.tsx           # Composant racine
+│       ├── components/       # Composants réutilisables (shadcn/ui)
+│       └── assets/           # Ressources statiques
 └── server/
     ├── src/
     │   ├── index.ts          # Point d'entrée (Fastify + Mercurius)
@@ -42,6 +61,8 @@ flower-app/
 
 ## Commandes essentielles
 
+### Backend (`server/`)
+
 ```bash
 # Développement
 pnpm dev             # Serveur en watch mode (tsx)
@@ -55,6 +76,15 @@ pnpm format:check    # Vérification Prettier
 # Base de données
 pnpm mig:gen         # Générer les migrations (drizzle-kit generate)
 pnpm mig:run         # Appliquer les migrations (drizzle-kit migrate)
+```
+
+### Frontend (`client/`)
+
+```bash
+pnpm dev             # Serveur de développement Vite
+pnpm build           # Build de production (tsc + vite build)
+pnpm lint            # ESLint
+pnpm preview         # Prévisualiser le build de production
 ```
 
 ## Environnement local
