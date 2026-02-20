@@ -11,7 +11,8 @@
     "format": "prettier --write src",
     "format:check": "prettier --check src",
     "mig:gen": "drizzle-kit generate",
-    "mig:run": "drizzle-kit migrate"
+    "mig:run": "drizzle-kit migrate",
+    "generate:schema": "tsx devtools/scripts/generate-schema.ts"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +33,7 @@
     "typescript-eslint": "^8.56.0"
   },
   "dependencies": {
+    "@fastify/cors": "^11.2.0",
     "@gqloom/core": "^0.16.1",
     "@gqloom/drizzle": "^0.11.0",
     "@gqloom/zod": "^0.15.2",

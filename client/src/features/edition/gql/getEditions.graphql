@@ -1,0 +1,7 @@
+query getEditions {
+  editions {
+    id
+    name
+    startDate
+  }
+}
