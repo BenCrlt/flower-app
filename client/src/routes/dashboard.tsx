@@ -1,3 +1,4 @@
+import { useEdition } from "@/features/edition/EditionContext";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard")({
@@ -5,11 +6,11 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function DashboardPage() {
+  const { editionSelected, setEditionSelected } = useEdition();
+
   return (
     <div className="h-full">
-      <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6">
-        <h1 className="text-xl font-semibold mb-4">Éditions</h1>
-      </div>
+      <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6"></div>
     </div>
   );
 }
