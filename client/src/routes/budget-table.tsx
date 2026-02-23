@@ -1,3 +1,4 @@
+import { TypographyH3 } from "@/components/ui/typography";
 import { BudgetTable } from "@/features/budget/components/budget-table";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -7,10 +8,9 @@ export const Route = createFileRoute("/budget-table")({
 
 function BudgetTablePage() {
   return (
-    <div className="h-full">
-      <div className="h-full rounded-4xl border bg-background text-card-foreground shadow">
-        <BudgetTable data={[]} />
-      </div>
+    <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6 flex flex-col gap-4">
+      <TypographyH3>Budget prévisionnel</TypographyH3>
+      <BudgetTable />
     </div>
   );
 }

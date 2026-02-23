@@ -6,7 +6,7 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function DashboardPage() {
-  const { editionSelected, setEditionSelected } = useEdition();
+  const { edition, setEdition } = useEdition();
 
   return (
     <div className="h-full">

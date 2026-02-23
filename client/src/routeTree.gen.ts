@@ -9,10 +9,16 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as EditionsRouteImport } from './routes/editions'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BudgetTableRouteImport } from './routes/budget-table'
 import { Route as IndexRouteImport } from './routes/index'
 
+const EditionsRoute = EditionsRouteImport.update({
+  id: '/editions',
+  path: '/editions',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DashboardRoute = DashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
@@ -33,34 +39,45 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
+  '/editions': typeof EditionsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
+  '/editions': typeof EditionsRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
+  '/editions': typeof EditionsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/budget-table' | '/dashboard'
+  fullPaths: '/' | '/budget-table' | '/dashboard' | '/editions'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/budget-table' | '/dashboard'
-  id: '__root__' | '/' | '/budget-table' | '/dashboard'
+  to: '/' | '/budget-table' | '/dashboard' | '/editions'
+  id: '__root__' | '/' | '/budget-table' | '/dashboard' | '/editions'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BudgetTableRoute: typeof BudgetTableRoute
   DashboardRoute: typeof DashboardRoute
+  EditionsRoute: typeof EditionsRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/editions': {
+      id: '/editions'
+      path: '/editions'
+      fullPath: '/editions'
+      preLoaderRoute: typeof EditionsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/dashboard': {
       id: '/dashboard'
       path: '/dashboard'
@@ -89,6 +106,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BudgetTableRoute: BudgetTableRoute,
   DashboardRoute: DashboardRoute,
+  EditionsRoute: EditionsRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

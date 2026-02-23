@@ -1,21 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
-import {
-  GetEditionsDocument,
-  GetEditionsQuery,
-} from "../../../generated/graphql";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { GetEditionsDocument } from "../../../generated/graphql";
 import { gqlFetch } from "../../../lib/gqlFetch";
 
-interface UseGetEditionsQueryProps {
-  onComplete?: (response: GetEditionsQuery) => void;
-}
-
-export function useGetEditionsQuery({ onComplete }: UseGetEditionsQueryProps) {
-  return useQuery({
+export function useGetEditionsSuspenseQuery() {
+  return useSuspenseQuery({
     queryKey: ["editions"],
-    queryFn: () =>
-      gqlFetch({
-        document: GetEditionsDocument,
-        onComplete,
-      }),
+    queryFn: () => gqlFetch({ document: GetEditionsDocument }),
   });
 }

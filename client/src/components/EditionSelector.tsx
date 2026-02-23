@@ -1,4 +1,4 @@
-import { useEdition } from "@/features/edition/EditionContext";
+import { useEditionContext } from "@/features/edition/EditionContext";
 import {
   Select,
   SelectContent,
@@ -9,22 +9,27 @@ import {
 } from "./ui/select";
 
 export const EditionSelector = () => {
-  const { editionSelected, setEditionSelected, editions } = useEdition();
+  const { edition, setEdition, editions } = useEditionContext();
+
+  if (editions.length === 0) return null;
 
   return (
     <div className="flex flex-col space-y-4">
-      <Select>
+      <Select
+        value={edition?.id.toString()}
+        onValueChange={(value) => {
+          const found = editions.find((e) => e.id.toString() === value);
+          if (found) setEdition(found);
+        }}
+      >
         <SelectTrigger className="w-[180px]">
-          <SelectValue
-            placeholder="Theme"
-            defaultValue={editionSelected?.name}
-          ></SelectValue>
+          <SelectValue placeholder="Sélectionner une édition" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
-            {editions.map((edition) => (
-              <SelectItem key={edition.id} value={edition.id.toString()}>
-                {edition.name}
+            {editions.map((e) => (
+              <SelectItem key={e.id} value={e.id.toString()}>
+                {e.name}
               </SelectItem>
             ))}
           </SelectGroup>

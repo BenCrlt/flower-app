@@ -12,6 +12,7 @@ query getBudgetLines(
   ) {
     id
     name
+    description
     estimatedQuantity
     estimatedUnitPrice
     category {
