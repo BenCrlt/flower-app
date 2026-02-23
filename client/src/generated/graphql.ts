@@ -182,7 +182,7 @@ export enum UpdateBudgetLineLineTypeInput {
 export type GetEditionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetEditionsQuery = { __typename?: 'Query', editions: Array<{ __typename?: 'EditionsItem', id: number, name: string, startDate: string }> };
+export type GetEditionsQuery = { __typename?: 'Query', editions: Array<{ __typename?: 'EditionsItem', id: number, name: string, startDate: string, totalExpense: number, totalIncome: number, totalPrevisionnalExpense: number, totalPrevisionnalIncome: number }> };
 
 
-export const GetEditionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEditions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"editions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}}]}}]}}]} as unknown as DocumentNode<GetEditionsQuery, GetEditionsQueryVariables>;
+export const GetEditionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEditions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"editions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"totalExpense"}},{"kind":"Field","name":{"kind":"Name","value":"totalIncome"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrevisionnalExpense"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrevisionnalIncome"}}]}}]}}]} as unknown as DocumentNode<GetEditionsQuery, GetEditionsQueryVariables>;

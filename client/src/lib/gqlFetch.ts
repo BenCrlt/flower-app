@@ -3,10 +3,17 @@ import { print } from "graphql";
 
 const GQL_ENDPOINT = "http://localhost:3000/graphql";
 
-export async function gqlFetch<TData, TVariables>(
-  document: TypedDocumentNode<TData, TVariables>,
-  variables?: TVariables,
-): Promise<TData> {
+interface GQLFetchProps<TData, TVariables> {
+  document: TypedDocumentNode<TData, TVariables>;
+  variables?: TVariables;
+  onComplete?: (data: TData) => void;
+}
+
+export async function gqlFetch<TData, TVariables>({
+  document,
+  variables,
+  onComplete,
+}: GQLFetchProps<TData, TVariables>): Promise<TData> {
   const res = await fetch(GQL_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -20,6 +27,10 @@ export async function gqlFetch<TData, TVariables>(
 
   if (json.errors) {
     throw new Error(json.errors[0].message);
+  }
+
+  if (onComplete) {
+    onComplete(json.data);
   }
 
   return json.data;

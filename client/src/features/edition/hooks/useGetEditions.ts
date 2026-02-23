@@ -1,10 +1,21 @@
 import { useQuery } from "@tanstack/react-query";
-import { GetEditionsDocument } from "../../../generated/graphql";
+import {
+  GetEditionsDocument,
+  GetEditionsQuery,
+} from "../../../generated/graphql";
 import { gqlFetch } from "../../../lib/gqlFetch";
 
-export function useGetEditions() {
+interface UseGetEditionsQueryProps {
+  onComplete?: (response: GetEditionsQuery) => void;
+}
+
+export function useGetEditionsQuery({ onComplete }: UseGetEditionsQueryProps) {
   return useQuery({
     queryKey: ["editions"],
-    queryFn: () => gqlFetch(GetEditionsDocument),
+    queryFn: () =>
+      gqlFetch({
+        document: GetEditionsDocument,
+        onComplete,
+      }),
   });
 }

@@ -3,5 +3,9 @@ query getEditions {
     id
     name
     startDate
+    totalExpense
+    totalIncome
+    totalPrevisionnalExpense
+    totalPrevisionnalIncome
   }
 }
