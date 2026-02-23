@@ -16,7 +16,7 @@ export function useGetBudgetLinesQuery({
   variables,
 }: UseGetBudgetLinesQueryProps) {
   return useQuery({
-    queryKey: ["budgetLines"],
+    queryKey: ["budgetLines", variables],
     queryFn: () =>
       gqlFetch({
         document: GetBudgetLinesDocument,

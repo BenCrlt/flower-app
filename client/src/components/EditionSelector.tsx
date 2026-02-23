@@ -7,14 +7,14 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-
+import { TypographyH1 } from "./ui/typography";
 export const EditionSelector = () => {
   const { edition, setEdition, editions } = useEditionContext();
 
   if (editions.length === 0) return null;
 
   return (
-    <div className="flex flex-col space-y-4">
+    <div className="flex flex-col space-y-4 py-4">
       <Select
         value={edition?.id.toString()}
         onValueChange={(value) => {
@@ -22,8 +22,10 @@ export const EditionSelector = () => {
           if (found) setEdition(found);
         }}
       >
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Sélectionner une édition" />
+        <SelectTrigger className="w-[350px]" size="lg">
+          <SelectValue>
+            <TypographyH1>{edition?.name}</TypographyH1>
+          </SelectValue>
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>

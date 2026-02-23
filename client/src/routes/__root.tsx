@@ -39,8 +39,10 @@ function RootLayout() {
   return (
     <div className="flex h-screen overflow-hidden py-4 pr-4 bg-card">
       <Sidebar />
-      <main className="flex-1 overflow-auto">
-        <EditionSelector />
+      <main className="flex-1 overflow-auto flex flex-col">
+        <div className="sticky top-0 z-10 bg-card">
+          <EditionSelector />
+        </div>
         <EditionGuard>
           <Outlet />
         </EditionGuard>
