@@ -1,8 +1,8 @@
 import z from "zod";
-import { paginatedInputSchema } from "./type";
+import { paginatedSchema } from "./type";
 
 export const getOffsetFromPagination = (
-  paginatedInput: z.infer<typeof paginatedInputSchema>,
+  paginatedInput: z.infer<typeof paginatedSchema>,
 ) => {
   return (paginatedInput.page - 1) * paginatedInput.limit;
 };

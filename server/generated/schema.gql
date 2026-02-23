@@ -15,6 +15,7 @@ enum BudgetLinesBudgetLineTypeInput {
 
 type BudgetLinesItem {
   budgetCategoryId: Int!
+  category: BudgetCategoriesItem
   description: String
   editionId: Int!
   estimatedQuantity: Float!

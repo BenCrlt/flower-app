@@ -1,4 +1,4 @@
-import { mutation, query, resolver } from "@gqloom/core";
+import { field, mutation, query, resolver } from "@gqloom/core";
 import { db } from "../../db/index";
 import { budgetCategoriesTable } from "../../db/schema/budget-categories";
 import { budgetLinesTable } from "../../db/schema/budget-lines";
@@ -15,7 +15,8 @@ import {
   deleteBudgetLine,
   deleteBudgetLineInput,
 } from "./utils/deleteBudgetLine";
-import { getBudgetLines, getBudgetLinesInput } from "./utils/getBudgetLines";
+import { getBudgetLines, getBudgetLinesFilter } from "./utils/getBudgetLines";
+import { loadBudgetCategory } from "./utils/loadBudgetCategory";
 import {
   updateBudgetCategory,
   updateBudgetCategoryInput,
@@ -42,8 +43,15 @@ export const budgetCategoriesResolver = resolver.of(budgetCategoriesTable, {
 
 export const budgetLinesResolver = resolver.of(budgetLinesTable, {
   budgetLines: query(budgetLinesTable.$list())
-    .input(getBudgetLinesInput)
+    .input(getBudgetLinesFilter)
     .resolve(getBudgetLines),
+
+  category: field(budgetCategoriesTable.$nullable())
+    .derivedFrom("budgetCategoryId")
+    .load(async (lines) =>
+      loadBudgetCategory(lines.map((line) => line.budgetCategoryId)),
+    ),
+
   addBudgetLine: mutation(budgetLinesTable.$nullable())
     .input(addBudgetLineInput)
     .resolve(addBudgetLine),

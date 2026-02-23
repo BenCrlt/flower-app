@@ -2,14 +2,14 @@ import { and, eq, inArray } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../../db";
 import { BudgetLine, budgetLinesTable, lineTypeEnum } from "../../../db/schema";
-import { paginatedInputSchema } from "../../type";
+import { paginatedSchema } from "../../type";
 import { getOffsetFromPagination } from "../../utils";
 
-export const getBudgetLinesInput = z.object({
+export const getBudgetLinesFilter = z.object({
   categoryIds: z.array(z.number().min(1)).optional(),
   budgetLineType: z.enum(lineTypeEnum.enumValues).optional(),
   editionId: z.number().min(1),
-  paginatedInput: paginatedInputSchema,
+  paginatedInput: paginatedSchema,
 });
 
 export const getBudgetLines = async ({
@@ -17,7 +17,7 @@ export const getBudgetLines = async ({
   categoryIds,
   paginatedInput,
   budgetLineType,
-}: z.infer<typeof getBudgetLinesInput>): Promise<BudgetLine[]> => {
+}: z.infer<typeof getBudgetLinesFilter>): Promise<BudgetLine[]> => {
   const offset = getOffsetFromPagination(paginatedInput);
 
   return db.query.budgetLinesTable.findMany({
