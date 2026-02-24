@@ -7,21 +7,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { BudgetCategoriesItem } from "@/generated/graphql";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  BudgetCategoriesItem,
+  BudgetLinesBudgetLineTypeInput,
+} from "@/generated/graphql";
 import { Table } from "@tanstack/react-table";
-import { ListFilter } from "lucide-react";
+import { CirclePlus, Coins, ListFilter, PiggyBank } from "lucide-react";
 import { useState } from "react";
 import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategories";
 import { BudgetTableRow } from "./columns";
 
+interface Props {
+  table: Table<BudgetTableRow>;
+  onChangeLineType: (type: BudgetLinesBudgetLineTypeInput) => void;
+}
+
 export function BudgetTableFiltersAndActions({
   table,
-}: {
-  table: Table<BudgetTableRow>;
-}) {
+  onChangeLineType,
+}: Props) {
   const { data } = useGetBudgetCategoriesQuery();
   const [categories, setCategories] = useState<BudgetCategoriesItem[]>([]);
   const value = table.getColumn("name")?.getFilterValue() as string;
+
+  const handleSelectCategory = (
+    category: BudgetCategoriesItem,
+    isChecked: boolean,
+  ) => {
+    const next = isChecked
+      ? [...categories, category]
+      : categories.filter((c) => c.id !== category.id);
+    setCategories(next);
+    table.getColumn("categoryName")?.setFilterValue(next.map((c) => c.name));
+  };
 
   return (
     <div className="flex justify-between">
@@ -55,15 +74,9 @@ export function BudgetTableFiltersAndActions({
                       className="capitalize"
                       checked={categories.some((c) => c.id === category.id)}
                       onSelect={(e) => e.preventDefault()}
-                      onCheckedChange={(value) => {
-                        const next = value
-                          ? [...categories, category]
-                          : categories.filter((c) => c.id !== category.id);
-                        setCategories(next);
-                        table
-                          .getColumn("categoryName")
-                          ?.setFilterValue(next.map((c) => c.name));
-                      }}
+                      onCheckedChange={(value) =>
+                        handleSelectCategory(category, value)
+                      }
                     >
                       {category.name}
                     </DropdownMenuCheckboxItem>
@@ -73,6 +86,35 @@ export function BudgetTableFiltersAndActions({
             </DropdownMenuContent>
           </DropdownMenu>
         )}
+      </div>
+      <div className="flex items-center gap-2">
+        <Tabs
+          defaultValue="expense"
+          onValueChange={(value) =>
+            onChangeLineType(value as BudgetLinesBudgetLineTypeInput)
+          }
+        >
+          <TabsList>
+            <TabsTrigger value={BudgetLinesBudgetLineTypeInput.Income}>
+              Recettes
+              <PiggyBank />
+            </TabsTrigger>
+            <TabsTrigger value={BudgetLinesBudgetLineTypeInput.Expense}>
+              Dépenses
+              <Coins />
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <Button
+          onClick={() => {
+            setCategories([]);
+            table.getColumn("categoryName")?.setFilterValue("");
+          }}
+          variant="default"
+          className="ml-2"
+        >
+          Ajouter <CirclePlus />
+        </Button>
       </div>
     </div>
   );

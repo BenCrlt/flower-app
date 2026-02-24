@@ -2,18 +2,21 @@ import { DataTable } from "@/components/Table/DataTable";
 import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
 import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useGetBudgetLinesQuery } from "../hooks/useGetBudgetLines";
 import { BudgetTableFiltersAndActions } from "./budget-table-actions";
 import { BudgetTableRow, columns } from "./columns";
 
 export function BudgetTable() {
   const { edition } = useEdition();
+  const [lineType, setLineType] = useState<BudgetLinesBudgetLineTypeInput>(
+    BudgetLinesBudgetLineTypeInput.Expense,
+  );
 
   const { data } = useGetBudgetLinesQuery({
     variables: {
       editionId: edition.id,
-      budgetLineType: BudgetLinesBudgetLineTypeInput.Expense,
+      budgetLineType: lineType,
     },
   });
 
@@ -36,7 +39,12 @@ export function BudgetTable() {
       <DataTable
         columns={columns}
         data={rows}
-        actions={(table) => <BudgetTableFiltersAndActions table={table} />}
+        actions={(table) => (
+          <BudgetTableFiltersAndActions
+            table={table}
+            onChangeLineType={(type) => setLineType(type)}
+          />
+        )}
       />
     </div>
   );
