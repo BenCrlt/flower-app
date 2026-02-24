@@ -2,15 +2,12 @@ import { DataTable } from "@/components/Table/DataTable";
 import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
 import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
-import { useMemo, useState } from "react";
+import { useMemo } from "react";
 import { useGetBudgetLinesQuery } from "../hooks/useGetBudgetLines";
 import { BudgetTableRow, columns } from "./columns";
 
-const PAGE_SIZE = 20;
-
 export function BudgetTable() {
   const { edition } = useEdition();
-  const [page, setPage] = useState(1);
 
   const { data } = useGetBudgetLinesQuery({
     variables: {
@@ -35,13 +32,7 @@ export function BudgetTable() {
   return (
     <div className="flex flex-col gap-4">
       <TypographyH2>Budget prévisionnel</TypographyH2>
-      <DataTable
-        columns={columns}
-        data={rows}
-        page={page}
-        pageSize={PAGE_SIZE}
-        onPageChange={setPage}
-      />
+      <DataTable columns={columns} data={rows} />
     </div>
   );
 }

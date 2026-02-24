@@ -8,8 +8,11 @@ import {
 } from "@/components/ui/table";
 import {
   ColumnDef,
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
   getSortedRowModel,
   SortingState,
   useReactTable,
@@ -20,34 +23,28 @@ import { Button } from "../ui/button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  page: number;
-  pageSize: number;
-  onPageChange: (page: number) => void;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  page,
-  pageSize,
-  onPageChange,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
-    manualPagination: true,
     onSortingChange: setSorting,
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
     state: {
       sorting,
+      columnFilters,
     },
   });
-
-  const hasPreviousPage = page > 1;
-  const hasNextPage = data.length === pageSize;
 
   return (
     <div>
@@ -100,16 +97,16 @@ export function DataTable<TData, TValue>({
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onPageChange(page - 1)}
-          disabled={!hasPreviousPage}
+          onClick={() => table.previousPage()}
+          disabled={!table.getCanPreviousPage()}
         >
           Précédent
         </Button>
         <Button
           variant="outline"
           size="sm"
-          onClick={() => onPageChange(page + 1)}
-          disabled={!hasNextPage}
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
         >
           Suivant
         </Button>
