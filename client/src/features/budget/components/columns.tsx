@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { MessageCircleCheck, MessageCircleQuestion, MoreHorizontal } from "lucide-react";
 
 export interface BudgetTableRow {
   id: number;
@@ -35,7 +35,7 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
     header: ({ column }) => (
       <SortableHeader
         column={column}
-        title="Prix unitaire (prévisionnel)"
+        title={<span className="flex items-center gap-1">Prix unitaire <MessageCircleQuestion className="h-4 w-4" /></span>}
         className="justify-end"
       />
     ),
@@ -46,7 +46,7 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
     header: ({ column }) => (
       <SortableHeader
         column={column}
-        title="Quantité (prévisionnel)"
+        title={<span className="flex items-center gap-1">Quantité <MessageCircleQuestion className="h-4 w-4" /></span>}
         className="justify-end"
       />
     ),
@@ -62,7 +62,7 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
     header: ({ column }) => (
       <SortableHeader
         column={column}
-        title="Prix unitaire (réel)"
+        title={<span className="flex items-center gap-1">Prix unitaire <MessageCircleCheck className="h-4 w-4" /></span>}
         className="justify-end"
       />
     ),
@@ -73,7 +73,7 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
     header: ({ column }) => (
       <SortableHeader
         column={column}
-        title="Quantité (réel)"
+        title={<span className="flex items-center gap-1">Quantité <MessageCircleCheck className="h-4 w-4" /></span>}
         className="justify-end"
       />
     ),
