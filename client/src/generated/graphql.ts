@@ -45,11 +45,6 @@ export type BudgetLinesItem = {
   name: Scalars['String']['output'];
 };
 
-export type BudgetLinesPaginatedInputInput = {
-  limit?: InputMaybe<Scalars['Float']['input']>;
-  page?: InputMaybe<Scalars['Float']['input']>;
-};
-
 export type EditionsItem = {
   __typename?: 'EditionsItem';
   id: Scalars['Int']['output'];
@@ -160,9 +155,7 @@ export type Query = {
 
 export type QueryBudgetLinesArgs = {
   budgetLineType?: InputMaybe<BudgetLinesBudgetLineTypeInput>;
-  categoryIds?: InputMaybe<Array<Scalars['Float']['input']>>;
   editionId: Scalars['Float']['input'];
-  paginatedInput: BudgetLinesPaginatedInputInput;
 };
 
 
@@ -183,8 +176,6 @@ export enum UpdateBudgetLineLineTypeInput {
 export type GetBudgetLinesQueryVariables = Exact<{
   editionId: Scalars['Float']['input'];
   budgetLineType: BudgetLinesBudgetLineTypeInput;
-  categoryIds?: InputMaybe<Array<Scalars['Float']['input']> | Scalars['Float']['input']>;
-  paginatedInput: BudgetLinesPaginatedInputInput;
 }>;
 
 
@@ -196,5 +187,5 @@ export type GetEditionsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetEditionsQuery = { __typename?: 'Query', editions: Array<{ __typename?: 'EditionsItem', id: number, name: string, startDate: string, totalExpense: number, totalIncome: number, totalPrevisionnalExpense: number, totalPrevisionnalIncome: number }> };
 
 
-export const GetBudgetLinesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getBudgetLines"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"budgetLineType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BudgetLinesBudgetLineTypeInput"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"categoryIds"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"paginatedInput"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BudgetLinesPaginatedInputInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"budgetLines"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"editionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}}},{"kind":"Argument","name":{"kind":"Name","value":"budgetLineType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"budgetLineType"}}},{"kind":"Argument","name":{"kind":"Name","value":"categoryIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"categoryIds"}}},{"kind":"Argument","name":{"kind":"Name","value":"paginatedInput"},"value":{"kind":"Variable","name":{"kind":"Name","value":"paginatedInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedQuantity"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedUnitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetBudgetLinesQuery, GetBudgetLinesQueryVariables>;
+export const GetBudgetLinesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getBudgetLines"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"budgetLineType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BudgetLinesBudgetLineTypeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"budgetLines"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"editionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}}},{"kind":"Argument","name":{"kind":"Name","value":"budgetLineType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"budgetLineType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedQuantity"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedUnitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetBudgetLinesQuery, GetBudgetLinesQueryVariables>;
 export const GetEditionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEditions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"editions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"totalExpense"}},{"kind":"Field","name":{"kind":"Name","value":"totalIncome"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrevisionnalExpense"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrevisionnalIncome"}}]}}]}}]} as unknown as DocumentNode<GetEditionsQuery, GetEditionsQueryVariables>;

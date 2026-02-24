@@ -1,15 +1,8 @@
 query getBudgetLines(
   $editionId: Float!
   $budgetLineType: BudgetLinesBudgetLineTypeInput!
-  $categoryIds: [Float!]
-  $paginatedInput: BudgetLinesPaginatedInputInput!
 ) {
-  budgetLines(
-    editionId: $editionId
-    budgetLineType: $budgetLineType
-    categoryIds: $categoryIds
-    paginatedInput: $paginatedInput
-  ) {
+  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {
     id
     name
     description

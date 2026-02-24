@@ -25,11 +25,6 @@ type BudgetLinesItem {
   name: String!
 }
 
-input BudgetLinesPaginatedInputInput {
-  limit: Float
-  page: Float
-}
-
 type EditionsItem {
   id: Int!
   name: String!
@@ -65,7 +60,7 @@ type Mutation {
 
 type Query {
   budgetCategories: [BudgetCategoriesItem!]!
-  budgetLines(budgetLineType: BudgetLinesBudgetLineTypeInput, categoryIds: [Float!], editionId: Float!, paginatedInput: BudgetLinesPaginatedInputInput!): [BudgetLinesItem!]!
+  budgetLines(budgetLineType: BudgetLinesBudgetLineTypeInput, editionId: Float!): [BudgetLinesItem!]!
   editions: [EditionsItem!]!
   getBudgetStatsByCategoriesForExpense(editionId: Float!): [GetBudgetStatsByCategoriesForIncome!]!
   getBudgetStatsByCategoriesForIncome(editionId: Float!): [GetBudgetStatsByCategoriesForIncome!]!

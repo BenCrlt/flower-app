@@ -15,7 +15,6 @@ export function BudgetTable() {
   const { data } = useGetBudgetLinesQuery({
     variables: {
       editionId: edition.id,
-      paginatedInput: { page, limit: PAGE_SIZE },
       budgetLineType: BudgetLinesBudgetLineTypeInput.Expense,
     },
   });
