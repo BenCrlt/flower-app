@@ -24,13 +24,13 @@ import { Button } from "../ui/button";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  filters?: (table: TableInstance<TData>) => React.ReactNode;
+  actions?: (table: TableInstance<TData>) => React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
-  filters,
+  actions,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
@@ -56,7 +56,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      {filters && <div className="mb-4">{filters(table)}</div>}
+      {actions && <div className="mb-4">{actions(table)}</div>}
       <div className="overflow-hidden rounded-md border bg-card">
         <Table>
           <TableHeader>

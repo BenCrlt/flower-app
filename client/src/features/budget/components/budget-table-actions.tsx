@@ -14,7 +14,7 @@ import { useState } from "react";
 import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategories";
 import { BudgetTableRow } from "./columns";
 
-export function BudgetTableFilters({
+export function BudgetTableFiltersAndActions({
   table,
 }: {
   table: Table<BudgetTableRow>;
