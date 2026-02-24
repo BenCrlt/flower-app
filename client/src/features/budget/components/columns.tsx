@@ -1,5 +1,5 @@
-import { HeaderPrice } from "@/components/Table/HeaderPrice";
 import { RowPrice } from "@/components/Table/RowPrice";
+import { SortableHeader } from "@/components/Table/SortableHeader";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -24,7 +24,7 @@ export interface BudgetTableRow {
 
 export const columns: ColumnDef<BudgetTableRow>[] = [
   {
-    header: "Nom",
+    header: ({ column }) => <SortableHeader column={column} title="Nom" />,
     accessorKey: "name",
   },
   {
@@ -32,12 +32,24 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
     accessorKey: "description",
   },
   {
-    header: () => <HeaderPrice title="Prix unitaire (prévisionnel)" />,
+    header: ({ column }) => (
+      <SortableHeader
+        column={column}
+        title="Prix unitaire (prévisionnel)"
+        className="justify-end"
+      />
+    ),
     accessorKey: "estimatedUnitPrice",
     cell: ({ row }) => <RowPrice amount={row.original.estimatedUnitPrice} />,
   },
   {
-    header: () => <HeaderPrice title="Quantité (prévisionnel)" />,
+    header: ({ column }) => (
+      <SortableHeader
+        column={column}
+        title="Quantité (prévisionnel)"
+        className="justify-end"
+      />
+    ),
     accessorKey: "estimatedQuantity",
     cell: ({ row }) => (
       <div key={row.original.name} className="text-right font-medium">
@@ -47,16 +59,30 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
   },
   {
     id: "actualUnitPrice",
-    header: () => <HeaderPrice title="Prix unitaire (réel)" />,
+    header: ({ column }) => (
+      <SortableHeader
+        column={column}
+        title="Prix unitaire (réel)"
+        className="justify-end"
+      />
+    ),
     cell: () => <RowPrice amount={0} />,
   },
   {
     id: "actualQuantity",
-    header: () => <HeaderPrice title="Quantité (réel)" />,
+    header: ({ column }) => (
+      <SortableHeader
+        column={column}
+        title="Quantité (réel)"
+        className="justify-end"
+      />
+    ),
     cell: () => <div className="text-right font-medium">{0}</div>,
   },
   {
-    header: "Catégorie",
+    header: ({ column }) => (
+      <SortableHeader column={column} title="Catégorie" />
+    ),
     accessorKey: "categoryName",
     cell: ({ row }) => (
       <Badge color="primary">{row.getValue("categoryName")}</Badge>

@@ -10,8 +10,11 @@ import {
   ColumnDef,
   flexRender,
   getCoreRowModel,
+  getSortedRowModel,
+  SortingState,
   useReactTable,
 } from "@tanstack/react-table";
+import { useState } from "react";
 import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
@@ -29,11 +32,18 @@ export function DataTable<TData, TValue>({
   pageSize,
   onPageChange,
 }: DataTableProps<TData, TValue>) {
+  const [sorting, setSorting] = useState<SortingState>([]);
+
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     manualPagination: true,
+    onSortingChange: setSorting,
+    getSortedRowModel: getSortedRowModel(),
+    state: {
+      sorting,
+    },
   });
 
   const hasPreviousPage = page > 1;
