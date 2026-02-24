@@ -15,10 +15,12 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  */
 type Documents = {
     "query getBudgetLines($editionId: Float!, $budgetLineType: BudgetLinesBudgetLineTypeInput!) {\n  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    category {\n      name\n    }\n  }\n}": typeof types.GetBudgetLinesDocument,
+    "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n  }\n}": typeof types.GetBudgetCategoriesDocument,
     "query getEditions {\n  editions {\n    id\n    name\n    startDate\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": typeof types.GetEditionsDocument,
 };
 const documents: Documents = {
     "query getBudgetLines($editionId: Float!, $budgetLineType: BudgetLinesBudgetLineTypeInput!) {\n  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    category {\n      name\n    }\n  }\n}": types.GetBudgetLinesDocument,
+    "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n  }\n}": types.GetBudgetCategoriesDocument,
     "query getEditions {\n  editions {\n    id\n    name\n    startDate\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": types.GetEditionsDocument,
 };
 
@@ -40,6 +42,10 @@ export function graphql(source: string): unknown;
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query getBudgetLines($editionId: Float!, $budgetLineType: BudgetLinesBudgetLineTypeInput!) {\n  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    category {\n      name\n    }\n  }\n}"): (typeof documents)["query getBudgetLines($editionId: Float!, $budgetLineType: BudgetLinesBudgetLineTypeInput!) {\n  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    category {\n      name\n    }\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n  }\n}"): (typeof documents)["query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

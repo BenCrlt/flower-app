@@ -23,9 +23,9 @@ export function SortableHeader<T>({
         className={className}
       >
         {column.getIsSorted() === "asc" ? (
-          <ArrowUp className="h-4 w-4" />
-        ) : (
           <ArrowDown className="h-4 w-4" />
+        ) : (
+          <ArrowUp className="h-4 w-4" />
         )}
       </Button>
     </div>

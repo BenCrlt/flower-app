@@ -84,6 +84,10 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
       <SortableHeader column={column} title="Catégorie" />
     ),
     accessorKey: "categoryName",
+    filterFn: (row, columnId, filterValue: string[]) => {
+      if (!filterValue.length) return true;
+      return filterValue.includes(row.getValue(columnId));
+    },
     cell: ({ row }) => (
       <Badge color="primary">{row.getValue("categoryName")}</Badge>
     ),

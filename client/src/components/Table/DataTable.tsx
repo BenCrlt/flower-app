@@ -15,39 +15,48 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   SortingState,
+  Table as TableInstance,
   useReactTable,
 } from "@tanstack/react-table";
-import { useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  filters?: (table: TableInstance<TData>) => React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  filters,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [globalFilter, setGlobalFilter] = useState<any>([]);
 
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
+    onColumnFiltersChange: setColumnFilters,
     getSortedRowModel: getSortedRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    onGlobalFilterChange: setGlobalFilter,
     state: {
       sorting,
       columnFilters,
+      globalFilter,
     },
   });
 
   return (
     <div>
+      {filters && <div className="mb-4">{filters(table)}</div>}
       <div className="overflow-hidden rounded-md border bg-card">
         <Table>
           <TableHeader>

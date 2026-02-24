@@ -1,0 +1,15 @@
+query getBudgetLines(
+  $editionId: Float!
+  $budgetLineType: BudgetLinesBudgetLineTypeInput!
+) {
+  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {
+    id
+    name
+    description
+    estimatedQuantity
+    estimatedUnitPrice
+    category {
+      name
+    }
+  }
+}

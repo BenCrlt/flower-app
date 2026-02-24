@@ -4,6 +4,7 @@ import { useEdition } from "@/features/edition/EditionContext";
 import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
 import { useMemo } from "react";
 import { useGetBudgetLinesQuery } from "../hooks/useGetBudgetLines";
+import { BudgetTableFilters } from "./budget-table-filters";
 import { BudgetTableRow, columns } from "./columns";
 
 export function BudgetTable() {
@@ -32,7 +33,11 @@ export function BudgetTable() {
   return (
     <div className="flex flex-col gap-4">
       <TypographyH2>Budget prévisionnel</TypographyH2>
-      <DataTable columns={columns} data={rows} />
+      <DataTable
+        columns={columns}
+        data={rows}
+        filters={(table) => <BudgetTableFilters table={table} />}
+      />
     </div>
   );
 }
