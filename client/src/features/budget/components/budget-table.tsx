@@ -3,7 +3,7 @@ import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
 import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
 import { useMemo, useState } from "react";
-import { useGetBudgetLinesQuery } from "../hooks/useGetBudgetLines";
+import { useGetBudgetLinesQuery } from "../hooks/useGetBudgetLinesQuery";
 import { BudgetTableFiltersAndActions } from "./budget-table-actions";
 import { BudgetTableRow, columns } from "./columns";
 

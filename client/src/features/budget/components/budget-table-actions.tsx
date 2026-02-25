@@ -15,7 +15,7 @@ import {
 import { Table } from "@tanstack/react-table";
 import { Coins, ListFilter, PiggyBank } from "lucide-react";
 import { useState } from "react";
-import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategories";
+import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategoriesQuery";
 import { AddBudgetLineSheet } from "./add-budget-line-sheet";
 import { BudgetTableRow } from "./columns";
 
@@ -108,7 +108,10 @@ export function BudgetTableFiltersAndActions({
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <AddBudgetLineSheet lineType={lineType} />
+        <AddBudgetLineSheet
+          lineType={lineType}
+          allCategories={data?.budgetCategories || []}
+        />
       </div>
     </div>
   );

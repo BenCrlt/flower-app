@@ -1,0 +1,22 @@
+mutation AddBudgetLine(
+  $name: String!
+  $budgetCategoryId: Float!
+  $description: String
+  $editionId: Float!
+  $estimatedQuantity: Int!
+  $estimatedUnitPrice: Int!
+  $lineType: AddBudgetLineLineTypeInput!
+) {
+  addBudgetLine(
+    name: $name
+    budgetCategoryId: $budgetCategoryId
+    description: $description
+    editionId: $editionId
+    estimatedQuantity: $estimatedQuantity
+    estimatedUnitPrice: $estimatedUnitPrice
+    lineType: $lineType
+  ) {
+    id
+    name
+  }
+}

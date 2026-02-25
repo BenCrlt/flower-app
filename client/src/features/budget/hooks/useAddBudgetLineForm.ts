@@ -1,15 +1,20 @@
+import { useEdition } from "@/features/edition/EditionContext";
+import { AddBudgetLineLineTypeInput } from "@/generated/graphql";
 import {
+  Control,
   FieldErrors,
   Resolver,
   useForm,
   UseFormRegister,
 } from "react-hook-form";
+import { useAddBudgetLineMutation } from "./useAddBudgetLineMutation";
 
 export type AddBudgetLineFormValues = {
   name: string;
   description: string;
-  quantity: number;
-  cost: number;
+  estimatedQuantity: number;
+  estimatedUnitPrice: number;
+  budgetCategoryId: number;
 };
 
 const resolver: Resolver<AddBudgetLineFormValues> = async (values) => {
@@ -20,28 +25,54 @@ const resolver: Resolver<AddBudgetLineFormValues> = async (values) => {
   }
 
   if (
-    values.quantity === undefined ||
-    values.quantity === null ||
-    values.quantity === ("" as unknown)
+    values.estimatedQuantity === undefined ||
+    values.estimatedQuantity === null ||
+    values.estimatedQuantity === ("" as unknown)
   ) {
-    errors.quantity = { type: "required", message: "Ce champ est requis." };
-  } else if (isNaN(Number(values.quantity))) {
-    errors.quantity = { type: "pattern", message: "Doit être un nombre." };
-  } else if (values.quantity < 0) {
-    errors.quantity = { type: "pattern", message: "Doit être supérieur à 1." };
+    errors.estimatedQuantity = {
+      type: "required",
+      message: "Ce champ est requis.",
+    };
+  } else if (isNaN(Number(values.estimatedQuantity))) {
+    errors.estimatedQuantity = {
+      type: "pattern",
+      message: "Doit être un nombre.",
+    };
+  } else if (values.estimatedQuantity < 0) {
+    errors.estimatedQuantity = {
+      type: "pattern",
+      message: "Doit être supérieur à 1.",
+    };
   }
 
   if (
-    values.cost === undefined ||
-    values.cost === null ||
-    values.cost === ("" as unknown)
+    values.estimatedUnitPrice === undefined ||
+    values.estimatedUnitPrice === null ||
+    values.estimatedUnitPrice === ("" as unknown)
   ) {
-    errors.cost = { type: "required", message: "Ce champ est requis." };
-  } else if (isNaN(Number(values.cost))) {
-    errors.cost = { type: "pattern", message: "Doit être un nombre." };
-  } else if (values.cost < 0) {
-    errors.cost = { type: "pattern", message: "Doit être supérieur à 0." };
+    errors.estimatedUnitPrice = {
+      type: "required",
+      message: "Ce champ est requis.",
+    };
+  } else if (isNaN(Number(values.estimatedUnitPrice))) {
+    errors.estimatedUnitPrice = {
+      type: "pattern",
+      message: "Doit être un nombre.",
+    };
+  } else if (values.estimatedUnitPrice < 0) {
+    errors.estimatedUnitPrice = {
+      type: "pattern",
+      message: "Doit être supérieur à 0.",
+    };
   }
+
+  if (!values.budgetCategoryId) {
+    errors.budgetCategoryId = {
+      type: "required",
+      message: "Ce champ est requis.",
+    };
+  }
+
   return {
     values: Object.keys(errors).length === 0 ? values : {},
     errors,
@@ -50,27 +81,37 @@ const resolver: Resolver<AddBudgetLineFormValues> = async (values) => {
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  lineType: AddBudgetLineLineTypeInput;
 }
 
-export function useAddBudgetLineForm({ setOpen }: Props): {
+export function useAddBudgetLineForm({ setOpen, lineType }: Props): {
   handleSubmit: () => void;
   handleClose: () => void;
   register: UseFormRegister<AddBudgetLineFormValues>;
+  control: Control<AddBudgetLineFormValues>;
   errors: FieldErrors<AddBudgetLineFormValues>;
 } {
+  const { edition } = useEdition();
+  const { mutate } = useAddBudgetLineMutation();
   const {
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors },
   } = useForm<AddBudgetLineFormValues>({
     resolver,
     mode: "onTouched",
-    defaultValues: { quantity: 1, cost: 0 },
+    defaultValues: { estimatedQuantity: 1, estimatedUnitPrice: 0 },
   });
 
   function onSubmit(data: AddBudgetLineFormValues) {
-    console.log(data);
+    mutate({
+      ...data,
+      editionId: edition.id,
+      lineType,
+    });
+    handleClose();
   }
 
   function handleClose() {
@@ -82,6 +123,7 @@ export function useAddBudgetLineForm({ setOpen }: Props): {
     handleSubmit: handleSubmit(onSubmit),
     handleClose,
     register,
+    control,
     errors,
   };
 }
