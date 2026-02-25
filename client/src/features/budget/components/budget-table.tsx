@@ -43,6 +43,7 @@ export function BudgetTable() {
           <BudgetTableFiltersAndActions
             table={table}
             onChangeLineType={(type) => setLineType(type)}
+            lineType={lineType}
           />
         )}
       />

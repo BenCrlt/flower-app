@@ -13,18 +13,21 @@ import {
   BudgetLinesBudgetLineTypeInput,
 } from "@/generated/graphql";
 import { Table } from "@tanstack/react-table";
-import { CirclePlus, Coins, ListFilter, PiggyBank } from "lucide-react";
+import { Coins, ListFilter, PiggyBank } from "lucide-react";
 import { useState } from "react";
 import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategories";
+import { AddBudgetLineSheet } from "./add-budget-line-sheet";
 import { BudgetTableRow } from "./columns";
 
 interface Props {
   table: Table<BudgetTableRow>;
+  lineType: BudgetLinesBudgetLineTypeInput;
   onChangeLineType: (type: BudgetLinesBudgetLineTypeInput) => void;
 }
 
 export function BudgetTableFiltersAndActions({
   table,
+  lineType,
   onChangeLineType,
 }: Props) {
   const { data } = useGetBudgetCategoriesQuery();
@@ -105,16 +108,7 @@ export function BudgetTableFiltersAndActions({
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <Button
-          onClick={() => {
-            setCategories([]);
-            table.getColumn("categoryName")?.setFilterValue("");
-          }}
-          variant="default"
-          className="ml-2"
-        >
-          Ajouter <CirclePlus />
-        </Button>
+        <AddBudgetLineSheet lineType={lineType} />
       </div>
     </div>
   );
