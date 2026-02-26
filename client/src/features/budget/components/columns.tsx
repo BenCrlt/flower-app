@@ -102,6 +102,12 @@ export function getColumns({
     {
       header: "Description",
       accessorKey: "description",
+      meta: { className: "max-w-48" },
+      cell: ({ getValue }) => (
+        <span className="block truncate" title={getValue<string>()}>
+          {getValue<string>()}
+        </span>
+      ),
     },
     {
       meta: { className: "w-px whitespace-nowrap" },
