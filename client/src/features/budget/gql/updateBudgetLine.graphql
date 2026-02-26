@@ -5,7 +5,7 @@ mutation updateBudgetLine(
   $description: String
   $editionId: Float
   $estimatedQuantity: Int
-  $estimatedUnitPrice: Int
+  $estimatedUnitPrice: Float
   $lineType: BudgetLinesBudgetLineTypeInput
 ) {
   updateBudgetLine(

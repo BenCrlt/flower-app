@@ -1,9 +1,6 @@
 import z from "zod";
 import { db } from "../../../db";
-import {
-  BudgetLine,
-  budgetLinesTable,
-} from "../../../db/schema/budget-lines";
+import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines";
 import { lineTypeSchema } from "../types";
 
 export const addBudgetLineInput = z.object({
@@ -12,8 +9,8 @@ export const addBudgetLineInput = z.object({
   lineType: lineTypeSchema,
   editionId: z.number(),
   budgetCategoryId: z.number(),
-  estimatedQuantity: z.number().int().min(0).optional(),
-  estimatedUnitPrice: z.number().int().min(0).optional(),
+  estimatedQuantity: z.number().int().min(0),
+  estimatedUnitPrice: z.number().min(0),
 });
 
 export const addBudgetLine = async (
@@ -21,7 +18,10 @@ export const addBudgetLine = async (
 ): Promise<BudgetLine | null> => {
   return db
     .insert(budgetLinesTable)
-    .values(input)
+    .values({
+      ...input,
+      estimatedUnitPrice: input.estimatedUnitPrice.toString(),
+    })
     .returning()
     .then((result) => result[0] ?? null)
     .catch((error) => {

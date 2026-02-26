@@ -2,6 +2,7 @@ import { drizzleSilk } from "@gqloom/drizzle";
 import { InferSelectModel } from "drizzle-orm";
 import {
   integer,
+  numeric,
   pgEnum,
   pgTable,
   smallint,
@@ -27,7 +28,12 @@ export const budgetLinesTable = drizzleSilk(
       .notNull()
       .references(() => budgetCategoriesTable.id),
     estimatedQuantity: smallint().default(1).notNull(),
-    estimatedUnitPrice: smallint().default(0).notNull(),
+    estimatedUnitPrice: numeric("estimatedUnitPrice", {
+      precision: 10,
+      scale: 2,
+    })
+      .default("0.00")
+      .notNull(),
   }),
 );
 

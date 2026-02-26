@@ -14,7 +14,7 @@ type BudgetLinesItem {
   description: String
   editionId: Int!
   estimatedQuantity: Float!
-  estimatedUnitPrice: Float!
+  estimatedUnitPrice: String!
   id: Int!
   lineType: LineType!
   name: String!
@@ -43,13 +43,13 @@ enum LineType {
 
 type Mutation {
   addBudgetCategory(name: String!): BudgetCategoriesItem
-  addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int, estimatedUnitPrice: Int, lineType: BudgetLinesBudgetLineTypeInput!, name: String!): BudgetLinesItem
+  addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, lineType: BudgetLinesBudgetLineTypeInput!, name: String!): BudgetLinesItem
   addEdition(name: String!, startDate: String!): EditionsItem
   deleteBudgetCategory(id: Float!): BudgetCategoriesItem
   deleteBudgetLine(id: Float!): BudgetLinesItem
   deleteEdition(id: Float!): EditionsItem
   updateBudgetCategory(id: Float!, name: String!): BudgetCategoriesItem
-  updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Int, id: Float!, lineType: BudgetLinesBudgetLineTypeInput, name: String): BudgetLinesItem
+  updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, id: Float!, lineType: BudgetLinesBudgetLineTypeInput, name: String): BudgetLinesItem
   updateEdition(id: Float!, name: String, startDate: String): EditionsItem
 }
 

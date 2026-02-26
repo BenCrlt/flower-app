@@ -1,5 +1,5 @@
 import { drizzleSilk } from "@gqloom/drizzle";
-import { date, integer, pgTable, smallint, text } from "drizzle-orm/pg-core";
+import { date, integer, numeric, pgTable, text } from "drizzle-orm/pg-core";
 import { editionsTable } from "./editions";
 import { usersTable } from "./users";
 import { vendorsTable } from "./vendors";
@@ -13,7 +13,12 @@ export const receiptsTable = drizzleSilk(
     vendorId: integer()
       .notNull()
       .references(() => vendorsTable.id),
-    totalAmount: smallint().notNull().default(0),
+    totalAmount: numeric("totalAmount", {
+      precision: 10,
+      scale: 2,
+    })
+      .default("0.00")
+      .notNull(),
     note: text(),
     executedAt: date().notNull().defaultNow(),
     authorId: integer()

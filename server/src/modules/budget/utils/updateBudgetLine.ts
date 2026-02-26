@@ -1,10 +1,7 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../../db";
-import {
-  BudgetLine,
-  budgetLinesTable,
-} from "../../../db/schema/budget-lines";
+import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines";
 import { lineTypeSchema } from "../types";
 
 export const updateBudgetLineInput = z.object({
@@ -15,7 +12,7 @@ export const updateBudgetLineInput = z.object({
   editionId: z.number().min(1).optional(),
   budgetCategoryId: z.number().min(1).optional(),
   estimatedQuantity: z.number().int().min(0).optional(),
-  estimatedUnitPrice: z.number().int().min(0).optional(),
+  estimatedUnitPrice: z.number().min(0).optional(),
 });
 
 export const updateBudgetLine = async (
@@ -24,7 +21,10 @@ export const updateBudgetLine = async (
   const { id, ...fieldsToUpdate } = input;
   return db
     .update(budgetLinesTable)
-    .set(fieldsToUpdate)
+    .set({
+      ...fieldsToUpdate,
+      estimatedUnitPrice: fieldsToUpdate.estimatedUnitPrice?.toString(),
+    })
     .where(eq(budgetLinesTable.id, id))
     .returning()
     .then((result) => result[0] ?? null)
