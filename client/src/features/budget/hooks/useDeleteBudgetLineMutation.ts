@@ -5,7 +5,7 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { gqlFetch } from "../../../lib/gqlFetch";
 
-export function useAddBudgetLineMutation() {
+export function useDeleteBudgetLineMutation() {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["deleteBudgetLine"],
