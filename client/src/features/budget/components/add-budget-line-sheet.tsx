@@ -18,13 +18,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import { Textarea } from "@/components/ui/textarea";
 import {
   BudgetCategoriesItem,
   BudgetLinesBudgetLineTypeInput,
 } from "@/generated/graphql";
 import { CirclePlus } from "lucide-react";
 import { ReactElement, useState } from "react";
-import { Controller } from "react-hook-form";
+import { Controller, useWatch } from "react-hook-form";
 import { useAddBudgetLineForm } from "../hooks/useAddBudgetLineForm";
 import { getBudgetLineTypeString } from "../utils";
 
@@ -45,6 +46,11 @@ export function AddBudgetLineSheet({
       setOpen,
       lineType,
     });
+
+  const estimatedQuantity = useWatch({ control, name: "estimatedQuantity" });
+  const estimatedUnitPrice = useWatch({ control, name: "estimatedUnitPrice" });
+  const totalEstimated =
+    Number(estimatedQuantity) * Number(estimatedUnitPrice) || 0;
 
   return (
     <Sheet
@@ -76,37 +82,49 @@ export function AddBudgetLineSheet({
               />
               <FieldError errors={[errors.name]} />
             </Field>
+            <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-2">
+              <Field data-invalid={!!errors.estimatedQuantity}>
+                <FieldLabel htmlFor="add-budget-line-input-quantity">
+                  Quantité
+                </FieldLabel>
+                <Input
+                  id="add-budget-line-input-quantity"
+                  aria-invalid={!!errors.estimatedQuantity}
+                  {...register("estimatedQuantity", { valueAsNumber: true })}
+                />
+                <FieldError errors={[errors.estimatedQuantity]} />
+              </Field>
+              <span className="mt-9 text-muted-foreground">×</span>
+              <Field data-invalid={!!errors.estimatedUnitPrice}>
+                <FieldLabel htmlFor="add-budget-line-input-cost">
+                  Prix unitaire
+                </FieldLabel>
+                <Input
+                  id="add-budget-line-input-cost"
+                  aria-invalid={!!errors.estimatedUnitPrice}
+                  {...register("estimatedUnitPrice", { valueAsNumber: true })}
+                />
+                <FieldError errors={[errors.estimatedUnitPrice]} />
+              </Field>
+            </div>
+            <p className="text-sm text-muted-foreground -mt-4">
+              Total prévisionnel :{" "}
+              <span className="font-medium text-foreground">
+                {totalEstimated.toLocaleString("fr-FR", {
+                  style: "currency",
+                  currency: "EUR",
+                })}
+              </span>
+            </p>
             <Field>
               <FieldLabel htmlFor="add-budget-line-input-desc">
                 Description
               </FieldLabel>
-              <Input
+              <Textarea
                 id="add-budget-line-input-desc"
                 placeholder="Description..."
                 {...register("description")}
               />
-            </Field>
-            <Field data-invalid={!!errors.estimatedQuantity}>
-              <FieldLabel htmlFor="add-budget-line-input-quantity">
-                Quantité prévisionnelle
-              </FieldLabel>
-              <Input
-                id="add-budget-line-input-quantity"
-                aria-invalid={!!errors.estimatedQuantity}
-                {...register("estimatedQuantity", { valueAsNumber: true })}
-              />
-              <FieldError errors={[errors.estimatedQuantity]} />
-            </Field>
-            <Field data-invalid={!!errors.estimatedUnitPrice}>
-              <FieldLabel htmlFor="add-budget-line-input-cost">
-                Coût prévisionnel
-              </FieldLabel>
-              <Input
-                id="add-budget-line-input-cost"
-                aria-invalid={!!errors.estimatedUnitPrice}
-                {...register("estimatedUnitPrice", { valueAsNumber: true })}
-              />
-              <FieldError errors={[errors.estimatedUnitPrice]} />
             </Field>
             <Field data-invalid={!!errors.budgetCategoryId}>
               <FieldLabel htmlFor="add-budget-line-input-category">
