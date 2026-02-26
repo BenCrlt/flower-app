@@ -10,15 +10,22 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Separator } from "@/components/ui/separator";
+import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
-import { MessageCircleCheck, MessageCircleQuestion, MoreHorizontal } from "lucide-react";
+import {
+  MessageCircleCheck,
+  MessageCircleQuestion,
+  MoreHorizontal,
+} from "lucide-react";
+import { getGapBetweenRealAndPrevisionnal } from "../utils";
+import { BudgetGapCell } from "./budget-gap-cell";
 
 export interface BudgetTableRow {
   id: number;
   name: string;
-  description: string;
   estimatedUnitPrice: number;
   estimatedQuantity: number;
+  description: string;
   categoryName: string;
 }
 
@@ -26,60 +33,77 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
   {
     header: ({ column }) => <SortableHeader column={column} title="Nom" />,
     accessorKey: "name",
+    meta: { className: "w-px whitespace-nowrap" },
+  },
+  {
+    id: "estimatedCost",
+    meta: { className: "w-px whitespace-nowrap" },
+    header: ({ column }) => (
+      <SortableHeader
+        column={column}
+        title={
+          <span className="flex items-center gap-1">
+            Coût <MessageCircleQuestion className="h-4 w-4" />
+          </span>
+        }
+        className="justify-end"
+      />
+    ),
+    accessorFn: (row) => row.estimatedUnitPrice * row.estimatedQuantity,
+    cell: ({ row }) => (
+      <RowPrice
+        amount={
+          row.original.estimatedUnitPrice * row.original.estimatedQuantity
+        }
+      />
+    ),
+  },
+  {
+    id: "actualCost",
+    meta: { className: "w-px whitespace-nowrap" },
+    header: ({ column }) => (
+      <SortableHeader
+        column={column}
+        title={
+          <span className="flex items-center gap-1">
+            Coût <MessageCircleCheck className="h-4 w-4" />
+          </span>
+        }
+        className="justify-end"
+      />
+    ),
+    cell: () => <RowPrice amount={null} />,
+  },
+  {
+    id: "gap",
+    meta: { className: "w-px whitespace-nowrap" },
+    header: ({ column }) => (
+      <SortableHeader column={column} title="Écart" className="justify-end" />
+    ),
+    accessorFn: (row) => {
+      const estimated = row.estimatedUnitPrice * row.estimatedQuantity;
+      const actual = null;
+      return getGapBetweenRealAndPrevisionnal(actual, estimated);
+    },
+    cell: ({ row }) => {
+      const estimated =
+        row.original.estimatedUnitPrice * row.original.estimatedQuantity;
+      const actual = null;
+      return (
+        <BudgetGapCell
+          lineType={BudgetLinesBudgetLineTypeInput.Expense}
+          previsionnalAmount={estimated}
+          realAmount={actual}
+        />
+      );
+    },
   },
   {
     header: "Description",
     accessorKey: "description",
   },
   {
-    header: ({ column }) => (
-      <SortableHeader
-        column={column}
-        title={<span className="flex items-center gap-1">Prix unitaire <MessageCircleQuestion className="h-4 w-4" /></span>}
-        className="justify-end"
-      />
-    ),
-    accessorKey: "estimatedUnitPrice",
-    cell: ({ row }) => <RowPrice amount={row.original.estimatedUnitPrice} />,
-  },
-  {
-    header: ({ column }) => (
-      <SortableHeader
-        column={column}
-        title={<span className="flex items-center gap-1">Quantité <MessageCircleQuestion className="h-4 w-4" /></span>}
-        className="justify-end"
-      />
-    ),
-    accessorKey: "estimatedQuantity",
-    cell: ({ row }) => (
-      <div key={row.original.name} className="text-right font-medium">
-        {row.original.estimatedQuantity}
-      </div>
-    ),
-  },
-  {
-    id: "actualUnitPrice",
-    header: ({ column }) => (
-      <SortableHeader
-        column={column}
-        title={<span className="flex items-center gap-1">Prix unitaire <MessageCircleCheck className="h-4 w-4" /></span>}
-        className="justify-end"
-      />
-    ),
-    cell: () => <RowPrice amount={0} />,
-  },
-  {
-    id: "actualQuantity",
-    header: ({ column }) => (
-      <SortableHeader
-        column={column}
-        title={<span className="flex items-center gap-1">Quantité <MessageCircleCheck className="h-4 w-4" /></span>}
-        className="justify-end"
-      />
-    ),
-    cell: () => <div className="text-right font-medium">{0}</div>,
-  },
-  {
+    meta: { className: "w-px whitespace-nowrap" },
     header: ({ column }) => (
       <SortableHeader column={column} title="Catégorie" />
     ),
@@ -94,6 +118,7 @@ export const columns: ColumnDef<BudgetTableRow>[] = [
   },
   {
     id: "actions",
+    meta: { className: "w-px whitespace-nowrap" },
     cell: () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
