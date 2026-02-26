@@ -3,13 +3,13 @@ import { db } from "../../../db";
 import {
   BudgetLine,
   budgetLinesTable,
-  lineTypeEnum,
 } from "../../../db/schema/budget-lines";
+import { lineTypeSchema } from "../types";
 
 export const addBudgetLineInput = z.object({
   name: z.string().min(1).max(255),
   description: z.string().optional(),
-  lineType: z.enum(lineTypeEnum.enumValues),
+  lineType: lineTypeSchema,
   editionId: z.number(),
   budgetCategoryId: z.number(),
   estimatedQuantity: z.number().int().min(0).optional(),

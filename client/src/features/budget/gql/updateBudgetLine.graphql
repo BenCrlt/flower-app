@@ -1,13 +1,15 @@
-mutation addBudgetLine(
-  $name: String!
-  $budgetCategoryId: Float!
+mutation updateBudgetLine(
+  $id: Float!
+  $name: String
+  $budgetCategoryId: Float
   $description: String
-  $editionId: Float!
-  $estimatedQuantity: Int!
-  $estimatedUnitPrice: Int!
-  $lineType: BudgetLinesBudgetLineTypeInput!
+  $editionId: Float
+  $estimatedQuantity: Int
+  $estimatedUnitPrice: Int
+  $lineType: BudgetLinesBudgetLineTypeInput
 ) {
-  addBudgetLine(
+  updateBudgetLine(
+    id: $id
     name: $name
     budgetCategoryId: $budgetCategoryId
     description: $description

@@ -19,7 +19,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  AddBudgetLineLineTypeInput,
   BudgetCategoriesItem,
   BudgetLinesBudgetLineTypeInput,
 } from "@/generated/graphql";
@@ -43,9 +42,9 @@ export function AddBudgetLineSheet({
 
   const { register, control, errors, handleClose, handleSubmit } =
     useAddBudgetLineForm({
-    setOpen,
-    lineType: lineType as unknown as AddBudgetLineLineTypeInput,
-  });
+      setOpen,
+      lineType,
+    });
 
   return (
     <Sheet
