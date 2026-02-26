@@ -7,7 +7,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./ui/select";
-import { TypographyH1 } from "./ui/typography";
+import { TypographyH2 } from "./ui/typography";
 export const EditionSelector = () => {
   const { edition, setEdition, editions } = useEditionContext();
 
@@ -24,7 +24,7 @@ export const EditionSelector = () => {
       >
         <SelectTrigger className="w-[350px]" size="lg">
           <SelectValue>
-            <TypographyH1>{edition?.name}</TypographyH1>
+            <TypographyH2>{edition?.name}</TypographyH2>
           </SelectValue>
         </SelectTrigger>
         <SelectContent>

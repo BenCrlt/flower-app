@@ -1,5 +1,5 @@
 import { TypographyH2 } from "@/components/ui/typography";
-import { useEdition } from "@/features/edition/EditionContext";
+import { EditionDashboard } from "@/features/dashboard/components/edition-dashboard";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/dashboard")({
@@ -7,11 +7,10 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function DashboardPage() {
-  const { edition, setEdition } = useEdition();
-
   return (
     <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6">
       <TypographyH2>Tableau de bord</TypographyH2>
+      <EditionDashboard />
     </div>
   );
 }
