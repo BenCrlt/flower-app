@@ -1,0 +1,6 @@
+mutation deleteBudgetLine($id: Float!) {
+  deleteBudgetLine(id: $id) {
+    id
+    name
+  }
+}

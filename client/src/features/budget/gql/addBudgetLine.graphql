@@ -1,4 +1,4 @@
-mutation AddBudgetLine(
+mutation addBudgetLine(
   $name: String!
   $budgetCategoryId: Float!
   $description: String
