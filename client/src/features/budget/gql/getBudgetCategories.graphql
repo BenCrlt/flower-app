@@ -9,6 +9,7 @@ query getBudgetLines(
     estimatedQuantity
     estimatedUnitPrice
     category {
+      id
       name
     }
   }

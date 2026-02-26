@@ -1,26 +1,27 @@
-import { useEdition } from "@/features/edition/EditionContext";
-import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
 import { Control, FieldErrors, useForm, UseFormRegister } from "react-hook-form";
 import {
   BudgetLineFormValues,
   budgetLineFormResolver,
 } from "./budgetLineFormResolver";
-import { useAddBudgetLineMutation } from "./useAddBudgetLineMutation";
+import { useUpdateBudgetLineMutation } from "./useUpdateBudgetLineMutation";
 
-interface Props {
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  lineType: BudgetLinesBudgetLineTypeInput;
+interface DefaultValues extends BudgetLineFormValues {
+  id: number;
 }
 
-export function useAddBudgetLineForm({ setOpen, lineType }: Props): {
+interface Props {
+  setOpen: (open: boolean) => void;
+  defaultValues: DefaultValues;
+}
+
+export function useEditBudgetLineForm({ setOpen, defaultValues }: Props): {
   handleSubmit: () => void;
   handleClose: () => void;
   register: UseFormRegister<BudgetLineFormValues>;
   control: Control<BudgetLineFormValues>;
   errors: FieldErrors<BudgetLineFormValues>;
 } {
-  const { edition } = useEdition();
-  const { mutate } = useAddBudgetLineMutation();
+  const { mutate } = useUpdateBudgetLineMutation();
   const {
     register,
     handleSubmit,
@@ -30,20 +31,16 @@ export function useAddBudgetLineForm({ setOpen, lineType }: Props): {
   } = useForm<BudgetLineFormValues>({
     resolver: budgetLineFormResolver,
     mode: "onTouched",
-    defaultValues: { estimatedQuantity: 1, estimatedUnitPrice: 0 },
+    defaultValues,
   });
 
   function onSubmit(data: BudgetLineFormValues) {
-    mutate({
-      ...data,
-      editionId: edition.id,
-      lineType,
-    });
+    mutate({ id: defaultValues.id, ...data });
     handleClose();
   }
 
   function handleClose() {
-    reset();
+    reset(defaultValues);
     setOpen(false);
   }
 

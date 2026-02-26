@@ -7,49 +7,50 @@ import {
   SheetFooter,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  BudgetCategoriesItem,
-  BudgetLinesBudgetLineTypeInput,
-} from "@/generated/graphql";
-import { CirclePlus } from "lucide-react";
-import { ReactElement, useState } from "react";
-import { useAddBudgetLineForm } from "../hooks/useAddBudgetLineForm";
-import { getBudgetLineTypeString } from "../utils";
+import { BudgetCategoriesItem } from "@/generated/graphql";
+import { ReactElement } from "react";
+import { useEditBudgetLineForm } from "../hooks/useEditBudgetLineForm";
 import { BudgetLineFormFields } from "./budget-line-form-fields";
 
+interface BudgetLineData {
+  id: number;
+  name: string;
+  description: string;
+  estimatedQuantity: number;
+  estimatedUnitPrice: number;
+  budgetCategoryId: number;
+}
+
 interface Props {
-  lineType: BudgetLinesBudgetLineTypeInput;
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  line: BudgetLineData;
   allCategories?: BudgetCategoriesItem[];
 }
 
-export function AddBudgetLineSheet({
-  lineType,
+export function EditBudgetLineSheet({
+  open,
+  onOpenChange,
+  line,
   allCategories,
 }: Props): ReactElement {
-  const lineTypeString = getBudgetLineTypeString(lineType);
-  const [open, setOpen] = useState(false);
-
   const { register, control, errors, handleClose, handleSubmit } =
-    useAddBudgetLineForm({ setOpen, lineType });
+    useEditBudgetLineForm({
+      setOpen: onOpenChange,
+      defaultValues: line,
+    });
 
   return (
     <Sheet
       open={open}
-      onOpenChange={(o) => (o ? setOpen(true) : handleClose())}
+      onOpenChange={(o) => (o ? onOpenChange(true) : handleClose())}
     >
-      <SheetTrigger asChild>
-        <Button variant="default">
-          Ajouter <CirclePlus />
-        </Button>
-      </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Ajout d'une nouvelle {lineTypeString}</SheetTitle>
+          <SheetTitle>{line.name}</SheetTitle>
           <SheetDescription>
-            Rentrez les informations prévisionnels. Les quantités/couts réels
-            seront calculées automatiquement.
+            Cliquez sur un champ pour le modifier.
           </SheetDescription>
         </SheetHeader>
         <form onSubmit={handleSubmit}>
@@ -59,13 +60,13 @@ export function AddBudgetLineSheet({
               control={control}
               errors={errors}
               allCategories={allCategories}
-              mode="add"
-              namePlaceholder={`Nom de la ${lineTypeString}`}
+              mode="edit"
+              currentValues={line}
             />
           </div>
           <SheetFooter>
             <Button type="submit" disabled={Object.keys(errors).length > 0}>
-              Ajouter
+              Enregistrer
             </Button>
             <SheetClose asChild>
               <Button variant="outline" onClick={handleClose}>

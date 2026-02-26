@@ -1,7 +1,10 @@
 import { RowPrice } from "@/components/Table/RowPrice";
 import { SortableHeader } from "@/components/Table/SortableHeader";
 import { Badge } from "@/components/ui/badge";
-import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
+import {
+  BudgetCategoriesItem,
+  BudgetLinesBudgetLineTypeInput,
+} from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { MessageCircleCheck, MessageCircleQuestion } from "lucide-react";
 import { getGapBetweenRealAndPrevisionnal } from "../utils";
@@ -15,14 +18,17 @@ export interface BudgetTableRow {
   estimatedQuantity: number;
   description: string;
   categoryName: string;
+  budgetCategoryId: number;
 }
 
 interface GetBudgetLineColumnsProps {
   onDelete: (id: number) => void;
+  allCategories?: BudgetCategoriesItem[];
 }
 
 export function getColumns({
   onDelete,
+  allCategories,
 }: GetBudgetLineColumnsProps): ColumnDef<BudgetTableRow>[] {
   return [
     {
@@ -115,7 +121,11 @@ export function getColumns({
       id: "actions",
       meta: { className: "w-px whitespace-nowrap" },
       cell: ({ row }) => (
-        <BudgetLineActionsCell row={row} onDelete={onDelete} />
+        <BudgetLineActionsCell
+          row={row}
+          onDelete={onDelete}
+          allCategories={allCategories}
+        />
       ),
     },
   ];
