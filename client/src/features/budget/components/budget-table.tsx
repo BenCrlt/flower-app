@@ -34,7 +34,7 @@ export function BudgetTable() {
         id: item.id,
         name: item.name,
         description: item.description ?? "",
-        estimatedUnitPrice: item.estimatedUnitPrice,
+        estimatedUnitPrice: Number(item.estimatedUnitPrice),
         estimatedQuantity: item.estimatedQuantity,
         categoryName: item.category?.name ?? "",
         budgetCategoryId: item.category?.id ?? 0,

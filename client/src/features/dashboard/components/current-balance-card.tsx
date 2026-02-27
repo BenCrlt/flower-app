@@ -21,7 +21,7 @@ export function CurrentBalanceCard() {
           <TypographyH3>Solde actuel</TypographyH3>
         </CardTitle>
         <CardDescription>
-          <TypographyP>Vous pouvez gérer votre solde actuel ici.</TypographyP>
+          <TypographyP>Consultez votre solde actuel ici.</TypographyP>
         </CardDescription>
       </CardHeader>
       <CardContent>

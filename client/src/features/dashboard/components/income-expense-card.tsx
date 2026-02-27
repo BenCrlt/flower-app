@@ -19,7 +19,9 @@ export function IncomeExpenseCard() {
           <TypographyH3>Aperçu du budget</TypographyH3>
         </CardTitle>
         <CardDescription>
-          <TypographyP>Résumé des revenus et dépenses.</TypographyP>
+          <TypographyP>
+            Visualisez si vos prévisions sont respectées.
+          </TypographyP>
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-2">

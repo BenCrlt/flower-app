@@ -15,7 +15,9 @@ export function AmountProgress({ value, max, title }: Props) {
       <Progress className="h-5" value={value} max={max} />
       <div className="flex justify-between">
         <TypographyH3>{formatPriceToEuros(0)}</TypographyH3>
-        <TypographyH3>{formatPriceToEuros(max)}</TypographyH3>
+        <TypographyH3 className="opacity-80">
+          {formatPriceToEuros(max)}
+        </TypographyH3>
       </div>
     </div>
   );
