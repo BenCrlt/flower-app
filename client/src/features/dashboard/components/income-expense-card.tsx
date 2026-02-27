@@ -13,7 +13,7 @@ import { AmountProgress } from "./amount-progress";
 export function IncomeExpenseCard() {
   const { edition } = useEdition();
   return (
-    <Card>
+    <Card className="flex flex-col justify-between">
       <CardHeader>
         <CardTitle>
           <TypographyH3>Aperçu du budget</TypographyH3>

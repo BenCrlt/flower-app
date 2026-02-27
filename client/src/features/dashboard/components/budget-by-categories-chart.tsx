@@ -6,7 +6,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { ChartConfig, ChartContainer } from "@/components/ui/chart";
+import {
+  ChartConfig,
+  ChartContainer,
+  ChartLegend,
+  ChartLegendContent,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useGetBudgetCategoriesQuery } from "@/features/budget/hooks/useGetBudgetCategoriesQuery";
@@ -15,7 +22,7 @@ import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
 import { upperFirst } from "lodash";
 import { Coins, PiggyBank } from "lucide-react";
 import { useState } from "react";
-import { Bar, BarChart } from "recharts";
+import { Bar, BarChart, XAxis } from "recharts";
 
 export function BudgetByCategoriesChart() {
   const [lineType, setLineType] = useState<BudgetLinesBudgetLineTypeInput>(
@@ -32,16 +39,16 @@ export function BudgetByCategoriesChart() {
   const chartConfig = {
     real: {
       label: "Coût réel",
-      color: "#2563eb",
+      color: "var(--primary)",
     },
     estimated: {
       label: "Coût estimé",
-      color: "#60a5fa",
+      color: "color-mix(in srgb, var(--primary), transparent 60%)",
     },
   } satisfies ChartConfig;
 
   return (
-    <Card className="h-full">
+    <Card className="flex flex-col justify-between">
       <CardHeader>
         <CardTitle>
           <TypographyH3>
@@ -76,6 +83,14 @@ export function BudgetByCategoriesChart() {
       <CardContent>
         <ChartContainer config={chartConfig}>
           <BarChart accessibilityLayer data={chartData}>
+            <XAxis
+              dataKey="name"
+              tickLine={false}
+              axisLine={false}
+              tickMargin={10}
+            />
+            <ChartTooltip content={<ChartTooltipContent />} />
+            <ChartLegend content={<ChartLegendContent />} />
             <Bar dataKey="real" fill="var(--color-real)" radius={10} />
             <Bar
               dataKey="estimated"

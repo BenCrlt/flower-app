@@ -15,7 +15,7 @@ import { TrendingUp } from "lucide-react";
 
 export function CurrentBalanceCard() {
   return (
-    <Card>
+    <Card className="flex flex-col justify-between">
       <CardHeader>
         <CardTitle>
           <TypographyH3>Solde actuel</TypographyH3>
