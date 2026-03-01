@@ -16,23 +16,33 @@ import {
 } from "@/components/ui/chart";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
-import { useGetBudgetCategoriesQuery } from "@/features/budget/hooks/useGetBudgetCategoriesQuery";
 import { getBudgetLineTypeString } from "@/features/budget/utils";
+import { useEdition } from "@/features/edition/EditionContext";
 import { LineTypeEnum } from "@/generated/graphql";
 import { upperFirst } from "lodash";
 import { Coins, PiggyBank } from "lucide-react";
 import { useState } from "react";
 import { Bar, BarChart, XAxis } from "recharts";
+import { useGetBudgetStatsByCategoriesQuery } from "../hooks/useGetBudgetStatsByCategoriesQuery";
 
 export function BudgetByCategoriesChart() {
+  const { edition } = useEdition();
   const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Expense);
-  const { data: allCategories } = useGetBudgetCategoriesQuery();
+  const { data: budgetStatsByCategories } = useGetBudgetStatsByCategoriesQuery({
+    variables: {
+      editionId: edition.id,
+      lineType,
+    },
+  });
 
-  const chartData = allCategories?.budgetCategories.map(({ name }) => ({
-    name,
-    real: 30,
-    estimated: 10,
-  }));
+  const chartData =
+    budgetStatsByCategories?.getBudgetStatsByCategories.map(
+      ({ categoryName, total, totalEstimated }) => ({
+        name: categoryName,
+        real: total,
+        estimated: totalEstimated,
+      }),
+    ) || [];
 
   const chartConfig = {
     real: {

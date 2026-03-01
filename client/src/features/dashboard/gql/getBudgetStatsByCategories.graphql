@@ -1,0 +1,7 @@
+query getBudgetStatsByCategories($editionId: Float!, $lineType: LineTypeEnum!) {
+  getBudgetStatsByCategories(editionId: $editionId, lineType: $lineType) {
+    categoryName
+    totalEstimated
+    total
+  }
+}
