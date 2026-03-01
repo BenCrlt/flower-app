@@ -1,4 +1,7 @@
+import { asEnumType } from "@gqloom/zod/v3";
 import z from "zod";
 import { lineTypeEnum } from "../../db/schema/budget-lines";
 
-export const lineTypeSchema = z.enum(lineTypeEnum.enumValues);
+export const LineTypeEnum = z
+  .enum(lineTypeEnum.enumValues)
+  .superRefine(asEnumType({ name: "LineTypeEnum" }));

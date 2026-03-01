@@ -2,6 +2,7 @@ import { field, mutation, query, resolver } from "@gqloom/core";
 import z from "zod";
 import { db } from "../../db/index";
 import { editionsTable } from "../../db/schema/editions";
+import { LineTypeEnum } from "../budget/types";
 import { addEdition, addEditionInput } from "./utils/addEdition";
 import { deleteEdition, deleteEditionInput } from "./utils/deleteEdition";
 import {
@@ -15,15 +16,10 @@ export const editionsResolver = resolver.of(editionsTable, {
   editions: query(editionsTable.$list()).resolve(() =>
     db.query.editionsTable.findMany(),
   ),
-  getBudgetStatsByCategoriesForIncome: query(statsByCategoryOutput)
-    .input({ editionId: z.number().min(1) })
-    .resolve(async ({ editionId }) =>
-      getBudgetStatsByCategories(editionId, "income"),
-    ),
-  getBudgetStatsByCategoriesForExpense: query(statsByCategoryOutput)
-    .input({ editionId: z.number().min(1) })
-    .resolve(async ({ editionId }) =>
-      getBudgetStatsByCategories(editionId, "expense"),
+  getBudgetStatsByCategories: query(statsByCategoryOutput)
+    .input({ editionId: z.number().min(1), lineType: LineTypeEnum })
+    .resolve(async ({ editionId, lineType }) =>
+      getBudgetStatsByCategories(editionId, lineType),
     ),
 
   totalPrevisionnalIncome: field(z.number())

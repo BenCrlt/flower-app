@@ -2,10 +2,10 @@ import { and, eq } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../../db";
 import { BudgetLine, budgetLinesTable } from "../../../db/schema";
-import { lineTypeSchema } from "../types";
+import { LineTypeEnum } from "../types";
 
 export const getBudgetLinesFilter = z.object({
-  budgetLineType: lineTypeSchema.optional(),
+  budgetLineType: LineTypeEnum.optional(),
   editionId: z.number().min(1),
 });
 

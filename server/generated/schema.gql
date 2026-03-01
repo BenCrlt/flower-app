@@ -3,11 +3,6 @@ type BudgetCategoriesItem {
   name: String!
 }
 
-enum BudgetLinesBudgetLineTypeInput {
-  expense
-  income
-}
-
 type BudgetLinesItem {
   budgetCategoryId: Int!
   category: BudgetCategoriesItem
@@ -30,7 +25,7 @@ type EditionsItem {
   totalPrevisionnalIncome: Float!
 }
 
-type GetBudgetStatsByCategoriesForIncome {
+type GetBudgetStatsByCategories {
   categoryName: String!
   total: Float!
   totalEstimated: Float!
@@ -41,22 +36,26 @@ enum LineType {
   INCOME
 }
 
+enum LineTypeEnum {
+  expense
+  income
+}
+
 type Mutation {
   addBudgetCategory(name: String!): BudgetCategoriesItem
-  addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, lineType: BudgetLinesBudgetLineTypeInput!, name: String!): BudgetLinesItem
+  addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, lineType: LineTypeEnum!, name: String!): BudgetLinesItem
   addEdition(name: String!, startDate: String!): EditionsItem
   deleteBudgetCategory(id: Float!): BudgetCategoriesItem
   deleteBudgetLine(id: Float!): BudgetLinesItem
   deleteEdition(id: Float!): EditionsItem
   updateBudgetCategory(id: Float!, name: String!): BudgetCategoriesItem
-  updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, id: Float!, lineType: BudgetLinesBudgetLineTypeInput, name: String): BudgetLinesItem
+  updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, id: Float!, lineType: LineTypeEnum, name: String): BudgetLinesItem
   updateEdition(id: Float!, name: String, startDate: String): EditionsItem
 }
 
 type Query {
   budgetCategories: [BudgetCategoriesItem!]!
-  budgetLines(budgetLineType: BudgetLinesBudgetLineTypeInput, editionId: Float!): [BudgetLinesItem!]!
+  budgetLines(budgetLineType: LineTypeEnum, editionId: Float!): [BudgetLinesItem!]!
   editions: [EditionsItem!]!
-  getBudgetStatsByCategoriesForExpense(editionId: Float!): [GetBudgetStatsByCategoriesForIncome!]!
-  getBudgetStatsByCategoriesForIncome(editionId: Float!): [GetBudgetStatsByCategoriesForIncome!]!
+  getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
 }
