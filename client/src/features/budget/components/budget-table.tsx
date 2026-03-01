@@ -1,7 +1,7 @@
 import { DataTable } from "@/components/Table/DataTable";
 import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
-import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
+import { LineTypeEnum } from "@/generated/graphql";
 import { useMemo, useState } from "react";
 import { useDeleteBudgetLineMutation } from "../hooks/useDeleteBudgetLineMutation";
 import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategoriesQuery";
@@ -12,9 +12,7 @@ import { EditBudgetLineSheet } from "./edit-budget-line-sheet";
 
 export function BudgetTable() {
   const { edition } = useEdition();
-  const [lineType, setLineType] = useState<BudgetLinesBudgetLineTypeInput>(
-    BudgetLinesBudgetLineTypeInput.Expense,
-  );
+  const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Expense);
   const [selectedRow, setSelectedRow] = useState<BudgetTableRow | null>(null);
 
   const { data } = useGetBudgetLinesQuery({

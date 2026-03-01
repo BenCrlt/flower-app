@@ -18,16 +18,14 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useGetBudgetCategoriesQuery } from "@/features/budget/hooks/useGetBudgetCategoriesQuery";
 import { getBudgetLineTypeString } from "@/features/budget/utils";
-import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
+import { LineTypeEnum } from "@/generated/graphql";
 import { upperFirst } from "lodash";
 import { Coins, PiggyBank } from "lucide-react";
 import { useState } from "react";
 import { Bar, BarChart, XAxis } from "recharts";
 
 export function BudgetByCategoriesChart() {
-  const [lineType, setLineType] = useState<BudgetLinesBudgetLineTypeInput>(
-    BudgetLinesBudgetLineTypeInput.Expense,
-  );
+  const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Expense);
   const { data: allCategories } = useGetBudgetCategoriesQuery();
 
   const chartData = allCategories?.budgetCategories.map(({ name }) => ({
@@ -63,16 +61,14 @@ export function BudgetByCategoriesChart() {
         <CardAction>
           <Tabs
             defaultValue="expense"
-            onValueChange={(value) =>
-              setLineType(value as BudgetLinesBudgetLineTypeInput)
-            }
+            onValueChange={(value) => setLineType(value as LineTypeEnum)}
           >
             <TabsList>
-              <TabsTrigger value={BudgetLinesBudgetLineTypeInput.Income}>
+              <TabsTrigger value={LineTypeEnum.Income}>
                 Recettes
                 <PiggyBank />
               </TabsTrigger>
-              <TabsTrigger value={BudgetLinesBudgetLineTypeInput.Expense}>
+              <TabsTrigger value={LineTypeEnum.Expense}>
                 Dépenses
                 <Coins />
               </TabsTrigger>

@@ -5,7 +5,7 @@ mutation addBudgetLine(
   $editionId: Float!
   $estimatedQuantity: Int!
   $estimatedUnitPrice: Float!
-  $lineType: BudgetLinesBudgetLineTypeInput!
+  $lineType: LineTypeEnum!
 ) {
   addBudgetLine(
     name: $name

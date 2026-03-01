@@ -1,15 +1,20 @@
 import { useEdition } from "@/features/edition/EditionContext";
-import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
-import { Control, FieldErrors, useForm, UseFormRegister } from "react-hook-form";
+import { LineTypeEnum } from "@/generated/graphql";
 import {
-  BudgetLineFormValues,
+  Control,
+  FieldErrors,
+  useForm,
+  UseFormRegister,
+} from "react-hook-form";
+import {
   budgetLineFormResolver,
+  BudgetLineFormValues,
 } from "./budgetLineFormResolver";
 import { useAddBudgetLineMutation } from "./useAddBudgetLineMutation";
 
 interface Props {
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  lineType: BudgetLinesBudgetLineTypeInput;
+  lineType: LineTypeEnum;
 }
 
 export function useAddBudgetLineForm({ setOpen, lineType }: Props): {

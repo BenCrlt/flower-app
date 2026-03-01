@@ -1,10 +1,7 @@
 import { RowPrice } from "@/components/Table/RowPrice";
 import { SortableHeader } from "@/components/Table/SortableHeader";
 import { Badge } from "@/components/ui/badge";
-import {
-  BudgetCategoriesItem,
-  BudgetLinesBudgetLineTypeInput,
-} from "@/generated/graphql";
+import { BudgetCategoriesItem, LineTypeEnum } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { MessageCircleCheck, MessageCircleQuestion } from "lucide-react";
 import { getGapBetweenRealAndPrevisionnal } from "../utils";
@@ -92,7 +89,7 @@ export function getColumns({
         const actual = null;
         return (
           <BudgetGapCell
-            lineType={BudgetLinesBudgetLineTypeInput.Expense}
+            lineType={LineTypeEnum.Expense}
             previsionnalAmount={estimated}
             realAmount={actual}
           />

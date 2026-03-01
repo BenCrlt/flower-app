@@ -1,12 +1,10 @@
-import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
+import { LineTypeEnum } from "@/generated/graphql";
 
-export const getBudgetLineTypeString = (
-  lineType: BudgetLinesBudgetLineTypeInput,
-) => {
+export const getBudgetLineTypeString = (lineType: LineTypeEnum) => {
   switch (lineType) {
-    case BudgetLinesBudgetLineTypeInput.Income:
+    case LineTypeEnum.Income:
       return "recette";
-    case BudgetLinesBudgetLineTypeInput.Expense:
+    case LineTypeEnum.Expense:
       return "dépense";
     default:
       return "autre";

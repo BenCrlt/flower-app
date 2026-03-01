@@ -22,11 +22,6 @@ export type BudgetCategoriesItem = {
   name: Scalars['String']['output'];
 };
 
-export enum BudgetLinesBudgetLineTypeInput {
-  Expense = 'expense',
-  Income = 'income'
-}
-
 export type BudgetLinesItem = {
   __typename?: 'BudgetLinesItem';
   budgetCategoryId: Scalars['Int']['output'];
@@ -51,8 +46,8 @@ export type EditionsItem = {
   totalPrevisionnalIncome: Scalars['Float']['output'];
 };
 
-export type GetBudgetStatsByCategoriesForIncome = {
-  __typename?: 'GetBudgetStatsByCategoriesForIncome';
+export type GetBudgetStatsByCategories = {
+  __typename?: 'GetBudgetStatsByCategories';
   categoryName: Scalars['String']['output'];
   total: Scalars['Float']['output'];
   totalEstimated: Scalars['Float']['output'];
@@ -61,6 +56,11 @@ export type GetBudgetStatsByCategoriesForIncome = {
 export enum LineType {
   Expense = 'EXPENSE',
   Income = 'INCOME'
+}
+
+export enum LineTypeEnum {
+  Expense = 'expense',
+  Income = 'income'
 }
 
 export type Mutation = {
@@ -88,7 +88,7 @@ export type MutationAddBudgetLineArgs = {
   editionId: Scalars['Float']['input'];
   estimatedQuantity: Scalars['Int']['input'];
   estimatedUnitPrice: Scalars['Float']['input'];
-  lineType: BudgetLinesBudgetLineTypeInput;
+  lineType: LineTypeEnum;
   name: Scalars['String']['input'];
 };
 
@@ -127,7 +127,7 @@ export type MutationUpdateBudgetLineArgs = {
   estimatedQuantity?: InputMaybe<Scalars['Int']['input']>;
   estimatedUnitPrice?: InputMaybe<Scalars['Float']['input']>;
   id: Scalars['Float']['input'];
-  lineType?: InputMaybe<BudgetLinesBudgetLineTypeInput>;
+  lineType?: InputMaybe<LineTypeEnum>;
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -143,24 +143,19 @@ export type Query = {
   budgetCategories: Array<BudgetCategoriesItem>;
   budgetLines: Array<BudgetLinesItem>;
   editions: Array<EditionsItem>;
-  getBudgetStatsByCategoriesForExpense: Array<GetBudgetStatsByCategoriesForIncome>;
-  getBudgetStatsByCategoriesForIncome: Array<GetBudgetStatsByCategoriesForIncome>;
+  getBudgetStatsByCategories: Array<GetBudgetStatsByCategories>;
 };
 
 
 export type QueryBudgetLinesArgs = {
-  budgetLineType?: InputMaybe<BudgetLinesBudgetLineTypeInput>;
+  budgetLineType?: InputMaybe<LineTypeEnum>;
   editionId: Scalars['Float']['input'];
 };
 
 
-export type QueryGetBudgetStatsByCategoriesForExpenseArgs = {
+export type QueryGetBudgetStatsByCategoriesArgs = {
   editionId: Scalars['Float']['input'];
-};
-
-
-export type QueryGetBudgetStatsByCategoriesForIncomeArgs = {
-  editionId: Scalars['Float']['input'];
+  lineType: LineTypeEnum;
 };
 
 export type AddBudgetLineMutationVariables = Exact<{
@@ -170,7 +165,7 @@ export type AddBudgetLineMutationVariables = Exact<{
   editionId: Scalars['Float']['input'];
   estimatedQuantity: Scalars['Int']['input'];
   estimatedUnitPrice: Scalars['Float']['input'];
-  lineType: BudgetLinesBudgetLineTypeInput;
+  lineType: LineTypeEnum;
 }>;
 
 
@@ -185,7 +180,7 @@ export type DeleteBudgetLineMutation = { __typename?: 'Mutation', deleteBudgetLi
 
 export type GetBudgetLinesQueryVariables = Exact<{
   editionId: Scalars['Float']['input'];
-  budgetLineType: BudgetLinesBudgetLineTypeInput;
+  budgetLineType: LineTypeEnum;
 }>;
 
 
@@ -204,7 +199,7 @@ export type UpdateBudgetLineMutationVariables = Exact<{
   editionId?: InputMaybe<Scalars['Float']['input']>;
   estimatedQuantity?: InputMaybe<Scalars['Int']['input']>;
   estimatedUnitPrice?: InputMaybe<Scalars['Float']['input']>;
-  lineType?: InputMaybe<BudgetLinesBudgetLineTypeInput>;
+  lineType?: InputMaybe<LineTypeEnum>;
 }>;
 
 
@@ -216,9 +211,9 @@ export type GetEditionsQueryVariables = Exact<{ [key: string]: never; }>;
 export type GetEditionsQuery = { __typename?: 'Query', editions: Array<{ __typename?: 'EditionsItem', id: number, name: string, startDate: string, totalExpense: number, totalIncome: number, totalPrevisionnalExpense: number, totalPrevisionnalIncome: number }> };
 
 
-export const AddBudgetLineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addBudgetLine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"budgetCategoryId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"description"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimatedQuantity"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimatedUnitPrice"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lineType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BudgetLinesBudgetLineTypeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addBudgetLine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"Argument","name":{"kind":"Name","value":"budgetCategoryId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"budgetCategoryId"}}},{"kind":"Argument","name":{"kind":"Name","value":"description"},"value":{"kind":"Variable","name":{"kind":"Name","value":"description"}}},{"kind":"Argument","name":{"kind":"Name","value":"editionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimatedQuantity"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimatedQuantity"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimatedUnitPrice"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimatedUnitPrice"}}},{"kind":"Argument","name":{"kind":"Name","value":"lineType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lineType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<AddBudgetLineMutation, AddBudgetLineMutationVariables>;
+export const AddBudgetLineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"addBudgetLine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"budgetCategoryId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"description"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimatedQuantity"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimatedUnitPrice"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lineType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LineTypeEnum"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"addBudgetLine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"Argument","name":{"kind":"Name","value":"budgetCategoryId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"budgetCategoryId"}}},{"kind":"Argument","name":{"kind":"Name","value":"description"},"value":{"kind":"Variable","name":{"kind":"Name","value":"description"}}},{"kind":"Argument","name":{"kind":"Name","value":"editionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimatedQuantity"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimatedQuantity"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimatedUnitPrice"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimatedUnitPrice"}}},{"kind":"Argument","name":{"kind":"Name","value":"lineType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lineType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<AddBudgetLineMutation, AddBudgetLineMutationVariables>;
 export const DeleteBudgetLineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"deleteBudgetLine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteBudgetLine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<DeleteBudgetLineMutation, DeleteBudgetLineMutationVariables>;
-export const GetBudgetLinesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getBudgetLines"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"budgetLineType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"BudgetLinesBudgetLineTypeInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"budgetLines"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"editionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}}},{"kind":"Argument","name":{"kind":"Name","value":"budgetLineType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"budgetLineType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedQuantity"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedUnitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetBudgetLinesQuery, GetBudgetLinesQueryVariables>;
+export const GetBudgetLinesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getBudgetLines"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"budgetLineType"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"LineTypeEnum"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"budgetLines"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"editionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}}},{"kind":"Argument","name":{"kind":"Name","value":"budgetLineType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"budgetLineType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedQuantity"}},{"kind":"Field","name":{"kind":"Name","value":"estimatedUnitPrice"}},{"kind":"Field","name":{"kind":"Name","value":"category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<GetBudgetLinesQuery, GetBudgetLinesQueryVariables>;
 export const GetBudgetCategoriesDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getBudgetCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"budgetCategories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<GetBudgetCategoriesQuery, GetBudgetCategoriesQueryVariables>;
-export const UpdateBudgetLineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateBudgetLine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"budgetCategoryId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"description"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimatedQuantity"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimatedUnitPrice"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lineType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"BudgetLinesBudgetLineTypeInput"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBudgetLine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"Argument","name":{"kind":"Name","value":"budgetCategoryId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"budgetCategoryId"}}},{"kind":"Argument","name":{"kind":"Name","value":"description"},"value":{"kind":"Variable","name":{"kind":"Name","value":"description"}}},{"kind":"Argument","name":{"kind":"Name","value":"editionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimatedQuantity"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimatedQuantity"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimatedUnitPrice"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimatedUnitPrice"}}},{"kind":"Argument","name":{"kind":"Name","value":"lineType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lineType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<UpdateBudgetLineMutation, UpdateBudgetLineMutationVariables>;
+export const UpdateBudgetLineDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"updateBudgetLine"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"name"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"budgetCategoryId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"description"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimatedQuantity"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"estimatedUnitPrice"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Float"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"lineType"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"LineTypeEnum"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBudgetLine"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"name"},"value":{"kind":"Variable","name":{"kind":"Name","value":"name"}}},{"kind":"Argument","name":{"kind":"Name","value":"budgetCategoryId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"budgetCategoryId"}}},{"kind":"Argument","name":{"kind":"Name","value":"description"},"value":{"kind":"Variable","name":{"kind":"Name","value":"description"}}},{"kind":"Argument","name":{"kind":"Name","value":"editionId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"editionId"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimatedQuantity"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimatedQuantity"}}},{"kind":"Argument","name":{"kind":"Name","value":"estimatedUnitPrice"},"value":{"kind":"Variable","name":{"kind":"Name","value":"estimatedUnitPrice"}}},{"kind":"Argument","name":{"kind":"Name","value":"lineType"},"value":{"kind":"Variable","name":{"kind":"Name","value":"lineType"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<UpdateBudgetLineMutation, UpdateBudgetLineMutationVariables>;
 export const GetEditionsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"getEditions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"editions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"startDate"}},{"kind":"Field","name":{"kind":"Name","value":"totalExpense"}},{"kind":"Field","name":{"kind":"Name","value":"totalIncome"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrevisionnalExpense"}},{"kind":"Field","name":{"kind":"Name","value":"totalPrevisionnalIncome"}}]}}]}}]} as unknown as DocumentNode<GetEditionsQuery, GetEditionsQueryVariables>;

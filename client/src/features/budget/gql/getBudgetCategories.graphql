@@ -1,7 +1,4 @@
-query getBudgetLines(
-  $editionId: Float!
-  $budgetLineType: BudgetLinesBudgetLineTypeInput!
-) {
+query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!) {
   budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {
     id
     name

@@ -9,10 +9,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import {
-  BudgetCategoriesItem,
-  BudgetLinesBudgetLineTypeInput,
-} from "@/generated/graphql";
+import { BudgetCategoriesItem, LineTypeEnum } from "@/generated/graphql";
 import { CirclePlus } from "lucide-react";
 import { ReactElement, useState } from "react";
 import { useAddBudgetLineForm } from "../hooks/useAddBudgetLineForm";
@@ -20,7 +17,7 @@ import { getBudgetLineTypeString } from "../utils";
 import { BudgetLineFormFields } from "./budget-line-form-fields";
 
 interface Props {
-  lineType: BudgetLinesBudgetLineTypeInput;
+  lineType: LineTypeEnum;
   allCategories?: BudgetCategoriesItem[];
 }
 

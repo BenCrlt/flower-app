@@ -1,22 +1,22 @@
-import { BudgetLinesBudgetLineTypeInput } from "@/generated/graphql";
+import { LineTypeEnum } from "@/generated/graphql";
 import { formatGapForCell, getGapBetweenRealAndPrevisionnal } from "../utils";
 
 interface Props {
-  lineType: BudgetLinesBudgetLineTypeInput;
+  lineType: LineTypeEnum;
   realAmount: number | null;
   previsionnalAmount: number;
   inPercent?: boolean;
 }
 
 const getCellTextColorFromLineType = (
-  lineType: BudgetLinesBudgetLineTypeInput,
+  lineType: LineTypeEnum,
   gap: number | null,
 ): string => {
   if (gap === null) return "";
   switch (lineType) {
-    case BudgetLinesBudgetLineTypeInput.Income:
+    case LineTypeEnum.Income:
       return gap > 0 ? "text-green-600" : "text-red-600";
-    case BudgetLinesBudgetLineTypeInput.Expense:
+    case LineTypeEnum.Expense:
       return gap > 0 ? "text-red-600" : "text-green-600";
     default:
       return "";

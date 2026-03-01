@@ -8,10 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import {
-  BudgetCategoriesItem,
-  BudgetLinesBudgetLineTypeInput,
-} from "@/generated/graphql";
+import { BudgetCategoriesItem, LineTypeEnum } from "@/generated/graphql";
 import { Table } from "@tanstack/react-table";
 import { Coins, ListFilter, PiggyBank } from "lucide-react";
 import { useState } from "react";
@@ -21,8 +18,8 @@ import { BudgetTableRow } from "./columns";
 
 interface Props {
   table: Table<BudgetTableRow>;
-  lineType: BudgetLinesBudgetLineTypeInput;
-  onChangeLineType: (type: BudgetLinesBudgetLineTypeInput) => void;
+  lineType: LineTypeEnum;
+  onChangeLineType: (type: LineTypeEnum) => void;
 }
 
 export function BudgetTableFiltersAndActions({
@@ -93,16 +90,14 @@ export function BudgetTableFiltersAndActions({
       <div className="flex items-center gap-2">
         <Tabs
           defaultValue="expense"
-          onValueChange={(value) =>
-            onChangeLineType(value as BudgetLinesBudgetLineTypeInput)
-          }
+          onValueChange={(value) => onChangeLineType(value as LineTypeEnum)}
         >
           <TabsList>
-            <TabsTrigger value={BudgetLinesBudgetLineTypeInput.Income}>
+            <TabsTrigger value={LineTypeEnum.Income}>
               Recettes
               <PiggyBank />
             </TabsTrigger>
-            <TabsTrigger value={BudgetLinesBudgetLineTypeInput.Expense}>
+            <TabsTrigger value={LineTypeEnum.Expense}>
               Dépenses
               <Coins />
             </TabsTrigger>
