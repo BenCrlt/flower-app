@@ -6,6 +6,7 @@ export const budgetCategoriesTable = drizzleSilk(
   pgTable("budget_categories", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     name: varchar({ length: 255 }).notNull(),
+    color: varchar({ length: 7 }).notNull(),
   }),
 );
 

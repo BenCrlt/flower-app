@@ -1,4 +1,5 @@
 type BudgetCategoriesItem {
+  color: String!
   id: Int!
   name: String!
 }

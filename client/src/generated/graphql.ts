@@ -18,6 +18,7 @@ export type Scalars = {
 
 export type BudgetCategoriesItem = {
   __typename?: 'BudgetCategoriesItem';
+  color: Scalars['String']['output'];
   id: Scalars['Int']['output'];
   name: Scalars['String']['output'];
 };
