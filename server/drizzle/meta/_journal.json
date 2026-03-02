@@ -36,6 +36,20 @@
       "when": 1772470245090,
       "tag": "0004_remove-unused-column-payment",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1772470839143,
+      "tag": "0005_furry_betty_brant",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1772471716703,
+      "tag": "0006_on-delete-cascade-for-payment",
+      "breakpoints": true
     }
   ]
 }

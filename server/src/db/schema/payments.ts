@@ -16,10 +16,14 @@ export const paymentsTable = drizzleSilk(
       .notNull(),
     editionId: integer()
       .notNull()
-      .references(() => editionsTable.id),
+      .references(() => editionsTable.id, {
+        onDelete: "cascade",
+      }),
     budgetLineId: integer()
       .notNull()
       .references(() => budgetLinesTable.id),
-    invoiceId: integer().references(() => invoicesTable.id),
+    invoiceId: integer().references(() => invoicesTable.id, {
+      onDelete: "cascade",
+    }),
   }),
 );

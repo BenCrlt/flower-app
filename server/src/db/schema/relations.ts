@@ -53,10 +53,6 @@ export const paymentsRelations = relations(paymentsTable, ({ one }) => ({
     fields: [paymentsTable.invoiceId],
     references: [invoicesTable.id],
   }),
-  author: one(usersTable, {
-    fields: [paymentsTable.authorId],
-    references: [usersTable.id],
-  }),
 }));
 
 export const productsRelations = relations(productsTable, ({ one, many }) => ({

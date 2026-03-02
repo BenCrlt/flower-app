@@ -1,5 +1,8 @@
 import { drizzleSilk } from "@gqloom/drizzle";
+import { InferSelectModel } from "drizzle-orm";
 import { integer, pgTable, text, varchar } from "drizzle-orm/pg-core";
+
+export type Vendor = InferSelectModel<typeof vendorsTable>;
 
 export const vendorsTable = drizzleSilk(
   pgTable("vendors", {

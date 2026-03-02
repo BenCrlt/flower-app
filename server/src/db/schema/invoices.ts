@@ -1,11 +1,12 @@
 import { drizzleSilk } from "@gqloom/drizzle";
+import { InferSelectModel } from "drizzle-orm";
 import {
-  date,
   integer,
   numeric,
   pgEnum,
   pgTable,
   text,
+  timestamp,
 } from "drizzle-orm/pg-core";
 import { editionsTable } from "./editions";
 import { usersTable } from "./users";
@@ -17,6 +18,8 @@ export const invoiceStatus = pgEnum("invoiceStatus", [
   "cancelled",
 ]);
 export type InvoiceStatus = (typeof invoiceStatus.enumValues)[number];
+
+export type Invoice = InferSelectModel<typeof invoicesTable>;
 
 export const invoicesTable = drizzleSilk(
   pgTable("invoices", {
@@ -37,7 +40,7 @@ export const invoicesTable = drizzleSilk(
     authorId: integer()
       .notNull()
       .references(() => usersTable.id),
-    executedAt: date(),
+    executedAt: timestamp(),
     status: invoiceStatus().notNull(),
   }),
 );
