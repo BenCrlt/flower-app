@@ -16,6 +16,12 @@ export type Scalars = {
   Float: { input: number; output: number; }
 };
 
+export type AddInvoicePaymentsInput = {
+  budgetLineId: Scalars['Float']['input'];
+  quantity: Scalars['Float']['input'];
+  unitPrice: Scalars['Float']['input'];
+};
+
 export type BudgetCategoriesItem = {
   __typename?: 'BudgetCategoriesItem';
   color: Scalars['String']['output'];
@@ -54,6 +60,30 @@ export type GetBudgetStatsByCategories = {
   totalEstimated: Scalars['Float']['output'];
 };
 
+export enum InvoiceStatus {
+  Cancelled = 'CANCELLED',
+  Paid = 'PAID',
+  Pending = 'PENDING'
+}
+
+export enum InvoiceStatusEnum {
+  Cancelled = 'cancelled',
+  Paid = 'paid',
+  Pending = 'pending'
+}
+
+export type InvoicesItem = {
+  __typename?: 'InvoicesItem';
+  authorId: Scalars['Int']['output'];
+  editionId: Scalars['Int']['output'];
+  executedAt?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  note?: Maybe<Scalars['String']['output']>;
+  status: InvoiceStatus;
+  totalAmount: Scalars['String']['output'];
+  vendorId: Scalars['Int']['output'];
+};
+
 export enum LineType {
   Expense = 'EXPENSE',
   Income = 'INCOME'
@@ -69,9 +99,13 @@ export type Mutation = {
   addBudgetCategory?: Maybe<BudgetCategoriesItem>;
   addBudgetLine?: Maybe<BudgetLinesItem>;
   addEdition?: Maybe<EditionsItem>;
+  addInvoice?: Maybe<InvoicesItem>;
+  addOrUpdateVendor?: Maybe<VendorsItem>;
   deleteBudgetCategory?: Maybe<BudgetCategoriesItem>;
   deleteBudgetLine?: Maybe<BudgetLinesItem>;
   deleteEdition?: Maybe<EditionsItem>;
+  deleteInvoice?: Maybe<InvoicesItem>;
+  deleteVendor?: Maybe<VendorsItem>;
   updateBudgetCategory?: Maybe<BudgetCategoriesItem>;
   updateBudgetLine?: Maybe<BudgetLinesItem>;
   updateEdition?: Maybe<EditionsItem>;
@@ -101,6 +135,27 @@ export type MutationAddEditionArgs = {
 };
 
 
+export type MutationAddInvoiceArgs = {
+  authorId: Scalars['Float']['input'];
+  editionId: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  payments: Array<AddInvoicePaymentsInput>;
+  status: InvoiceStatusEnum;
+  totalAmount: Scalars['Float']['input'];
+  vendorId: Scalars['Float']['input'];
+};
+
+
+export type MutationAddOrUpdateVendorArgs = {
+  address?: InputMaybe<Scalars['String']['input']>;
+  description?: InputMaybe<Scalars['String']['input']>;
+  email?: InputMaybe<Scalars['String']['input']>;
+  id?: InputMaybe<Scalars['Float']['input']>;
+  name: Scalars['String']['input'];
+  phone?: InputMaybe<Scalars['String']['input']>;
+};
+
+
 export type MutationDeleteBudgetCategoryArgs = {
   id: Scalars['Float']['input'];
 };
@@ -112,6 +167,16 @@ export type MutationDeleteBudgetLineArgs = {
 
 
 export type MutationDeleteEditionArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
+export type MutationDeleteInvoiceArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
+export type MutationDeleteVendorArgs = {
   id: Scalars['Float']['input'];
 };
 
@@ -146,6 +211,8 @@ export type Query = {
   budgetLines: Array<BudgetLinesItem>;
   editions: Array<EditionsItem>;
   getBudgetStatsByCategories: Array<GetBudgetStatsByCategories>;
+  invoices: Array<InvoicesItem>;
+  vendors: Array<VendorsItem>;
 };
 
 
@@ -158,6 +225,22 @@ export type QueryBudgetLinesArgs = {
 export type QueryGetBudgetStatsByCategoriesArgs = {
   editionId: Scalars['Float']['input'];
   lineType: LineTypeEnum;
+};
+
+
+export type QueryInvoicesArgs = {
+  editionId: Scalars['Float']['input'];
+  status?: InputMaybe<InvoiceStatusEnum>;
+};
+
+export type VendorsItem = {
+  __typename?: 'VendorsItem';
+  address?: Maybe<Scalars['String']['output']>;
+  description?: Maybe<Scalars['String']['output']>;
+  email?: Maybe<Scalars['String']['output']>;
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  phoneNumber?: Maybe<Scalars['String']['output']>;
 };
 
 export type AddBudgetCategoryMutationVariables = Exact<{
