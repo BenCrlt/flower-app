@@ -35,6 +35,7 @@ export function BudgetTable() {
         estimatedUnitPrice: Number(item.estimatedUnitPrice),
         estimatedQuantity: item.estimatedQuantity,
         categoryName: item.category?.name ?? "",
+        categoryColor: item.category?.color ?? "",
         budgetCategoryId: item.category?.id ?? 0,
       })) || [],
     [data],

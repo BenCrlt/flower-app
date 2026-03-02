@@ -15,6 +15,7 @@ export interface BudgetTableRow {
   estimatedQuantity: number;
   description: string;
   categoryName: string;
+  categoryColor: string;
   budgetCategoryId: number;
 }
 
@@ -117,7 +118,15 @@ export function getColumns({
         return filterValue.includes(row.getValue(columnId));
       },
       cell: ({ row }) => (
-        <Badge color="primary">{row.getValue("categoryName")}</Badge>
+        <Badge
+          style={{
+            backgroundColor: row.original.categoryColor,
+            borderColor: row.original.categoryColor,
+            color: "#fff",
+          }}
+        >
+          {row.original.categoryName}
+        </Badge>
       ),
     },
     {

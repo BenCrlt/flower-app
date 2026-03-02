@@ -1,6 +1,14 @@
-query getBudgetCategories {
-  budgetCategories {
+query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!) {
+  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {
     id
     name
+    description
+    estimatedQuantity
+    estimatedUnitPrice
+    category {
+      id
+      name
+      color
+    }
   }
 }
