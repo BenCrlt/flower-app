@@ -7,6 +7,7 @@ import {
 
 export const addBudgetCategoryInput = z.object({
   name: z.string().min(1).max(255),
+  color: z.string(),
 });
 
 export const addBudgetCategory = async (

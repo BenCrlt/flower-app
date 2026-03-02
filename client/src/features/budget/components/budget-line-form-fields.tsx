@@ -1,3 +1,5 @@
+import { AddCategoryField } from "@/components/AddCategoryField";
+import { CategoryBadge } from "@/components/CategoryBadge";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
@@ -88,7 +90,10 @@ export function BudgetLineFormFields({
     return (
       <>
         <Field data-invalid={!!errors.name}>
-          <EditableField label="Nom" displayValue={nameValue ?? currentValues.name}>
+          <EditableField
+            label="Nom"
+            displayValue={nameValue ?? currentValues.name}
+          >
             {({ onEditDone }) => {
               const { onBlur: rhfBlur, ...rest } = register("name");
               return (
@@ -230,9 +235,20 @@ export function BudgetLineFormFields({
                           key={category.id}
                           value={category.id.toString()}
                         >
-                          {category.name}
+                          <CategoryBadge
+                            name={category.name}
+                            color={category.color}
+                          />
                         </SelectItem>
                       ))}
+                      <div className="p-1">
+                        <AddCategoryField
+                          onAdded={(id) => {
+                            field.onChange(id);
+                            onEditDone();
+                          }}
+                        />
+                      </div>
                     </SelectContent>
                   </Select>
                 )}
@@ -270,7 +286,9 @@ export function BudgetLineFormFields({
         </Field>
         <span className="mt-9 text-muted-foreground">×</span>
         <Field data-invalid={!!errors.estimatedUnitPrice}>
-          <FieldLabel htmlFor="budget-line-input-cost">Prix unitaire</FieldLabel>
+          <FieldLabel htmlFor="budget-line-input-cost">
+            Prix unitaire
+          </FieldLabel>
           <Input
             id="budget-line-input-cost"
             aria-invalid={!!errors.estimatedUnitPrice}
@@ -315,13 +333,16 @@ export function BudgetLineFormFields({
               </SelectTrigger>
               <SelectContent>
                 {allCategories?.map((category) => (
-                  <SelectItem
-                    key={category.id}
-                    value={category.id.toString()}
-                  >
-                    {category.name}
+                  <SelectItem key={category.id} value={category.id.toString()}>
+                    <CategoryBadge
+                      name={category.name}
+                      color={category.color}
+                    />
                   </SelectItem>
                 ))}
+                <div className="p-1">
+                  <AddCategoryField onAdded={(id) => field.onChange(id)} />
+                </div>
               </SelectContent>
             </Select>
           )}

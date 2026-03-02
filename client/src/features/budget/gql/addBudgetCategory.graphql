@@ -1,0 +1,7 @@
+mutation AddBudgetCategory($name: String!, $color: String!) {
+  addBudgetCategory(name: $name, color: $color) {
+    id
+    name
+    color
+  }
+}

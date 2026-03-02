@@ -43,7 +43,7 @@ enum LineTypeEnum {
 }
 
 type Mutation {
-  addBudgetCategory(name: String!): BudgetCategoriesItem
+  addBudgetCategory(color: String!, name: String!): BudgetCategoriesItem
   addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, lineType: LineTypeEnum!, name: String!): BudgetLinesItem
   addEdition(name: String!, startDate: String!): EditionsItem
   deleteBudgetCategory(id: Float!): BudgetCategoriesItem

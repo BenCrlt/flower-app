@@ -1,6 +1,6 @@
+import { CategoryBadge } from "@/components/CategoryBadge";
 import { RowPrice } from "@/components/Table/RowPrice";
 import { SortableHeader } from "@/components/Table/SortableHeader";
-import { Badge } from "@/components/ui/badge";
 import { BudgetCategoriesItem, LineTypeEnum } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { MessageCircleCheck, MessageCircleQuestion } from "lucide-react";
@@ -118,15 +118,10 @@ export function getColumns({
         return filterValue.includes(row.getValue(columnId));
       },
       cell: ({ row }) => (
-        <Badge
-          style={{
-            backgroundColor: row.original.categoryColor,
-            borderColor: row.original.categoryColor,
-            color: "#fff",
-          }}
-        >
-          {row.original.categoryName}
-        </Badge>
+        <CategoryBadge
+          name={row.original.categoryName}
+          color={row.original.categoryColor}
+        />
       ),
     },
     {
