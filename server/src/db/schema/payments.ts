@@ -1,16 +1,8 @@
 import { drizzleSilk } from "@gqloom/drizzle";
-import {
-  date,
-  integer,
-  numeric,
-  pgTable,
-  smallint,
-  text,
-} from "drizzle-orm/pg-core";
+import { integer, numeric, pgTable, smallint } from "drizzle-orm/pg-core";
 import { budgetLinesTable } from "./budget-lines";
 import { editionsTable } from "./editions";
 import { invoicesTable } from "./invoices";
-import { usersTable } from "./users";
 
 export const paymentsTable = drizzleSilk(
   pgTable("payments", {
@@ -22,8 +14,6 @@ export const paymentsTable = drizzleSilk(
     })
       .default("0.00")
       .notNull(),
-    note: text(),
-    executedAt: date().notNull().defaultNow(),
     editionId: integer()
       .notNull()
       .references(() => editionsTable.id),
@@ -31,8 +21,5 @@ export const paymentsTable = drizzleSilk(
       .notNull()
       .references(() => budgetLinesTable.id),
     invoiceId: integer().references(() => invoicesTable.id),
-    authorId: integer()
-      .notNull()
-      .references(() => usersTable.id),
   }),
 );
