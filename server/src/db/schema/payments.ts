@@ -9,7 +9,7 @@ import {
 } from "drizzle-orm/pg-core";
 import { budgetLinesTable } from "./budget-lines";
 import { editionsTable } from "./editions";
-import { receiptsTable } from "./receipts";
+import { invoicesTable } from "./invoices";
 import { usersTable } from "./users";
 
 export const paymentsTable = drizzleSilk(
@@ -30,7 +30,7 @@ export const paymentsTable = drizzleSilk(
     budgetLineId: integer()
       .notNull()
       .references(() => budgetLinesTable.id),
-    receiptId: integer().references(() => receiptsTable.id),
+    invoiceId: integer().references(() => invoicesTable.id),
     authorId: integer()
       .notNull()
       .references(() => usersTable.id),

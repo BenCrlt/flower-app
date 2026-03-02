@@ -1,11 +1,25 @@
 import { drizzleSilk } from "@gqloom/drizzle";
-import { date, integer, numeric, pgTable, text } from "drizzle-orm/pg-core";
+import {
+  date,
+  integer,
+  numeric,
+  pgEnum,
+  pgTable,
+  text,
+} from "drizzle-orm/pg-core";
 import { editionsTable } from "./editions";
 import { usersTable } from "./users";
 import { vendorsTable } from "./vendors";
 
-export const receiptsTable = drizzleSilk(
-  pgTable("receipts", {
+export const invoiceStatus = pgEnum("invoiceStatus", [
+  "pending",
+  "paid",
+  "cancelled",
+]);
+export type InvoiceStatus = (typeof invoiceStatus.enumValues)[number];
+
+export const invoicesTable = drizzleSilk(
+  pgTable("invoices", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     editionId: integer()
       .notNull()
@@ -20,9 +34,10 @@ export const receiptsTable = drizzleSilk(
       .default("0.00")
       .notNull(),
     note: text(),
-    executedAt: date().notNull().defaultNow(),
     authorId: integer()
       .notNull()
       .references(() => usersTable.id),
+    executedAt: date(),
+    status: invoiceStatus().notNull(),
   }),
 );
