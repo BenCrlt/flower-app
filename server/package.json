@@ -12,7 +12,8 @@
     "format:check": "prettier --check src",
     "mig:gen": "drizzle-kit generate",
     "mig:run": "drizzle-kit migrate",
-    "generate:schema": "tsx devtools/scripts/generate-schema.ts"
+    "generate:schema": "tsx devtools/scripts/generate-schema.ts",
+    "seed": "tsx devtools/scripts/seed.ts"
   },
   "keywords": [],
   "author": "",
