@@ -1,6 +1,7 @@
 import { DataTable } from "@/components/Table/DataTable";
 import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
+import { useDeleteInvoiceMutation } from "../hooks/useDeleteInvoiceMutation";
 import { useGetInvoicesQuery } from "../hooks/useGetInvoicesQuery";
 import { getColumns, PaymentTableRow } from "./columns";
 import { PaymentsTableFilter } from "./payments-table-filters";
@@ -10,6 +11,12 @@ export function PaymentsTable() {
   const { data } = useGetInvoicesQuery({
     variables: { editionId: edition.id },
   });
+
+  const { mutate: deleteInvoice } = useDeleteInvoiceMutation();
+
+  const handleDeleteInvoice = (id: number) => {
+    deleteInvoice({ id });
+  };
 
   const rows: PaymentTableRow[] =
     data?.invoices.map((invoice) => ({
@@ -21,7 +28,7 @@ export function PaymentsTable() {
       executedAt: invoice.executedAt ?? "-",
     })) || [];
 
-  const columns = getColumns();
+  const columns = getColumns({ onDelete: handleDeleteInvoice });
 
   return (
     <div className="flex flex-col gap-4">

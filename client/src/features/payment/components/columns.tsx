@@ -3,6 +3,7 @@ import { SortableHeader } from "@/components/Table/SortableHeader";
 import { InvoiceStatus } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { PaymentStatusBadge } from "./payment-status-badge";
+import { PaymentsTableActionsLine } from "./payments-table-actions-line";
 
 export interface PaymentTableRow {
   id: number;
@@ -13,7 +14,13 @@ export interface PaymentTableRow {
   note: string;
 }
 
-export function getColumns(): ColumnDef<PaymentTableRow>[] {
+interface GetPaymentTableColumns {
+  onDelete: (id: number) => void;
+}
+
+export function getColumns({
+  onDelete,
+}: GetPaymentTableColumns): ColumnDef<PaymentTableRow>[] {
   return [
     {
       header: ({ column }) => (
@@ -57,6 +64,13 @@ export function getColumns(): ColumnDef<PaymentTableRow>[] {
         <span className="block truncate" title={getValue<string>()}>
           {getValue<string>()}
         </span>
+      ),
+    },
+    {
+      id: "actions",
+      meta: { className: "w-px whitespace-nowrap" },
+      cell: ({ row }) => (
+        <PaymentsTableActionsLine row={row} onDelete={onDelete} />
       ),
     },
   ];
