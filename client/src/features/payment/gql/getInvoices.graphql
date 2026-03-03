@@ -1,5 +1,21 @@
 query getInvoices($editionId: Float!, $status: InvoiceStatusEnum) {
   invoices(editionId: $editionId, status: $status) {
-      
+    id
+    vendor {
+      id
+      name
+    }
+    totalAmount
+    note
+    author {
+      id
+    }
+    executedAt
+    status
+    payments {
+      id
+      quantity
+      unitPrice
+    }
   }
 }

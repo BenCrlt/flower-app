@@ -9,11 +9,23 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SalesRouteImport } from './routes/sales'
+import { Route as PaymentsRouteImport } from './routes/payments'
 import { Route as EditionsRouteImport } from './routes/editions'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BudgetTableRouteImport } from './routes/budget-table'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SalesRoute = SalesRouteImport.update({
+  id: '/sales',
+  path: '/sales',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PaymentsRoute = PaymentsRouteImport.update({
+  id: '/payments',
+  path: '/payments',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const EditionsRoute = EditionsRouteImport.update({
   id: '/editions',
   path: '/editions',
@@ -40,12 +52,16 @@ export interface FileRoutesByFullPath {
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/editions': typeof EditionsRoute
+  '/payments': typeof PaymentsRoute
+  '/sales': typeof SalesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/editions': typeof EditionsRoute
+  '/payments': typeof PaymentsRoute
+  '/sales': typeof SalesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -53,13 +69,34 @@ export interface FileRoutesById {
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/editions': typeof EditionsRoute
+  '/payments': typeof PaymentsRoute
+  '/sales': typeof SalesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/budget-table' | '/dashboard' | '/editions'
+  fullPaths:
+    | '/'
+    | '/budget-table'
+    | '/dashboard'
+    | '/editions'
+    | '/payments'
+    | '/sales'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/budget-table' | '/dashboard' | '/editions'
-  id: '__root__' | '/' | '/budget-table' | '/dashboard' | '/editions'
+  to:
+    | '/'
+    | '/budget-table'
+    | '/dashboard'
+    | '/editions'
+    | '/payments'
+    | '/sales'
+  id:
+    | '__root__'
+    | '/'
+    | '/budget-table'
+    | '/dashboard'
+    | '/editions'
+    | '/payments'
+    | '/sales'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -67,10 +104,26 @@ export interface RootRouteChildren {
   BudgetTableRoute: typeof BudgetTableRoute
   DashboardRoute: typeof DashboardRoute
   EditionsRoute: typeof EditionsRoute
+  PaymentsRoute: typeof PaymentsRoute
+  SalesRoute: typeof SalesRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/sales': {
+      id: '/sales'
+      path: '/sales'
+      fullPath: '/sales'
+      preLoaderRoute: typeof SalesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/payments': {
+      id: '/payments'
+      path: '/payments'
+      fullPath: '/payments'
+      preLoaderRoute: typeof PaymentsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/editions': {
       id: '/editions'
       path: '/editions'
@@ -107,6 +160,8 @@ const rootRouteChildren: RootRouteChildren = {
   BudgetTableRoute: BudgetTableRoute,
   DashboardRoute: DashboardRoute,
   EditionsRoute: EditionsRoute,
+  PaymentsRoute: PaymentsRoute,
+  SalesRoute: SalesRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

@@ -1,4 +1,9 @@
-import { ChartNoAxesCombined, LayoutDashboard } from "lucide-react";
+import {
+  ChartNoAxesCombined,
+  Coins,
+  CreditCard,
+  LayoutDashboard,
+} from "lucide-react";
 import FlowerLogo from "../assets/flower.svg?react";
 import { SidebarItem } from "./SidebarItem";
 
@@ -13,6 +18,8 @@ export function Sidebar() {
             to="/budget-table"
             icon={<ChartNoAxesCombined size={20} />}
           />
+          <SidebarItem to="/payments" icon={<CreditCard size={20} />} />
+          <SidebarItem to="/sales" icon={<Coins size={20} />} />
         </nav>
       </div>
     </aside>
