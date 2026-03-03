@@ -1,5 +1,11 @@
-import { mutation, query, resolver } from "@gqloom/core";
-import { invoicesTable, vendorsTable } from "../../db/schema";
+import { field, mutation, query, resolver } from "@gqloom/core";
+import { map } from "lodash";
+import {
+  invoicesTable,
+  paymentsTable,
+  usersTable,
+  vendorsTable,
+} from "../../db/schema";
 import { addInvoice, addInvoiceInput } from "./utils/addInvoice";
 import {
   addOrUpdateVendor,
@@ -9,11 +15,24 @@ import { deleteInvoice, deleteInvoiceInput } from "./utils/deleteInvoice";
 import { deleteVendor, deleteVendorInput } from "./utils/deleteVendor";
 import { getInvoices, getInvoicesInput } from "./utils/getInvoices";
 import { getVendors } from "./utils/getVendors";
+import { loadAuthors } from "./utils/loadAuthors";
+import { loadPayments } from "./utils/loadPayments";
+import { loadVendors } from "./utils/loadVendors";
 
 export const invoiceResolver = resolver.of(invoicesTable, {
   invoices: query(invoicesTable.$list())
     .input(getInvoicesInput)
     .resolve(getInvoices),
+
+  payments: field(paymentsTable.$list())
+    .derivedFrom("id")
+    .load(async (invoices) => loadPayments(map(invoices, "id"))),
+  author: field(usersTable.$nullable())
+    .derivedFrom("authorId")
+    .load(async (invoices) => loadAuthors(map(invoices, "authorId"))),
+  vendor: field(vendorsTable.$nullable())
+    .derivedFrom("vendorId")
+    .load(async (invoices) => loadVendors(map(invoices, "vendorId"))),
 
   addInvoice: mutation(invoicesTable.$nullable())
     .input(addInvoiceInput)

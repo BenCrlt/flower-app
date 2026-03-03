@@ -1,0 +1,5 @@
+query getInvoices($editionId: Float!, $status: InvoiceStatusEnum) {
+  invoices(editionId: $editionId, status: $status) {
+      
+  }
+}
