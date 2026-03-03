@@ -20,6 +20,7 @@ interface Props {
 
 export function PaymentsTableFilter({ table }: Props): ReactElement {
   const [statusFiltered, setStatusFiltered] = useState<InvoiceStatus[]>([]);
+  const value = table.getColumn("vendorName")?.getFilterValue() as string;
 
   const statusAvailable = [
     InvoiceStatus.Paid,
@@ -28,18 +29,19 @@ export function PaymentsTableFilter({ table }: Props): ReactElement {
   ];
 
   const handleSelectStatus = (status: InvoiceStatus, checked: boolean) => {
-    if (!checked) {
-      setStatusFiltered((prev) => prev.filter((s) => s !== status));
-      return;
-    }
-    setStatusFiltered((prev) => [...prev, status]);
+    const newStatusFiltered = !checked
+      ? statusFiltered.filter((s) => s !== status)
+      : [...statusFiltered, status];
+
+    setStatusFiltered(newStatusFiltered);
+    table.getColumn("status")?.setFilterValue(newStatusFiltered);
   };
 
   return (
     <div className="flex items-center gap-2">
       <Input
         placeholder="Rechercher..."
-        value={""}
+        value={value}
         onChange={(event) => {
           const value = event.target.value;
           table.setGlobalFilter(value);

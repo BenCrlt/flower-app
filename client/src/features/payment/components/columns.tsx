@@ -1,3 +1,4 @@
+import { RowPrice } from "@/components/Table/RowPrice";
 import { SortableHeader } from "@/components/Table/SortableHeader";
 import { InvoiceStatus } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
@@ -31,6 +32,7 @@ export function getColumns(): ColumnDef<PaymentTableRow>[] {
           className="justify-end"
         />
       ),
+      cell: ({ row }) => <RowPrice amount={row.original.totalAmount} />,
     },
     {
       meta: { className: "w-px whitespace-nowrap" },
