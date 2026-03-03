@@ -56,7 +56,6 @@ export function AddBudgetLineSheet({
               control={control}
               errors={errors}
               allCategories={allCategories}
-              mode="add"
               namePlaceholder={`Nom de la ${lineTypeString}`}
             />
           </div>

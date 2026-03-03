@@ -60,7 +60,6 @@ export function EditBudgetLineSheet({
               control={control}
               errors={errors}
               allCategories={allCategories}
-              mode="edit"
               currentValues={line}
             />
           </div>

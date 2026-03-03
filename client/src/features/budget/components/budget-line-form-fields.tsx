@@ -1,6 +1,6 @@
 import { AddCategoryField } from "@/components/AddCategoryField";
 import { CategoryBadge } from "@/components/CategoryBadge";
-import { Field, FieldError, FieldLabel } from "@/components/ui/field";
+import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { BudgetCategoriesItem } from "@/generated/graphql";
-import { ReactElement, useState } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import {
   Control,
   Controller,
@@ -24,10 +24,12 @@ import { BudgetLineFormValues } from "../hooks/budgetLineFormResolver";
 function EditableField({
   label,
   displayValue,
+  placeholder,
   children,
 }: {
   label: string;
-  displayValue: string;
+  displayValue: ReactNode;
+  placeholder?: string;
   children: (props: { onEditDone: () => void }) => ReactElement;
 }) {
   const [editing, setEditing] = useState(false);
@@ -44,7 +46,9 @@ function EditableField({
           className="min-h-9 w-full rounded-md border border-transparent px-3 py-2 text-left text-sm transition-colors hover:border-input hover:bg-muted/40 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           {displayValue || (
-            <span className="text-muted-foreground italic">—</span>
+            <span className="text-muted-foreground italic">
+              {placeholder ?? "—"}
+            </span>
           )}
         </button>
       )}
@@ -57,7 +61,6 @@ interface Props {
   control: Control<BudgetLineFormValues>;
   errors: FieldErrors<BudgetLineFormValues>;
   allCategories?: BudgetCategoriesItem[];
-  mode: "add" | "edit";
   namePlaceholder?: string;
   currentValues?: {
     name: string;
@@ -72,7 +75,6 @@ export function BudgetLineFormFields({
   control,
   errors,
   allCategories,
-  mode,
   namePlaceholder,
   currentValues,
 }: Props): ReactElement {
@@ -86,214 +88,91 @@ export function BudgetLineFormFields({
   const categoryValue = useWatch({ control, name: "budgetCategoryId" });
   const currentCategory = allCategories?.find((c) => c.id === categoryValue);
 
-  if (mode === "edit" && currentValues) {
-    return (
-      <>
-        <Field data-invalid={!!errors.name}>
-          <EditableField
-            label="Nom"
-            displayValue={nameValue ?? currentValues.name}
-          >
-            {({ onEditDone }) => {
-              const { onBlur: rhfBlur, ...rest } = register("name");
-              return (
-                <Input
-                  autoFocus
-                  aria-invalid={!!errors.name}
-                  onBlur={(e) => {
-                    rhfBlur(e);
-                    onEditDone();
-                  }}
-                  {...rest}
-                />
-              );
-            }}
-          </EditableField>
-          <FieldError errors={[errors.name]} />
-        </Field>
+  const qtyDisplay = (() => {
+    const val = estimatedQuantity ?? currentValues?.estimatedQuantity;
+    if (val === undefined || isNaN(Number(val))) return "";
+    return String(val);
+  })();
 
-        <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-2">
-          <Field data-invalid={!!errors.estimatedQuantity}>
-            <EditableField
-              label="Quantité"
-              displayValue={String(
-                estimatedQuantity ?? currentValues.estimatedQuantity,
-              )}
-            >
-              {({ onEditDone }) => {
-                const { onBlur: rhfBlur, ...rest } = register(
-                  "estimatedQuantity",
-                  { valueAsNumber: true },
-                );
-                return (
-                  <Input
-                    autoFocus
-                    aria-invalid={!!errors.estimatedQuantity}
-                    onBlur={(e) => {
-                      rhfBlur(e);
-                      onEditDone();
-                    }}
-                    {...rest}
-                  />
-                );
-              }}
-            </EditableField>
-            <FieldError errors={[errors.estimatedQuantity]} />
-          </Field>
-          <span className="mt-7 text-muted-foreground">×</span>
-          <Field data-invalid={!!errors.estimatedUnitPrice}>
-            <EditableField
-              label="Prix unitaire"
-              displayValue={Number(
-                estimatedUnitPrice ?? currentValues.estimatedUnitPrice,
-              ).toLocaleString("fr-FR", {
-                style: "currency",
-                currency: "EUR",
-              })}
-            >
-              {({ onEditDone }) => {
-                const { onBlur: rhfBlur, ...rest } = register(
-                  "estimatedUnitPrice",
-                  { valueAsNumber: true },
-                );
-                return (
-                  <Input
-                    autoFocus
-                    aria-invalid={!!errors.estimatedUnitPrice}
-                    onBlur={(e) => {
-                      rhfBlur(e);
-                      onEditDone();
-                    }}
-                    {...rest}
-                  />
-                );
-              }}
-            </EditableField>
-            <FieldError errors={[errors.estimatedUnitPrice]} />
-          </Field>
-        </div>
-
-        <p className="text-sm text-muted-foreground -mt-4">
-          Total prévisionnel :{" "}
-          <span className="font-medium text-foreground">
-            {totalEstimated.toLocaleString("fr-FR", {
-              style: "currency",
-              currency: "EUR",
-            })}
-          </span>
-        </p>
-
-        <Field>
-          <EditableField
-            label="Description"
-            displayValue={descriptionValue ?? currentValues.description}
-          >
-            {({ onEditDone }) => {
-              const { onBlur: rhfBlur, ...rest } = register("description");
-              return (
-                <Textarea
-                  autoFocus
-                  onBlur={(e) => {
-                    rhfBlur(e);
-                    onEditDone();
-                  }}
-                  {...rest}
-                />
-              );
-            }}
-          </EditableField>
-        </Field>
-
-        <Field data-invalid={!!errors.budgetCategoryId}>
-          <EditableField
-            label="Catégorie"
-            displayValue={currentCategory?.name ?? "—"}
-          >
-            {({ onEditDone }) => (
-              <Controller
-                name="budgetCategoryId"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    aria-invalid={!!errors.budgetCategoryId}
-                    value={field.value?.toString()}
-                    onValueChange={(val) => {
-                      field.onChange(Number(val));
-                      onEditDone();
-                    }}
-                    open
-                    onOpenChange={(o) => {
-                      if (!o) onEditDone();
-                    }}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Sélectionnez une catégorie..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {allCategories?.map((category) => (
-                        <SelectItem
-                          key={category.id}
-                          value={category.id.toString()}
-                        >
-                          <CategoryBadge
-                            name={category.name}
-                            color={category.color}
-                          />
-                        </SelectItem>
-                      ))}
-                      <div className="p-1">
-                        <AddCategoryField
-                          onAdded={(id) => {
-                            field.onChange(id);
-                            onEditDone();
-                          }}
-                        />
-                      </div>
-                    </SelectContent>
-                  </Select>
-                )}
-              />
-            )}
-          </EditableField>
-          <FieldError errors={[errors.budgetCategoryId]} />
-        </Field>
-      </>
-    );
-  }
+  const priceDisplay = (() => {
+    const val = estimatedUnitPrice ?? currentValues?.estimatedUnitPrice;
+    if (val === undefined || isNaN(Number(val))) return "";
+    return Number(val).toLocaleString("fr-FR", {
+      style: "currency",
+      currency: "EUR",
+    });
+  })();
 
   return (
     <>
       <Field data-invalid={!!errors.name}>
-        <FieldLabel htmlFor="budget-line-input-name">Nom</FieldLabel>
-        <Input
-          id="budget-line-input-name"
+        <EditableField
+          label="Nom"
+          displayValue={nameValue ?? currentValues?.name ?? ""}
           placeholder={namePlaceholder}
-          aria-invalid={!!errors.name}
-          {...register("name")}
-        />
+        >
+          {({ onEditDone }) => {
+            const { onBlur: rhfBlur, ...rest } = register("name");
+            return (
+              <Input
+                autoFocus
+                aria-invalid={!!errors.name}
+                onBlur={(e) => {
+                  rhfBlur(e);
+                  onEditDone();
+                }}
+                {...rest}
+              />
+            );
+          }}
+        </EditableField>
         <FieldError errors={[errors.name]} />
       </Field>
 
       <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-2">
         <Field data-invalid={!!errors.estimatedQuantity}>
-          <FieldLabel htmlFor="budget-line-input-quantity">Quantité</FieldLabel>
-          <Input
-            id="budget-line-input-quantity"
-            aria-invalid={!!errors.estimatedQuantity}
-            {...register("estimatedQuantity", { valueAsNumber: true })}
-          />
+          <EditableField label="Quantité" displayValue={qtyDisplay}>
+            {({ onEditDone }) => {
+              const { onBlur: rhfBlur, ...rest } = register(
+                "estimatedQuantity",
+                { valueAsNumber: true },
+              );
+              return (
+                <Input
+                  autoFocus
+                  aria-invalid={!!errors.estimatedQuantity}
+                  onBlur={(e) => {
+                    rhfBlur(e);
+                    onEditDone();
+                  }}
+                  {...rest}
+                />
+              );
+            }}
+          </EditableField>
           <FieldError errors={[errors.estimatedQuantity]} />
         </Field>
-        <span className="mt-9 text-muted-foreground">×</span>
+        <span className="mt-7 text-muted-foreground">×</span>
         <Field data-invalid={!!errors.estimatedUnitPrice}>
-          <FieldLabel htmlFor="budget-line-input-cost">
-            Prix unitaire
-          </FieldLabel>
-          <Input
-            id="budget-line-input-cost"
-            aria-invalid={!!errors.estimatedUnitPrice}
-            {...register("estimatedUnitPrice", { valueAsNumber: true })}
-          />
+          <EditableField label="Prix unitaire" displayValue={priceDisplay}>
+            {({ onEditDone }) => {
+              const { onBlur: rhfBlur, ...rest } = register(
+                "estimatedUnitPrice",
+                { valueAsNumber: true },
+              );
+              return (
+                <Input
+                  autoFocus
+                  aria-invalid={!!errors.estimatedUnitPrice}
+                  onBlur={(e) => {
+                    rhfBlur(e);
+                    onEditDone();
+                  }}
+                  {...rest}
+                />
+              );
+            }}
+          </EditableField>
           <FieldError errors={[errors.estimatedUnitPrice]} />
         </Field>
       </div>
@@ -309,44 +188,86 @@ export function BudgetLineFormFields({
       </p>
 
       <Field>
-        <FieldLabel htmlFor="budget-line-input-desc">Description</FieldLabel>
-        <Textarea
-          id="budget-line-input-desc"
+        <EditableField
+          label="Description"
+          displayValue={descriptionValue ?? currentValues?.description ?? ""}
           placeholder="Description..."
-          {...register("description")}
-        />
+        >
+          {({ onEditDone }) => {
+            const { onBlur: rhfBlur, ...rest } = register("description");
+            return (
+              <Textarea
+                autoFocus
+                onBlur={(e) => {
+                  rhfBlur(e);
+                  onEditDone();
+                }}
+                {...rest}
+              />
+            );
+          }}
+        </EditableField>
       </Field>
 
       <Field data-invalid={!!errors.budgetCategoryId}>
-        <FieldLabel htmlFor="budget-line-input-category">Catégorie</FieldLabel>
-        <Controller
-          name="budgetCategoryId"
-          control={control}
-          render={({ field }) => (
-            <Select
-              aria-invalid={!!errors.budgetCategoryId}
-              value={field.value?.toString()}
-              onValueChange={(val) => field.onChange(Number(val))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Sélectionnez une catégorie..." />
-              </SelectTrigger>
-              <SelectContent>
-                {allCategories?.map((category) => (
-                  <SelectItem key={category.id} value={category.id.toString()}>
-                    <CategoryBadge
-                      name={category.name}
-                      color={category.color}
-                    />
-                  </SelectItem>
-                ))}
-                <div className="p-1">
-                  <AddCategoryField onAdded={(id) => field.onChange(id)} />
-                </div>
-              </SelectContent>
-            </Select>
+        <EditableField
+          label="Catégorie"
+          displayValue={
+            currentCategory ? (
+              <CategoryBadge
+                name={currentCategory.name}
+                color={currentCategory.color}
+              />
+            ) : undefined
+          }
+          placeholder="Sélectionnez une catégorie..."
+        >
+          {({ onEditDone }) => (
+            <Controller
+              name="budgetCategoryId"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  aria-invalid={!!errors.budgetCategoryId}
+                  value={field.value?.toString()}
+                  onValueChange={(val) => {
+                    field.onChange(Number(val));
+                    onEditDone();
+                  }}
+                  open
+                  onOpenChange={(o) => {
+                    if (!o) onEditDone();
+                  }}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Sélectionnez une catégorie..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {allCategories?.map((category) => (
+                      <SelectItem
+                        key={category.id}
+                        value={category.id.toString()}
+                      >
+                        <CategoryBadge
+                          name={category.name}
+                          color={category.color}
+                        />
+                      </SelectItem>
+                    ))}
+                    <div className="p-1">
+                      <AddCategoryField
+                        onAdded={(id) => {
+                          field.onChange(id);
+                          onEditDone();
+                        }}
+                      />
+                    </div>
+                  </SelectContent>
+                </Select>
+              )}
+            />
           )}
-        />
+        </EditableField>
         <FieldError errors={[errors.budgetCategoryId]} />
       </Field>
     </>
