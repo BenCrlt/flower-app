@@ -5,21 +5,32 @@ import { ColumnDef } from "@tanstack/react-table";
 import { PaymentStatusBadge } from "./payment-status-badge";
 import { PaymentsTableActionsLine } from "./payments-table-actions-line";
 
+export interface PaymentLineRow {
+  id: number;
+  budgetLineId: number;
+  quantity: number;
+  unitPrice: number;
+}
+
 export interface PaymentTableRow {
   id: number;
+  vendorId: number;
   vendorName: string;
   totalAmount: number;
   status: InvoiceStatus;
   executedAt: string;
   note: string;
+  payments: PaymentLineRow[];
 }
 
 interface GetPaymentTableColumns {
   onDelete: (id: number) => void;
+  onEdit: (row: PaymentTableRow) => void;
 }
 
 export function getColumns({
   onDelete,
+  onEdit,
 }: GetPaymentTableColumns): ColumnDef<PaymentTableRow>[] {
   return [
     {
@@ -70,7 +81,11 @@ export function getColumns({
       id: "actions",
       meta: { className: "w-px whitespace-nowrap" },
       cell: ({ row }) => (
-        <PaymentsTableActionsLine row={row} onDelete={onDelete} />
+        <PaymentsTableActionsLine
+          row={row}
+          onDelete={onDelete}
+          onEdit={onEdit}
+        />
       ),
     },
   ];

@@ -13,10 +13,11 @@ import { PaymentTableRow } from "./columns";
 
 interface Props {
   onDelete: (id: number) => void;
+  onEdit: (row: PaymentTableRow) => void;
   row: Row<PaymentTableRow>;
 }
 
-export function PaymentsTableActionsLine({ onDelete, row }: Props) {
+export function PaymentsTableActionsLine({ onDelete, onEdit, row }: Props) {
   return (
     <div onClick={(e) => e.stopPropagation()}>
       <DropdownMenu>
@@ -29,7 +30,7 @@ export function PaymentsTableActionsLine({ onDelete, row }: Props) {
         <DropdownMenuContent align="end">
           <DropdownMenuLabel>Actions</DropdownMenuLabel>
           <Separator />
-          <DropdownMenuItem>
+          <DropdownMenuItem onSelect={() => onEdit(row.original)}>
             <Pencil /> Modifier
           </DropdownMenuItem>
           <DropdownMenuItem>

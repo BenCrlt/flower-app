@@ -1,0 +1,6 @@
+query getVendors {
+  vendors {
+    id
+    name
+  }
+}
