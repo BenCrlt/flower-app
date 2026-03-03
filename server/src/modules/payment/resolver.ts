@@ -1,5 +1,5 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
-import { map } from "lodash";
+import _ from "lodash";
 import {
   invoicesTable,
   paymentsTable,
@@ -26,13 +26,13 @@ export const invoiceResolver = resolver.of(invoicesTable, {
 
   payments: field(paymentsTable.$list())
     .derivedFrom("id")
-    .load(async (invoices) => loadPayments(map(invoices, "id"))),
+    .load(async (invoices) => loadPayments(_.map(invoices, "id"))),
   author: field(usersTable.$nullable())
     .derivedFrom("authorId")
-    .load(async (invoices) => loadAuthors(map(invoices, "authorId"))),
+    .load(async (invoices) => loadAuthors(_.map(invoices, "authorId"))),
   vendor: field(vendorsTable.$nullable())
     .derivedFrom("vendorId")
-    .load(async (invoices) => loadVendors(map(invoices, "vendorId"))),
+    .load(async (invoices) => loadVendors(_.map(invoices, "vendorId"))),
 
   addInvoice: mutation(invoicesTable.$nullable())
     .input(addInvoiceInput)

@@ -51,13 +51,16 @@ enum InvoiceStatusEnum {
 }
 
 type InvoicesItem {
+  author: UsersItem
   authorId: Int!
   editionId: Int!
   executedAt: String
   id: Int!
   note: String
+  payments: [PaymentsItem!]!
   status: InvoiceStatus!
   totalAmount: String!
+  vendor: VendorsItem
   vendorId: Int!
 }
 
@@ -87,6 +90,15 @@ type Mutation {
   updateEdition(id: Float!, name: String, startDate: String): EditionsItem
 }
 
+type PaymentsItem {
+  budgetLineId: Int!
+  editionId: Int!
+  id: Int!
+  invoiceId: Int!
+  quantity: Float!
+  unitPrice: String!
+}
+
 type Query {
   budgetCategories: [BudgetCategoriesItem!]!
   budgetLines(budgetLineType: LineTypeEnum, editionId: Float!): [BudgetLinesItem!]!
@@ -94,6 +106,13 @@ type Query {
   getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
   invoices(editionId: Float!, status: InvoiceStatusEnum): [InvoicesItem!]!
   vendors: [VendorsItem!]!
+}
+
+type UsersItem {
+  email: String!
+  firstName: String!
+  id: Int!
+  lastName: String!
 }
 
 type VendorsItem {
