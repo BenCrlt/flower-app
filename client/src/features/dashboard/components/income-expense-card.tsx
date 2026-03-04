@@ -33,7 +33,7 @@ export function IncomeExpenseCard() {
         <Separator />
         <AmountProgress
           title="Dépenses"
-          value={50}
+          value={edition.totalExpense}
           max={edition.totalPrevisionnalExpense}
         />
       </CardContent>

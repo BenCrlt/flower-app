@@ -9,12 +9,13 @@ interface Props {
 }
 
 export function AmountProgress({ value, max, title }: Props) {
+  const progress = Math.min((value / max) * 100, 100);
   return (
     <div className="flex flex-col gap-3">
       <TypographyH2>{title}</TypographyH2>
-      <Progress className="h-5" value={value} max={max} />
+      <Progress className="h-5" value={progress} />
       <div className="flex justify-between">
-        <TypographyH3>{formatPriceToEuros(0)}</TypographyH3>
+        <TypographyH3>{formatPriceToEuros(value)}</TypographyH3>
         <TypographyH3 className="opacity-80">
           {formatPriceToEuros(max)}
         </TypographyH3>
