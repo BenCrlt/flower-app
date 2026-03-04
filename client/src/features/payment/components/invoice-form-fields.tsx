@@ -10,32 +10,19 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { InvoiceStatus, InvoiceStatusEnum } from "@/generated/graphql";
-import { FieldArrayWithId } from "react-hook-form";
+import { InvoiceStatus } from "@/generated/graphql";
 import { CirclePlus, Trash2 } from "lucide-react";
 import { ReactElement } from "react";
-import { Control, Controller, FieldErrors, UseFormRegister, useWatch } from "react-hook-form";
+import {
+  Control,
+  Controller,
+  FieldArrayWithId,
+  FieldErrors,
+  UseFormRegister,
+  useWatch,
+} from "react-hook-form";
 import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
 import { PaymentStatusBadge } from "./payment-status-badge";
-
-const STATUS_OPTIONS: { label: string; value: InvoiceStatusEnum }[] = [
-  { label: "En attente", value: InvoiceStatusEnum.Pending },
-  { label: "Payé", value: InvoiceStatusEnum.Paid },
-  { label: "Annulé", value: InvoiceStatusEnum.Cancelled },
-];
-
-export const STATUS_ENUM_TO_DISPLAY: Record<InvoiceStatusEnum, InvoiceStatus> =
-  {
-    [InvoiceStatusEnum.Pending]: InvoiceStatus.Pending,
-    [InvoiceStatusEnum.Paid]: InvoiceStatus.Paid,
-    [InvoiceStatusEnum.Cancelled]: InvoiceStatus.Cancelled,
-  };
-
-export const STATUS_TO_ENUM: Record<InvoiceStatus, InvoiceStatusEnum> = {
-  [InvoiceStatus.Pending]: InvoiceStatusEnum.Pending,
-  [InvoiceStatus.Paid]: InvoiceStatusEnum.Paid,
-  [InvoiceStatus.Cancelled]: InvoiceStatusEnum.Cancelled,
-};
 
 interface Props {
   register: UseFormRegister<InvoiceFormValues>;
@@ -115,9 +102,7 @@ export function InvoiceFormFields({
           label="Statut"
           displayValue={
             statusValue ? (
-              <PaymentStatusBadge
-                status={STATUS_ENUM_TO_DISPLAY[statusValue]}
-              />
+              <PaymentStatusBadge status={statusValue} />
             ) : undefined
           }
           placeholder="Sélectionnez un statut..."
@@ -130,7 +115,7 @@ export function InvoiceFormFields({
                 <Select
                   value={field.value}
                   onValueChange={(val) => {
-                    field.onChange(val as InvoiceStatusEnum);
+                    field.onChange(val as InvoiceStatus);
                     onEditDone();
                   }}
                   open
@@ -142,9 +127,9 @@ export function InvoiceFormFields({
                     <SelectValue placeholder="Sélectionnez un statut..." />
                   </SelectTrigger>
                   <SelectContent>
-                    {STATUS_OPTIONS.map((opt) => (
-                      <SelectItem key={opt.value} value={opt.value}>
-                        {opt.label}
+                    {Object.values(InvoiceStatus).map((status) => (
+                      <SelectItem key={status} value={status}>
+                        <PaymentStatusBadge status={status} />
                       </SelectItem>
                     ))}
                   </SelectContent>

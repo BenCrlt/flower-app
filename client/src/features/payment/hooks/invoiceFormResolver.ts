@@ -1,4 +1,4 @@
-import { InvoiceStatusEnum } from "@/generated/graphql";
+import { InvoiceStatus } from "@/generated/graphql";
 import { Resolver } from "react-hook-form";
 
 export type PaymentLineValues = {
@@ -9,7 +9,7 @@ export type PaymentLineValues = {
 
 export type InvoiceFormValues = {
   vendorId: number;
-  status: InvoiceStatusEnum;
+  status: InvoiceStatus;
   note: string;
   payments: PaymentLineValues[];
 };

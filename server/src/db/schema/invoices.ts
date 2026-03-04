@@ -1,23 +1,22 @@
 import { drizzleSilk } from "@gqloom/drizzle";
+import { asEnumType } from "@gqloom/zod/v3";
 import { InferSelectModel } from "drizzle-orm";
 import {
   integer,
   numeric,
-  pgEnum,
   pgTable,
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import z from "zod";
 import { editionsTable } from "./editions";
 import { usersTable } from "./users";
 import { vendorsTable } from "./vendors";
 
-export const invoiceStatus = pgEnum("invoiceStatus", [
-  "pending",
-  "paid",
-  "cancelled",
-]);
-export type InvoiceStatus = (typeof invoiceStatus.enumValues)[number];
+const INVOICE_STATUS_VALUES = ["pending", "paid", "cancelled"] as const;
+export const invoiceStatusSchema = z
+  .enum(INVOICE_STATUS_VALUES)
+  .superRefine(asEnumType({ name: "InvoiceStatus" }));
 
 export type Invoice = InferSelectModel<typeof invoicesTable>;
 
@@ -41,6 +40,6 @@ export const invoicesTable = drizzleSilk(
       .notNull()
       .references(() => usersTable.id),
     executedAt: timestamp(),
-    status: invoiceStatus().notNull(),
+    status: text({ enum: INVOICE_STATUS_VALUES }).notNull(),
   }),
 );

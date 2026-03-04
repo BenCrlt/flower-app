@@ -3,7 +3,7 @@ mutation addInvoice(
   $editionId: Float!
   $note: String
   $payments: [AddInvoicePaymentsInput!]!
-  $status: InvoiceStatusEnum!
+  $status: InvoiceStatus!
   $totalAmount: Float!
   $vendorId: Float!
 ) {

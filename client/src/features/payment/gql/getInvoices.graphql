@@ -1,4 +1,4 @@
-query getInvoices($editionId: Float!, $status: InvoiceStatusEnum) {
+query getInvoices($editionId: Float!, $status: InvoiceStatus) {
   invoices(editionId: $editionId, status: $status) {
     id
     vendorId

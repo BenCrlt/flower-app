@@ -16,7 +16,7 @@ import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
 import { useEditInvoiceForm } from "../hooks/useEditInvoiceForm";
 import { useGetVendorsQuery } from "../hooks/useGetVendorsQuery";
 import { PaymentTableRow } from "./columns";
-import { InvoiceFormFields, STATUS_TO_ENUM } from "./invoice-form-fields";
+import { InvoiceFormFields } from "./invoice-form-fields";
 
 interface Props {
   open: boolean;
@@ -38,7 +38,7 @@ export function EditInvoiceSheet({
 
   const defaultValues: InvoiceFormValues = {
     vendorId: invoice.vendorId,
-    status: STATUS_TO_ENUM[invoice.status],
+    status: invoice.status,
     note: invoice.note === "-" ? "" : invoice.note,
     payments: invoice.payments.map((p) => ({
       budgetLineId: p.budgetLineId,

@@ -57,6 +57,13 @@
       "when": 1772527778118,
       "tag": "0007_set-not-null-invoice-payment",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1772622432946,
+      "tag": "0008_update-invoice-status-type",
+      "breakpoints": true
     }
   ]
 }

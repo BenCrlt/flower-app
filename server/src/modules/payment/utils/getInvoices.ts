@@ -1,12 +1,11 @@
 import { and, eq } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../../db";
-import { invoicesTable } from "../../../db/schema";
-import { InvoiceStatusEnum } from "../types";
+import { invoicesTable, invoiceStatusSchema } from "../../../db/schema";
 
 export const getInvoicesInput = z.object({
   editionId: z.number().min(1),
-  status: InvoiceStatusEnum.optional(),
+  status: invoiceStatusSchema.optional(),
 });
 
 export function getInvoices({

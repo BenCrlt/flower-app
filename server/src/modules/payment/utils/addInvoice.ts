@@ -1,7 +1,11 @@
 import z from "zod";
 import { db } from "../../../db";
-import { Invoice, invoicesTable, paymentsTable } from "../../../db/schema";
-import { InvoiceStatusEnum } from "../types";
+import {
+  Invoice,
+  invoicesTable,
+  invoiceStatusSchema,
+  paymentsTable,
+} from "../../../db/schema";
 
 const addPaymentInput = z.object({
   quantity: z.number().min(1),
@@ -15,7 +19,7 @@ export const addInvoiceInput = z.object({
   totalAmount: z.number().min(0),
   note: z.string().min(1).max(255).optional(),
   authorId: z.number().min(1),
-  status: InvoiceStatusEnum,
+  status: invoiceStatusSchema,
   payments: z.array(addPaymentInput).min(1),
 });
 
