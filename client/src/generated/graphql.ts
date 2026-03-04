@@ -112,6 +112,7 @@ export type Mutation = {
   updateBudgetCategory?: Maybe<BudgetCategoriesItem>;
   updateBudgetLine?: Maybe<BudgetLinesItem>;
   updateEdition?: Maybe<EditionsItem>;
+  updateInvoice?: Maybe<InvoicesItem>;
 };
 
 
@@ -208,6 +209,18 @@ export type MutationUpdateEditionArgs = {
   startDate?: InputMaybe<Scalars['String']['input']>;
 };
 
+
+export type MutationUpdateInvoiceArgs = {
+  authorId?: InputMaybe<Scalars['Float']['input']>;
+  editionId: Scalars['Float']['input'];
+  id: Scalars['Float']['input'];
+  note?: InputMaybe<Scalars['String']['input']>;
+  payments?: InputMaybe<Array<UpdateInvoicePaymentsInput>>;
+  status?: InputMaybe<InvoiceStatus>;
+  totalAmount?: InputMaybe<Scalars['Float']['input']>;
+  vendorId?: InputMaybe<Scalars['Float']['input']>;
+};
+
 export type PaymentsItem = {
   __typename?: 'PaymentsItem';
   budgetLineId: Scalars['Int']['output'];
@@ -244,6 +257,13 @@ export type QueryGetBudgetStatsByCategoriesArgs = {
 export type QueryInvoicesArgs = {
   editionId: Scalars['Float']['input'];
   status?: InputMaybe<InvoiceStatus>;
+};
+
+export type UpdateInvoicePaymentsInput = {
+  budgetLineId: Scalars['Float']['input'];
+  id?: InputMaybe<Scalars['Float']['input']>;
+  quantity: Scalars['Float']['input'];
+  unitPrice: Scalars['Float']['input'];
 };
 
 export type UsersItem = {

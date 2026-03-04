@@ -33,7 +33,7 @@ export async function addInvoice({
     .values({
       ...input,
       totalAmount: totalAmount.toString(),
-      executedAt: input.status === "paid" ? new Date() : undefined,
+      executedAt: input.status === "PAID" ? new Date() : undefined,
     })
     .returning();
 

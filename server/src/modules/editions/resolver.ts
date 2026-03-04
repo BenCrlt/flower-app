@@ -10,6 +10,7 @@ import {
   statsByCategoryOutput,
 } from "./utils/getBudgetStatsByCategories";
 import { getTotalEstimatedForEditions } from "./utils/getTotalEstimatedForEditions";
+import { getTotalExpense } from "./utils/getTotalExpense";
 import { updateEdition, updateEditionInput } from "./utils/updateEdition";
 
 export const editionsResolver = resolver.of(editionsTable, {
@@ -38,10 +39,11 @@ export const editionsResolver = resolver.of(editionsTable, {
         "expense",
       ),
     ),
-  // TODO: When payment module is done
   totalExpense: field(z.number())
     .derivedFrom("id")
-    .resolve(() => 0),
+    .load(async (editions) =>
+      getTotalExpense(editions.map((edition) => edition.id)),
+    ),
   // TODO: When sales module is done
   totalIncome: field(z.number())
     .derivedFrom("id")

@@ -18,6 +18,7 @@ import { getVendors } from "./utils/getVendors";
 import { loadAuthors } from "./utils/loadAuthors";
 import { loadPayments } from "./utils/loadPayments";
 import { loadVendors } from "./utils/loadVendors";
+import { updateInvoice, updateInvoiceInput } from "./utils/updateInvoice";
 
 export const invoiceResolver = resolver.of(invoicesTable, {
   invoices: query(invoicesTable.$list())
@@ -40,6 +41,9 @@ export const invoiceResolver = resolver.of(invoicesTable, {
   deleteInvoice: mutation(invoicesTable.$nullable())
     .input(deleteInvoiceInput)
     .resolve(deleteInvoice),
+  updateInvoice: mutation(invoicesTable.$nullable())
+    .input(updateInvoiceInput)
+    .resolve(updateInvoice),
 });
 
 export const vendorResolver = resolver.of(vendorsTable, {
