@@ -37,7 +37,7 @@ export function useAddInvoiceForm({ setOpen }: Props): {
     formState: { errors },
   } = useForm<InvoiceFormValues>({
     resolver: invoiceFormResolver,
-    mode: "onTouched",
+    mode: "onChange",
     defaultValues: {
       payments: [{ budgetLineId: 0, quantity: 1, unitPrice: 0 }],
     },

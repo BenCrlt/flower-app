@@ -13,7 +13,7 @@ import { editionsTable } from "./editions";
 import { usersTable } from "./users";
 import { vendorsTable } from "./vendors";
 
-const INVOICE_STATUS_VALUES = ["pending", "paid", "cancelled"] as const;
+const INVOICE_STATUS_VALUES = ["PENDING", "PAID", "CANCELLED"] as const;
 export const invoiceStatusSchema = z
   .enum(INVOICE_STATUS_VALUES)
   .superRefine(asEnumType({ name: "InvoiceStatus" }));

@@ -33,7 +33,7 @@ export function useEditInvoiceForm({ setOpen, defaultValues }: Props): {
     formState: { errors },
   } = useForm<InvoiceFormValues>({
     resolver: invoiceFormResolver,
-    mode: "onTouched",
+    mode: "onChange",
     defaultValues,
   });
 

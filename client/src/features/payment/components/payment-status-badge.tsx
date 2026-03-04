@@ -8,5 +8,7 @@ interface Props {
 }
 
 export function PaymentStatusBadge({ status }: Props): ReactElement {
-  return <Badge variant={getStatusColor(status)}>{getStatusText(status)}</Badge>;
+  return (
+    <Badge variant={getStatusColor(status)}>{getStatusText(status)}</Badge>
+  );
 }

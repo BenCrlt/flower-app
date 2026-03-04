@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { BudgetCategoriesItem } from "@/generated/graphql";
+import { formatPriceToEuros } from "@/utils/PriceUtils";
 import { ReactElement } from "react";
 import {
   Control,
@@ -144,12 +145,9 @@ export function BudgetLineFormFields({
       </div>
 
       <p className="text-sm text-muted-foreground -mt-4">
-        Total prévisionnel :{" "}
+        {"Total prévisionnel : "}
         <span className="font-medium text-foreground">
-          {totalEstimated.toLocaleString("fr-FR", {
-            style: "currency",
-            currency: "EUR",
-          })}
+          {formatPriceToEuros(totalEstimated)}
         </span>
       </p>
 

@@ -14,9 +14,7 @@ export type InvoiceFormValues = {
   payments: PaymentLineValues[];
 };
 
-export const invoiceFormResolver: Resolver<InvoiceFormValues> = async (
-  values,
-) => {
+export const invoiceFormResolver: Resolver<InvoiceFormValues> = (values) => {
   const errors: Record<string, { type: string; message: string }> = {};
 
   if (!values.vendorId) {

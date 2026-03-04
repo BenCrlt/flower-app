@@ -73,7 +73,7 @@ export function InvoiceFormFields({
                     field.onChange(Number(val));
                     onEditDone();
                   }}
-                  open
+                  defaultOpen
                   onOpenChange={(o) => {
                     if (!o) onEditDone();
                   }}
@@ -118,7 +118,7 @@ export function InvoiceFormFields({
                     field.onChange(val as InvoiceStatus);
                     onEditDone();
                   }}
-                  open
+                  defaultOpen
                   onOpenChange={(o) => {
                     if (!o) onEditDone();
                   }}
@@ -165,16 +165,21 @@ export function InvoiceFormFields({
       </Field>
 
       {/* Lignes de paiement */}
-      <div className="flex flex-col gap-3">
-        <span className="text-sm font-medium text-foreground">
-          Lignes de paiement
+      <div className="grid grid-cols-20 gap-2 items-center">
+        <span className="text-sm font-medium text-foreground col-span-10">
+          Articles
         </span>
+        <span className="text-sm font-medium text-foreground col-span-3">
+          Quantité
+        </span>
+        <div></div>
+        <span className="text-sm font-medium text-foreground col-span-5">
+          Prix
+        </span>
+        <div></div>
         {paymentFields.map((field, index) => (
-          <div
-            key={field.id}
-            className="grid grid-cols-[1fr_auto_auto_auto] items-end gap-2"
-          >
-            <Field>
+          <>
+            <Field className="col-span-10">
               <Controller
                 name={`payments.${index}.budgetLineId`}
                 control={control}
@@ -184,7 +189,7 @@ export function InvoiceFormFields({
                     onValueChange={(val) => f.onChange(Number(val))}
                   >
                     <SelectTrigger>
-                      <SelectValue placeholder="Ligne budgétaire..." />
+                      <SelectValue placeholder="Sélectionner un article..." />
                     </SelectTrigger>
                     <SelectContent>
                       {budgetLines.map((line) => (
@@ -197,21 +202,20 @@ export function InvoiceFormFields({
                 )}
               />
             </Field>
-            <Field>
+            <Field className="col-span-3">
               <Input
-                type="number"
                 placeholder="Qté"
-                className="w-16"
+                className="w-12s"
                 {...register(`payments.${index}.quantity`, {
                   valueAsNumber: true,
                 })}
               />
             </Field>
-            <Field>
+            <span className="text-muted-foreground justify-self-center">×</span>
+            <Field className="col-span-5">
               <Input
-                type="number"
                 placeholder="Prix"
-                className="w-24"
+                className="w-20"
                 {...register(`payments.${index}.unitPrice`, {
                   valueAsNumber: true,
                 })}
@@ -226,10 +230,12 @@ export function InvoiceFormFields({
             >
               <Trash2 className="h-4 w-4 text-muted-foreground" />
             </Button>
-          </div>
+          </>
         ))}
         {errors.payments && (
-          <p className="text-sm text-destructive">{errors.payments.message}</p>
+          <p className="text-sm text-destructive col-span-20">
+            {errors.payments.message}
+          </p>
         )}
         <Button
           type="button"
@@ -239,13 +245,13 @@ export function InvoiceFormFields({
           className="w-fit"
         >
           <CirclePlus className="mr-1 h-4 w-4" />
-          Ajouter une ligne
+          Ajouter un article
         </Button>
       </div>
 
       {/* Total */}
       <p className="text-sm text-muted-foreground">
-        Montant total :{" "}
+        {"Montant total : "}
         <span className="font-medium text-foreground">
           {totalAmount.toLocaleString("fr-FR", {
             style: "currency",

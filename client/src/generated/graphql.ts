@@ -61,9 +61,9 @@ export type GetBudgetStatsByCategories = {
 };
 
 export enum InvoiceStatus {
-  Cancelled = 'cancelled',
-  Paid = 'paid',
-  Pending = 'pending'
+  Cancelled = 'CANCELLED',
+  Paid = 'PAID',
+  Pending = 'PENDING'
 }
 
 export type InvoicesItem = {

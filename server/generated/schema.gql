@@ -39,9 +39,9 @@ type GetBudgetStatsByCategories {
 }
 
 enum InvoiceStatus {
-  cancelled
-  paid
-  pending
+  CANCELLED
+  PAID
+  PENDING
 }
 
 type InvoicesItem {
