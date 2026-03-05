@@ -5,6 +5,7 @@ import {
   budgetCategoriesTable,
   budgetLinesTable,
   LineType,
+  paymentsTable,
 } from "../../../db/schema";
 
 export const statsByCategoryOutput = z.array(
@@ -19,8 +20,9 @@ export const getBudgetStatsByCategories = async (
   editionId: number,
   lineType: LineType,
 ): Promise<z.infer<typeof statsByCategoryOutput>> => {
-  const stats = await db
+  const totalEstimatedStats = await db
     .select({
+      categoryId: budgetCategoriesTable.id,
       categoryName: budgetCategoriesTable.name,
       totalEstimated: sql<number>`sum(${budgetLinesTable.estimatedQuantity} * ${budgetLinesTable.estimatedUnitPrice})`,
     })
@@ -37,9 +39,52 @@ export const getBudgetStatsByCategories = async (
     )
     .groupBy(budgetCategoriesTable.id);
 
-  return stats.map((stat) => ({
+  const totalStats = await getTotalByCategoryIdFromLineType(
+    editionId,
+    lineType,
+  );
+
+  return totalEstimatedStats.map((stat) => ({
     categoryName: stat.categoryName,
     totalEstimated: stat.totalEstimated,
-    total: 0,
+    total: totalStats[stat.categoryId] ?? 0,
   }));
+};
+
+const getTotalByCategoryIdFromLineType = async (
+  editionId: number,
+  lineType: LineType,
+): Promise<Record<number, number>> => {
+  switch (lineType) {
+    case "expense":
+      return getTotalExpenseStatsByCategoryId(editionId);
+    case "income":
+    default:
+      return {};
+  }
+};
+
+const getTotalExpenseStatsByCategoryId = async (
+  editionId: number,
+): Promise<Record<number, number>> => {
+  const totalEstimatedStats = await db
+    .select({
+      categoryId: budgetLinesTable.budgetCategoryId,
+      total: sql<number>`sum(${paymentsTable.quantity} * ${paymentsTable.unitPrice})`,
+    })
+    .from(paymentsTable)
+    .innerJoin(
+      budgetLinesTable,
+      eq(paymentsTable.budgetLineId, budgetLinesTable.id),
+    )
+    .where(eq(paymentsTable.editionId, editionId))
+    .groupBy(budgetLinesTable.budgetCategoryId);
+
+  return totalEstimatedStats.reduce(
+    (acc, stat) => {
+      acc[stat.categoryId] = stat.total;
+      return acc;
+    },
+    {} as Record<number, number>,
+  );
 };
