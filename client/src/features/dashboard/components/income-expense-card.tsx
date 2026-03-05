@@ -8,6 +8,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
+import { LineTypeEnum } from "@/generated/graphql";
 import { AmountProgress } from "./amount-progress";
 
 export function IncomeExpenseCard() {
@@ -24,17 +25,19 @@ export function IncomeExpenseCard() {
           </TypographyP>
         </CardDescription>
       </CardHeader>
-      <CardContent className="flex flex-col gap-2">
+      <CardContent className="flex flex-col gap-6">
         <AmountProgress
           title="Recettes"
-          value={20}
+          value={null}
           max={edition.totalPrevisionnalIncome}
+          lineType={LineTypeEnum.Income}
         />
         <Separator />
         <AmountProgress
           title="Dépenses"
           value={edition.totalExpense}
           max={edition.totalPrevisionnalExpense}
+          lineType={LineTypeEnum.Expense}
         />
       </CardContent>
     </Card>

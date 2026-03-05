@@ -29,5 +29,23 @@ export const formatGapForCell = (gap: number | null, inPercent = false) => {
   if (gap === null) {
     return "-";
   }
-  return `${gap >= 0 ? "+" : ""}${gap.toFixed(2)}${inPercent ? "%" : ""}`;
+  return formatGap(gap, inPercent);
+};
+
+export const formatGap = (gap: number, inPercent = false, fixedDigits = 2) =>
+  `${gap >= 0 ? "+" : ""}${gap.toFixed(fixedDigits)}${inPercent ? "%" : ""}`;
+
+export const getTextColorForGapFromLineType = (
+  lineType: LineTypeEnum,
+  gap: number | null,
+): string => {
+  if (gap === null) return "";
+  switch (lineType) {
+    case LineTypeEnum.Income:
+      return gap > 0 ? "text-green-600" : "text-red-600";
+    case LineTypeEnum.Expense:
+      return gap > 0 ? "text-red-600" : "text-green-600";
+    default:
+      return "";
+  }
 };
