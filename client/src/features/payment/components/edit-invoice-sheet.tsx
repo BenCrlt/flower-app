@@ -12,9 +12,8 @@ import { useGetBudgetLinesQuery } from "@/features/budget/hooks/useGetBudgetLine
 import { useEdition } from "@/features/edition/EditionContext";
 import { LineTypeEnum } from "@/generated/graphql";
 import { ReactElement } from "react";
-import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
-import { useEditInvoiceForm } from "../hooks/useEditInvoiceForm";
 import { useGetVendorsQuery } from "../hooks/useGetVendorsQuery";
+import { useInvoiceForm } from "../hooks/useInvoiceForm";
 import { PaymentTableRow } from "./columns";
 import { InvoiceFormFields } from "./invoice-form-fields";
 
@@ -36,17 +35,6 @@ export function EditInvoiceSheet({
     variables: { editionId: edition.id, budgetLineType: LineTypeEnum.Expense },
   });
 
-  const defaultValues: InvoiceFormValues = {
-    vendorId: invoice.vendorId,
-    status: invoice.status,
-    note: invoice.note === "-" ? "" : invoice.note,
-    payments: invoice.payments.map((p) => ({
-      budgetLineId: p.budgetLineId,
-      quantity: p.quantity,
-      unitPrice: p.unitPrice,
-    })),
-  };
-
   const {
     handleSubmit,
     handleClose,
@@ -57,7 +45,7 @@ export function EditInvoiceSheet({
     appendPayment,
     removePayment,
     totalAmount,
-  } = useEditInvoiceForm({ setOpen: onOpenChange, defaultValues });
+  } = useInvoiceForm({ setOpen: onOpenChange, existingInvoice: invoice });
 
   return (
     <Sheet
@@ -86,7 +74,7 @@ export function EditInvoiceSheet({
             />
           </div>
           <SheetFooter>
-            <Button type="submit" disabled>
+            <Button type="submit" disabled={Object.keys(errors).length > 0}>
               Enregistrer
             </Button>
             <SheetClose asChild>

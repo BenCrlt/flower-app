@@ -1,0 +1,23 @@
+mutation updateInvoice(
+  $id: Float!
+  $authorId: Float
+  $editionId: Float!
+  $note: String
+  $payments: [UpdateInvoicePaymentsInput!]
+  $status: InvoiceStatus
+  $totalAmount: Float
+  $vendorId: Float
+) {
+  updateInvoice(
+    id: $id
+    editionId: $editionId
+    note: $note
+    payments: $payments
+    status: $status
+    totalAmount: $totalAmount
+    vendorId: $vendorId
+    authorId: $authorId
+  ) {
+    id
+  }
+}

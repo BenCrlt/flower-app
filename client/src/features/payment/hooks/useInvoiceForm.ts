@@ -1,3 +1,5 @@
+import { useEdition } from "@/features/edition/EditionContext";
+import _ from "lodash";
 import {
   Control,
   FieldArrayWithId,
@@ -6,14 +8,16 @@ import {
   useForm,
   UseFormRegister,
 } from "react-hook-form";
-import { InvoiceFormValues, invoiceFormResolver } from "./invoiceFormResolver";
+import { invoiceFormResolver, InvoiceFormValues } from "./invoiceFormResolver";
+import { useAddInvoiceMutation } from "./useAddInvoiceMutation";
+import { useUpdateInvoiceMutation } from "./useEditInvoiceMutation";
 
 interface Props {
   setOpen: (open: boolean) => void;
-  defaultValues: InvoiceFormValues;
+  existingInvoice?: InvoiceFormValues;
 }
 
-export function useEditInvoiceForm({ setOpen, defaultValues }: Props): {
+export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
   handleSubmit: () => void;
   handleClose: () => void;
   register: UseFormRegister<InvoiceFormValues>;
@@ -24,6 +28,10 @@ export function useEditInvoiceForm({ setOpen, defaultValues }: Props): {
   removePayment: (index: number) => void;
   totalAmount: number;
 } {
+  const { edition } = useEdition();
+  const { mutate: updateInvoice } = useUpdateInvoiceMutation();
+  const { mutate: addInvoice } = useAddInvoiceMutation();
+
   const {
     register,
     handleSubmit,
@@ -34,7 +42,7 @@ export function useEditInvoiceForm({ setOpen, defaultValues }: Props): {
   } = useForm<InvoiceFormValues>({
     resolver: invoiceFormResolver,
     mode: "onChange",
-    defaultValues,
+    defaultValues: existingInvoice,
   });
 
   const { fields, append, remove } = useFieldArray({
@@ -48,8 +56,26 @@ export function useEditInvoiceForm({ setOpen, defaultValues }: Props): {
     0,
   );
 
-  function onSubmit(_data: InvoiceFormValues) {
-    // TODO: call updateInvoice mutation
+  function onSubmit(data: InvoiceFormValues) {
+    const invoiceId = data.id;
+    if (existingInvoice && invoiceId) {
+      void updateInvoice({
+        ...data,
+        id: invoiceId,
+        editionId: edition.id,
+        totalAmount,
+        authorId: 1,
+        note: data.note.length > 0 ? data.note : undefined,
+      });
+    } else {
+      void addInvoice({
+        ..._.omit(data, ["id"]),
+        editionId: edition.id,
+        totalAmount,
+        authorId: 1,
+        note: data.note.length > 0 ? data.note : undefined,
+      });
+    }
     handleClose();
   }
 

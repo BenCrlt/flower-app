@@ -24,6 +24,7 @@ type Documents = {
     "query getEditions {\n  editions {\n    id\n    name\n    startDate\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": typeof types.GetEditionsDocument,
     "mutation addInvoice($authorId: Float!, $editionId: Float!, $note: String, $payments: [AddInvoicePaymentsInput!]!, $status: InvoiceStatus!, $totalAmount: Float!, $vendorId: Float!) {\n  addInvoice(\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": typeof types.AddInvoiceDocument,
     "mutation deleteInvoice($id: Float!) {\n  deleteInvoice(id: $id) {\n    id\n  }\n}": typeof types.DeleteInvoiceDocument,
+    "mutation updateInvoice($id: Float!, $authorId: Float, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": typeof types.UpdateInvoiceDocument,
     "query getInvoices($editionId: Float!, $status: InvoiceStatus) {\n  invoices(editionId: $editionId, status: $status) {\n    id\n    vendorId\n    vendor {\n      id\n      name\n    }\n    totalAmount\n    note\n    author {\n      id\n    }\n    executedAt\n    status\n    payments {\n      id\n      budgetLineId\n      quantity\n      unitPrice\n    }\n  }\n}": typeof types.GetInvoicesDocument,
     "query getVendors {\n  vendors {\n    id\n    name\n  }\n}": typeof types.GetVendorsDocument,
 };
@@ -38,6 +39,7 @@ const documents: Documents = {
     "query getEditions {\n  editions {\n    id\n    name\n    startDate\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": types.GetEditionsDocument,
     "mutation addInvoice($authorId: Float!, $editionId: Float!, $note: String, $payments: [AddInvoicePaymentsInput!]!, $status: InvoiceStatus!, $totalAmount: Float!, $vendorId: Float!) {\n  addInvoice(\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": types.AddInvoiceDocument,
     "mutation deleteInvoice($id: Float!) {\n  deleteInvoice(id: $id) {\n    id\n  }\n}": types.DeleteInvoiceDocument,
+    "mutation updateInvoice($id: Float!, $authorId: Float, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": types.UpdateInvoiceDocument,
     "query getInvoices($editionId: Float!, $status: InvoiceStatus) {\n  invoices(editionId: $editionId, status: $status) {\n    id\n    vendorId\n    vendor {\n      id\n      name\n    }\n    totalAmount\n    note\n    author {\n      id\n    }\n    executedAt\n    status\n    payments {\n      id\n      budgetLineId\n      quantity\n      unitPrice\n    }\n  }\n}": types.GetInvoicesDocument,
     "query getVendors {\n  vendors {\n    id\n    name\n  }\n}": types.GetVendorsDocument,
 };
@@ -96,6 +98,10 @@ export function graphql(source: "mutation addInvoice($authorId: Float!, $edition
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation deleteInvoice($id: Float!) {\n  deleteInvoice(id: $id) {\n    id\n  }\n}"): (typeof documents)["mutation deleteInvoice($id: Float!) {\n  deleteInvoice(id: $id) {\n    id\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation updateInvoice($id: Float!, $authorId: Float, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}"): (typeof documents)["mutation updateInvoice($id: Float!, $authorId: Float, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

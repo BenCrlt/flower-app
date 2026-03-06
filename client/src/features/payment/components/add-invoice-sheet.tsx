@@ -14,8 +14,8 @@ import { useEdition } from "@/features/edition/EditionContext";
 import { LineTypeEnum } from "@/generated/graphql";
 import { CirclePlus } from "lucide-react";
 import { ReactElement, useState } from "react";
-import { useAddInvoiceForm } from "../hooks/useAddInvoiceForm";
 import { useGetVendorsQuery } from "../hooks/useGetVendorsQuery";
+import { useInvoiceForm } from "../hooks/useInvoiceForm";
 import { InvoiceFormFields } from "./invoice-form-fields";
 
 export function AddInvoiceSheet(): ReactElement {
@@ -37,10 +37,13 @@ export function AddInvoiceSheet(): ReactElement {
     appendPayment,
     removePayment,
     totalAmount,
-  } = useAddInvoiceForm({ setOpen });
+  } = useInvoiceForm({ setOpen });
 
   return (
-    <Sheet open={open} onOpenChange={(o) => (o ? setOpen(true) : handleClose())}>
+    <Sheet
+      open={open}
+      onOpenChange={(o) => (o ? setOpen(true) : handleClose())}
+    >
       <SheetTrigger asChild>
         <Button variant="default">
           Ajouter <CirclePlus />

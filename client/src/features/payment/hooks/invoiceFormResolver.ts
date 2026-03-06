@@ -2,12 +2,14 @@ import { InvoiceStatus } from "@/generated/graphql";
 import { Resolver } from "react-hook-form";
 
 export type PaymentLineValues = {
+  id?: number;
   budgetLineId: number;
   quantity: number;
   unitPrice: number;
 };
 
 export type InvoiceFormValues = {
+  id?: number;
   vendorId: number;
   status: InvoiceStatus;
   note: string;
