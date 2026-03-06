@@ -10,6 +10,7 @@ export type PaymentLineValues = {
 
 export type InvoiceFormValues = {
   id?: number;
+  name: string;
   vendorId: number;
   status: InvoiceStatus;
   note: string;
@@ -18,6 +19,10 @@ export type InvoiceFormValues = {
 
 export const invoiceFormResolver: Resolver<InvoiceFormValues> = (values) => {
   const errors: Record<string, { type: string; message: string }> = {};
+
+  if (!values.name) {
+    errors.name = { type: "required", message: "Ce champ est requis." };
+  }
 
   if (!values.vendorId) {
     errors.vendorId = { type: "required", message: "Ce champ est requis." };

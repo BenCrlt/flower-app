@@ -1,6 +1,7 @@
 query getInvoices($editionId: Float!, $status: InvoiceStatus) {
   invoices(editionId: $editionId, status: $status) {
     id
+    name
     vendorId
     vendor {
       id

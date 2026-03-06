@@ -64,6 +64,13 @@
       "when": 1772622432946,
       "tag": "0008_update-invoice-status-type",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1772819224218,
+      "tag": "0009_add-name-to-invoice",
+      "breakpoints": true
     }
   ]
 }

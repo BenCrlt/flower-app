@@ -7,6 +7,7 @@ import {
   pgTable,
   text,
   timestamp,
+  varchar,
 } from "drizzle-orm/pg-core";
 import z from "zod";
 import { editionsTable } from "./editions";
@@ -26,6 +27,7 @@ export const invoicesTable = drizzleSilk(
     editionId: integer()
       .notNull()
       .references(() => editionsTable.id),
+    name: varchar({ length: 255 }).notNull(),
     vendorId: integer()
       .notNull()
       .references(() => vendorsTable.id),

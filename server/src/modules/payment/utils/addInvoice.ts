@@ -15,6 +15,7 @@ const addPaymentInput = z.object({
 
 export const addInvoiceInput = z.object({
   editionId: z.number().min(1),
+  name: z.string().min(1).max(255),
   vendorId: z.number().min(1),
   totalAmount: z.number().min(0),
   note: z.string().min(1).max(255).optional(),

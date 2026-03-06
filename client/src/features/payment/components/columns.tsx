@@ -14,6 +14,7 @@ export interface PaymentLineRow {
 
 export interface PaymentTableRow {
   id: number;
+  name: string;
   vendorId: number;
   vendorName: string;
   totalAmount: number;
@@ -33,6 +34,11 @@ export function getColumns({
   onEdit,
 }: GetPaymentTableColumns): ColumnDef<PaymentTableRow>[] {
   return [
+    {
+      header: ({ column }) => <SortableHeader column={column} title="Nom" />,
+      accessorKey: "name",
+      meta: { className: "w-px whitespace-nowrap" },
+    },
     {
       header: ({ column }) => (
         <SortableHeader column={column} title="Vendeur" />

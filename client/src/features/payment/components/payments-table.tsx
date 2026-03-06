@@ -26,6 +26,7 @@ export function PaymentsTable() {
   const rows: PaymentTableRow[] =
     data?.invoices.map((invoice) => ({
       id: invoice.id,
+      name: invoice.name,
       vendorId: invoice.vendorId,
       vendorName: invoice.vendor?.name ?? "-",
       status: invoice.status,

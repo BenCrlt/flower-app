@@ -50,11 +50,34 @@ export function InvoiceFormFields({
   const vendorIdValue = useWatch({ control, name: "vendorId" });
   const statusValue = useWatch({ control, name: "status" });
   const noteValue = useWatch({ control, name: "note" });
+  const nameValue = useWatch({ control, name: "name" });
 
   const currentVendor = vendors.find((v) => v.id === vendorIdValue);
 
   return (
     <>
+      {/* Nom */}
+      <Field>
+        <EditableField
+          label="Nom"
+          displayValue={nameValue ?? ""}
+          placeholder="Ajouter un nom..."
+        >
+          {({ onEditDone }) => {
+            const { onBlur: rhfBlur, ...rest } = register("name");
+            return (
+              <Input
+                autoFocus
+                onBlur={(e) => {
+                  rhfBlur(e);
+                  onEditDone();
+                }}
+                {...rest}
+              />
+            );
+          }}
+        </EditableField>
+      </Field>
       {/* Fournisseur */}
       <Field data-invalid={!!errors.vendorId}>
         <EditableField

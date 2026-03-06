@@ -1,4 +1,5 @@
 mutation addInvoice(
+  $name: String!
   $authorId: Float!
   $editionId: Float!
   $note: String
@@ -8,6 +9,7 @@ mutation addInvoice(
   $vendorId: Float!
 ) {
   addInvoice(
+    name: $name
     editionId: $editionId
     note: $note
     payments: $payments
