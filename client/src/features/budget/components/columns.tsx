@@ -7,6 +7,7 @@ import { MessageCircleCheck, MessageCircleQuestion } from "lucide-react";
 import { getGapBetweenRealAndPrevisionnal } from "../utils";
 import { BudgetGapCell } from "./budget-gap-cell";
 import { BudgetLineActionsCell } from "./budget-line-actions-cell";
+import { GapCellHeader } from "./gap-cell-header";
 
 export interface BudgetTableRow {
   id: number;
@@ -17,16 +18,21 @@ export interface BudgetTableRow {
   categoryName: string;
   categoryColor: string;
   budgetCategoryId: number;
+  realCost: number | null;
 }
 
 interface GetBudgetLineColumnsProps {
   onDelete: (id: number) => void;
   allCategories?: BudgetCategoriesItem[];
+  showGapInPercent: boolean;
+  onToggleGapInPercent: () => void;
 }
 
 export function getColumns({
   onDelete,
   allCategories,
+  showGapInPercent,
+  onToggleGapInPercent,
 }: GetBudgetLineColumnsProps): ColumnDef<BudgetTableRow>[] {
   return [
     {
@@ -71,28 +77,33 @@ export function getColumns({
           className="justify-end"
         />
       ),
-      cell: () => <RowPrice amount={null} />,
+      cell: ({ row }) => <RowPrice amount={row.original.realCost} />,
     },
     {
       id: "gap",
       meta: { className: "w-px whitespace-nowrap" },
       header: ({ column }) => (
-        <SortableHeader column={column} title="Écart" className="justify-end" />
+        <GapCellHeader
+          column={column}
+          onToggleGapInPercent={onToggleGapInPercent}
+          showGapInPercent={showGapInPercent}
+        />
       ),
       accessorFn: (row) => {
         const estimated = row.estimatedUnitPrice * row.estimatedQuantity;
-        const actual = null;
+        const actual = row.realCost;
         return getGapBetweenRealAndPrevisionnal(actual, estimated);
       },
       cell: ({ row }) => {
         const estimated =
           row.original.estimatedUnitPrice * row.original.estimatedQuantity;
-        const actual = null;
+        const actual = row.original.realCost;
         return (
           <BudgetGapCell
             lineType={LineTypeEnum.Expense}
             previsionnalAmount={estimated}
             realAmount={actual}
+            inPercent={showGapInPercent}
           />
         );
       },

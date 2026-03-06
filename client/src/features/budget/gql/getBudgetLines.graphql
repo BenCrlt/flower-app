@@ -5,6 +5,7 @@ query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!) {
     description
     estimatedQuantity
     estimatedUnitPrice
+    realCost
     category {
       id
       name

@@ -20,6 +20,7 @@ type BudgetLinesItem {
   id: Int!
   lineType: LineType!
   name: String!
+  realCost: Int
 }
 
 type EditionsItem {

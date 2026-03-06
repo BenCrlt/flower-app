@@ -1,4 +1,5 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
+import z from "zod";
 import { db } from "../../db/index";
 import { budgetCategoriesTable } from "../../db/schema/budget-categories";
 import { budgetLinesTable } from "../../db/schema/budget-lines";
@@ -17,6 +18,7 @@ import {
 } from "./utils/deleteBudgetLine";
 import { getBudgetLines, getBudgetLinesFilter } from "./utils/getBudgetLines";
 import { loadBudgetCategory } from "./utils/loadBudgetCategory";
+import { loadRealCost } from "./utils/loadRealData";
 import {
   updateBudgetCategory,
   updateBudgetCategoryInput,
@@ -51,6 +53,10 @@ export const budgetLinesResolver = resolver.of(budgetLinesTable, {
     .load(async (lines) =>
       loadBudgetCategory(lines.map((line) => line.budgetCategoryId)),
     ),
+
+  realCost: field(z.number().int().min(0).nullable())
+    .derivedFrom("id")
+    .load(async (lines) => loadRealCost(lines.map((line) => line.id))),
 
   addBudgetLine: mutation(budgetLinesTable.$nullable())
     .input(addBudgetLineInput)

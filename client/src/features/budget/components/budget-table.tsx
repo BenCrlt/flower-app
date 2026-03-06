@@ -14,6 +14,7 @@ export function BudgetTable() {
   const { edition } = useEdition();
   const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Expense);
   const [selectedRow, setSelectedRow] = useState<BudgetTableRow | null>(null);
+  const [showGapInPercent, setShowGapInPercent] = useState<boolean>(true);
 
   const { data } = useGetBudgetLinesQuery({
     variables: {
@@ -37,6 +38,7 @@ export function BudgetTable() {
         categoryName: item.category?.name ?? "",
         categoryColor: item.category?.color ?? "",
         budgetCategoryId: item.category?.id ?? 0,
+        realCost: item.realCost ?? null,
       })) || [],
     [data],
   );
@@ -46,6 +48,8 @@ export function BudgetTable() {
   const columns = getColumns({
     onDelete: handleDeleteLine,
     allCategories: categoriesData?.budgetCategories,
+    showGapInPercent,
+    onToggleGapInPercent: () => setShowGapInPercent((prev) => !prev),
   });
 
   return (
