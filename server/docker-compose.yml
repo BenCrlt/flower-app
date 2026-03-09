@@ -11,8 +11,11 @@ services:
       - 5432:5432
   garage-local:
     image: dxflrs/garage:v2.2.0
-    network_mode: "host"
     restart: unless-stopped
+    ports:
+      - "3900:3900"
+      - "3901:3901"
+      - "3903:3903"
     volumes:
       - ./garage/garage.toml:/etc/garage.toml
       - ./garage/meta:/var/lib/garage/meta
