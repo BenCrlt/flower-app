@@ -1,0 +1,35 @@
+## SETUP de Garage pour tester en local le stockage via Buckets
+
+- Run le container via docker compose
+docker-compose up garage-local
+
+- Vérifier que le container est en cours d'exécution et récupérer l'identifiant du node
+docker exec server-garage-local-1 /garage status
+
+- Définir de la place sur le node
+docker exec server-garage-local-1 /garage layout assign -z dc1 -c 1G <node_id>
+
+- Appliquer la configuration du node
+docker exec server-garage-local-1 /garage layout apply --version 1
+
+- Créer le bucket 
+docker exec server-garage-local-1 /garage bucket create flower-files
+
+- Générer les clés AWS pour accéder au bucket
+docker exec server-garage-local-1 /garage key create flower-app-key --yes
+
+La sortie de la commande sera la suivante :
+Key name: flower-app-key 
+Key ID: "AWS_ACCESS_KEY_ID"
+Secret key: "AWS_SECRET_ACCESS_KEY"
+Authorized buckets:
+
+Mettre ces valeurs dans les variables d'environnement de votre application pour accéder au bucket.
+
+- Ajouter les droits sur le bucket
+docker exec server-garage-local-1 /garage bucket allow \
+  --read \
+  --write \
+  --owner \
+  flower-files \
+  --key flower-app-key

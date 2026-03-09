@@ -140,3 +140,7 @@ vite.config.ts.timestamp-*
 
 # Claude file
 .claude/*
+
+# Garage files
+server/garage/data/
+server/garage/meta/

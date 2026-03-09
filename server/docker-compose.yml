@@ -9,3 +9,11 @@ services:
       - POSTGRES_PASSWORD=admin
     ports:
       - 5432:5432
+  garage-local:
+    image: dxflrs/garage:v2.2.0
+    network_mode: "host"
+    restart: unless-stopped
+    volumes:
+      - ./garage/garage.toml:/etc/garage.toml
+      - ./garage/meta:/var/lib/garage/meta
+      - ./garage/data:/var/lib/garage/data
