@@ -10,12 +10,13 @@ export function buildApp(): FastifyInstance {
     logger: true,
   });
 
-  app.register(filesRoutes, { prefix: "/files" });
-  app.register(authRoutes, { prefix: "/auth" });
-
   app.register(cors, {
     origin: "http://localhost:5173",
+    credentials: true,
   });
+
+  app.register(filesRoutes, { prefix: "/files" });
+  app.register(authRoutes, { prefix: "/api/auth" });
 
   app.register(mercurius, {
     schema,

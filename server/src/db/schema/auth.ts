@@ -2,7 +2,7 @@ import { drizzleSilk } from "@gqloom/drizzle";
 import { relations } from "drizzle-orm";
 import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
-export const userTable = drizzleSilk(
+export const user = drizzleSilk(
   pgTable("user", {
     id: text("id").primaryKey(),
     name: text("name").notNull(),
@@ -17,7 +17,7 @@ export const userTable = drizzleSilk(
   }),
 );
 
-export const sessionTable = pgTable(
+export const session = pgTable(
   "session",
   {
     id: text("id").primaryKey(),
@@ -31,12 +31,12 @@ export const sessionTable = pgTable(
     userAgent: text("user_agent"),
     userId: text("user_id")
       .notNull()
-      .references(() => userTable.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
   },
   (table) => [index("session_userId_idx").on(table.userId)],
 );
 
-export const accountTable = pgTable(
+export const account = pgTable(
   "account",
   {
     id: text("id").primaryKey(),
@@ -44,7 +44,7 @@ export const accountTable = pgTable(
     providerId: text("provider_id").notNull(),
     userId: text("user_id")
       .notNull()
-      .references(() => userTable.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     accessToken: text("access_token"),
     refreshToken: text("refresh_token"),
     idToken: text("id_token"),
@@ -60,7 +60,7 @@ export const accountTable = pgTable(
   (table) => [index("account_userId_idx").on(table.userId)],
 );
 
-export const verificationTable = pgTable(
+export const verification = pgTable(
   "verification",
   {
     id: text("id").primaryKey(),
@@ -76,21 +76,21 @@ export const verificationTable = pgTable(
   (table) => [index("verification_identifier_idx").on(table.identifier)],
 );
 
-export const userRelations = relations(userTable, ({ many }) => ({
-  sessions: many(sessionTable),
-  accounts: many(accountTable),
+export const userRelations = relations(user, ({ many }) => ({
+  sessions: many(session),
+  accounts: many(account),
 }));
 
-export const sessionRelations = relations(sessionTable, ({ one }) => ({
-  user: one(userTable, {
-    fields: [sessionTable.userId],
-    references: [userTable.id],
+export const sessionRelations = relations(session, ({ one }) => ({
+  user: one(user, {
+    fields: [session.userId],
+    references: [user.id],
   }),
 }));
 
-export const accountRelations = relations(accountTable, ({ one }) => ({
-  user: one(userTable, {
-    fields: [accountTable.userId],
-    references: [userTable.id],
+export const accountRelations = relations(account, ({ one }) => ({
+  user: one(user, {
+    fields: [account.userId],
+    references: [user.id],
   }),
 }));

@@ -7,7 +7,7 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { userTable } from "./auth";
+import { user } from "./auth";
 import { editionsTable } from "./editions";
 import { productsTable } from "./products";
 
@@ -27,6 +27,6 @@ export const salesTable = drizzleSilk(
       .references(() => editionsTable.id),
     authorId: text()
       .notNull()
-      .references(() => userTable.id),
+      .references(() => user.id),
   }),
 );

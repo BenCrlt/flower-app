@@ -10,7 +10,7 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import z from "zod";
-import { userTable } from "./auth";
+import { user } from "./auth";
 import { editionsTable } from "./editions";
 import { vendorsTable } from "./vendors";
 
@@ -40,7 +40,7 @@ export const invoicesTable = drizzleSilk(
     note: text(),
     authorId: text()
       .notNull()
-      .references(() => userTable.id),
+      .references(() => user.id),
     executedAt: timestamp(),
     status: text({ enum: INVOICE_STATUS_VALUES }).notNull(),
   }),

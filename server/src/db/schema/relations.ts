@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { userTable } from "./auth";
+import { user } from "./auth";
 import { budgetCategoriesTable } from "./budget-categories";
 import { budgetLinesTable } from "./budget-lines";
 import { editionsTable } from "./editions";
@@ -76,9 +76,9 @@ export const invoicesRelations = relations(invoicesTable, ({ one, many }) => ({
     fields: [invoicesTable.vendorId],
     references: [vendorsTable.id],
   }),
-  author: one(userTable, {
+  author: one(user, {
     fields: [invoicesTable.authorId],
-    references: [userTable.id],
+    references: [user.id],
   }),
   payments: many(paymentsTable),
 }));
@@ -92,13 +92,13 @@ export const salesRelations = relations(salesTable, ({ one }) => ({
     fields: [salesTable.editionId],
     references: [editionsTable.id],
   }),
-  author: one(userTable, {
+  author: one(user, {
     fields: [salesTable.authorId],
-    references: [userTable.id],
+    references: [user.id],
   }),
 }));
 
-export const usersRelations = relations(userTable, ({ many }) => ({
+export const usersRelations = relations(user, ({ many }) => ({
   sales: many(salesTable),
   payments: many(paymentsTable),
   invoices: many(invoicesTable),
