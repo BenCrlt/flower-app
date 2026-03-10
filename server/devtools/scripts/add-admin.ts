@@ -1,0 +1,27 @@
+import { eq } from "drizzle-orm";
+import { db } from "../../src";
+import { user } from "../../src/db/schema";
+import { auth } from "../../src/utils/auth";
+
+async function main() {
+  const adminUsername = "admin2";
+  const adminPassword = "123456";
+
+  const admin = await auth.api.createUser({
+    body: {
+      email: `${adminUsername}@flower2.fr`, // required
+      password: `${adminPassword}`, // required
+      name: "Benoit Cournault", // required
+      role: "admin",
+    },
+  });
+
+  await db
+    .update(user)
+    .set({ username: adminUsername })
+    .where(eq(user.id, admin.user.id));
+
+  process.exit(0);
+}
+
+main();

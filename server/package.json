@@ -13,7 +13,8 @@
     "mig:gen": "drizzle-kit generate",
     "mig:run": "drizzle-kit migrate",
     "generate:schema": "tsx devtools/scripts/generate-schema.ts",
-    "seed": "tsx devtools/scripts/seed.ts"
+    "seed": "tsx devtools/scripts/seed.ts",
+    "add-admin": "tsx devtools/scripts/add-admin.ts"
   },
   "keywords": [],
   "author": "",
