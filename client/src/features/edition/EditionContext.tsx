@@ -29,7 +29,7 @@ function EditionProviderInner({ children }: { children: ReactNode }) {
   const editions = data.editions;
 
   const [edition, setEdition] = useState<EditionsItem | null>(
-    editions[1] ?? null,
+    editions[0] ?? null,
   );
 
   return (
