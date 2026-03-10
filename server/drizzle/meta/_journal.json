@@ -85,6 +85,13 @@
       "when": 1773157777794,
       "tag": "0011_update-auth-for-username",
       "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "7",
+      "when": 1773159245515,
+      "tag": "0012_update-auth-for-admin-plugin",
+      "breakpoints": true
     }
   ]
 }
