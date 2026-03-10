@@ -78,6 +78,13 @@
       "when": 1773142109738,
       "tag": "0010_add-auth-schema",
       "breakpoints": true
+    },
+    {
+      "idx": 11,
+      "version": "7",
+      "when": 1773157777794,
+      "tag": "0011_update-auth-for-username",
+      "breakpoints": true
     }
   ]
 }
