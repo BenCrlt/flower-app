@@ -10,8 +10,8 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import z from "zod";
+import { userTable } from "./auth";
 import { editionsTable } from "./editions";
-import { usersTable } from "./users";
 import { vendorsTable } from "./vendors";
 
 const INVOICE_STATUS_VALUES = ["PENDING", "PAID", "CANCELLED"] as const;
@@ -38,9 +38,9 @@ export const invoicesTable = drizzleSilk(
       .default("0.00")
       .notNull(),
     note: text(),
-    authorId: integer()
+    authorId: text()
       .notNull()
-      .references(() => usersTable.id),
+      .references(() => userTable.id),
     executedAt: timestamp(),
     status: text({ enum: INVOICE_STATUS_VALUES }).notNull(),
   }),

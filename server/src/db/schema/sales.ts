@@ -4,11 +4,12 @@ import {
   pgEnum,
   pgTable,
   smallint,
+  text,
   timestamp,
 } from "drizzle-orm/pg-core";
+import { userTable } from "./auth";
 import { editionsTable } from "./editions";
 import { productsTable } from "./products";
-import { usersTable } from "./users";
 
 export const paymentMethod = pgEnum("payment_method", ["cash", "card"]);
 export type PaymentMethod = (typeof paymentMethod.enumValues)[number];
@@ -24,8 +25,8 @@ export const salesTable = drizzleSilk(
     editionId: integer()
       .notNull()
       .references(() => editionsTable.id),
-    authorId: integer()
+    authorId: text()
       .notNull()
-      .references(() => usersTable.id),
+      .references(() => userTable.id),
   }),
 );

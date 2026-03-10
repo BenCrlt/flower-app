@@ -2,9 +2,9 @@ import { db } from "../../../db";
 import { User } from "../../../db/schema";
 
 export async function loadAuthors(
-  authorIds: number[],
+  authorIds: string[],
 ): Promise<(User | null)[]> {
-  const authors = await db.query.usersTable.findMany({
+  const authors = await db.query.userTable.findMany({
     where: (table, { inArray }) => inArray(table.id, authorIds),
   });
 

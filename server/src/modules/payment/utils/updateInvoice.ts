@@ -23,7 +23,7 @@ export const updateInvoiceInput = z.object({
   vendorId: z.number().min(1).optional(),
   totalAmount: z.number().min(0).optional(),
   note: z.string().min(1).max(255).optional(),
-  authorId: z.number().min(1).optional(),
+  authorId: z.string().uuid().optional(),
   status: invoiceStatusSchema.optional(),
   payments: z.array(updatePaymentInput).optional(),
 });

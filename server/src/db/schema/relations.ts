@@ -1,4 +1,5 @@
 import { relations } from "drizzle-orm";
+import { userTable } from "./auth";
 import { budgetCategoriesTable } from "./budget-categories";
 import { budgetLinesTable } from "./budget-lines";
 import { editionsTable } from "./editions";
@@ -6,7 +7,6 @@ import { invoicesTable } from "./invoices";
 import { paymentsTable } from "./payments";
 import { productsTable } from "./products";
 import { salesTable } from "./sales";
-import { usersTable } from "./users";
 import { vendorsTable } from "./vendors";
 
 export const budgetCategoriesRelations = relations(
@@ -76,9 +76,9 @@ export const invoicesRelations = relations(invoicesTable, ({ one, many }) => ({
     fields: [invoicesTable.vendorId],
     references: [vendorsTable.id],
   }),
-  author: one(usersTable, {
+  author: one(userTable, {
     fields: [invoicesTable.authorId],
-    references: [usersTable.id],
+    references: [userTable.id],
   }),
   payments: many(paymentsTable),
 }));
@@ -92,13 +92,13 @@ export const salesRelations = relations(salesTable, ({ one }) => ({
     fields: [salesTable.editionId],
     references: [editionsTable.id],
   }),
-  author: one(usersTable, {
+  author: one(userTable, {
     fields: [salesTable.authorId],
-    references: [usersTable.id],
+    references: [userTable.id],
   }),
 }));
 
-export const usersRelations = relations(usersTable, ({ many }) => ({
+export const usersRelations = relations(userTable, ({ many }) => ({
   sales: many(salesTable),
   payments: many(paymentsTable),
   invoices: many(invoicesTable),

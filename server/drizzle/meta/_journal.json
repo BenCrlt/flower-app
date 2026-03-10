@@ -71,6 +71,13 @@
       "when": 1772819224218,
       "tag": "0009_add-name-to-invoice",
       "breakpoints": true
+    },
+    {
+      "idx": 10,
+      "version": "7",
+      "when": 1773142109738,
+      "tag": "0010_add-auth-schema",
+      "breakpoints": true
     }
   ]
 }
