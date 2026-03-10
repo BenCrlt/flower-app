@@ -1,6 +1,7 @@
 import { EditionSelector } from "@/components/EditionSelector";
 import { Sidebar } from "@/components/Sidebar";
 import { useEditionContext } from "@/features/edition/EditionContext";
+import { authClient } from "@/lib/auth-client";
 import {
   createRootRoute,
   Outlet,
@@ -35,18 +36,53 @@ function EditionGuard({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+function AuthGuard({ children }: { children: React.ReactNode }) {
+  const { data: session, isPending } = authClient.useSession();
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const isAuthRoute = location.pathname.startsWith("/auth/");
+
+  useEffect(() => {
+    if (isPending) return;
+    if (!session && !isAuthRoute) {
+      navigate({ to: "/auth/sign-in" });
+    }
+    if (session && isAuthRoute) {
+      navigate({ to: "/" });
+    }
+  }, [session, isPending, isAuthRoute, navigate]);
+
+  if (isPending) return null;
+
+  return <>{children}</>;
+}
+
 function RootLayout() {
+  const location = useLocation();
+  const isAuthRoute = location.pathname.startsWith("/auth/");
+
+  if (isAuthRoute) {
+    return (
+      <AuthGuard>
+        <Outlet />
+      </AuthGuard>
+    );
+  }
+
   return (
-    <div className="flex h-screen overflow-hidden py-4 pr-4 bg-card">
-      <Sidebar />
-      <main className="flex-1 overflow-auto flex flex-col">
-        <div className="sticky top-0 z-10 bg-card">
-          <EditionSelector />
-        </div>
-        <EditionGuard>
-          <Outlet />
-        </EditionGuard>
-      </main>
-    </div>
+    <AuthGuard>
+      <div className="flex h-screen overflow-hidden py-4 pr-4 bg-card">
+        <Sidebar />
+        <main className="flex-1 overflow-auto flex flex-col">
+          <div className="sticky top-0 z-10 bg-card">
+            <EditionSelector />
+          </div>
+          <EditionGuard>
+            <Outlet />
+          </EditionGuard>
+        </main>
+      </div>
+    </AuthGuard>
   );
 }
