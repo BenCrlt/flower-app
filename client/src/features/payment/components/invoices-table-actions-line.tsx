@@ -9,15 +9,15 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Row } from "@tanstack/react-table";
 import { File, MoreHorizontal, Pencil, Trash } from "lucide-react";
-import { PaymentTableRow } from "./columns";
+import { InvoiceTableRow } from "./columns";
 
 interface Props {
   onDelete: (id: number) => void;
-  onEdit: (row: PaymentTableRow) => void;
-  row: Row<PaymentTableRow>;
+  onEdit: (row: InvoiceTableRow) => void;
+  row: Row<InvoiceTableRow>;
 }
 
-export function PaymentsTableActionsLine({ onDelete, onEdit, row }: Props) {
+export function InvoicesTableActionsLine({ onDelete, onEdit, row }: Props) {
   return (
     <div onClick={(e) => e.stopPropagation()}>
       <DropdownMenu>

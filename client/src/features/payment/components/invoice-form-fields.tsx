@@ -22,7 +22,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
-import { PaymentStatusBadge } from "./payment-status-badge";
+import { InvoiceStatusBadge } from "./invoice-status-badge";
 
 interface Props {
   register: UseFormRegister<InvoiceFormValues>;
@@ -125,7 +125,7 @@ export function InvoiceFormFields({
           label="Statut"
           displayValue={
             statusValue ? (
-              <PaymentStatusBadge status={statusValue} />
+              <InvoiceStatusBadge status={statusValue} />
             ) : undefined
           }
           placeholder="Sélectionnez un statut..."
@@ -152,7 +152,7 @@ export function InvoiceFormFields({
                   <SelectContent>
                     {Object.values(InvoiceStatus).map((status) => (
                       <SelectItem key={status} value={status}>
-                        <PaymentStatusBadge status={status} />
+                        <InvoiceStatusBadge status={status} />
                       </SelectItem>
                     ))}
                   </SelectContent>

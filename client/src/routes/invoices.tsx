@@ -1,14 +1,14 @@
-import { PaymentsTable } from "@/features/payment/components/payments-table";
+import { InvoicesTable } from "@/features/payment/components/invoices-table";
 import { createFileRoute } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/payments")({
+export const Route = createFileRoute("/invoices")({
   component: RouteComponent,
 });
 
 function RouteComponent() {
   return (
     <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6">
-      <PaymentsTable />
+      <InvoicesTable />
     </div>
   );
 }

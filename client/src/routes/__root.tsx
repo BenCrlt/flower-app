@@ -1,5 +1,9 @@
-import { EditionSelector } from "@/components/EditionSelector";
-import { Sidebar } from "@/components/Sidebar";
+import { AppSidebar } from "@/components/AppSidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { useEditionContext } from "@/features/edition/EditionContext";
 import { authClient } from "@/lib/auth-client";
 import {
@@ -72,17 +76,19 @@ function RootLayout() {
 
   return (
     <AuthGuard>
-      <div className="flex h-screen overflow-hidden py-4 pr-4 bg-card">
-        <Sidebar />
-        <main className="flex-1 overflow-auto flex flex-col">
-          <div className="sticky top-0 z-10 bg-card">
-            <EditionSelector />
-          </div>
-          <EditionGuard>
-            <Outlet />
-          </EditionGuard>
-        </main>
-      </div>
+      <SidebarProvider>
+        <AppSidebar />
+        <SidebarInset>
+          <header className="flex h-12 items-center gap-2 border-b px-4">
+            <SidebarTrigger className="md:hidden" />
+          </header>
+          <main>
+            <EditionGuard>
+              <Outlet />
+            </EditionGuard>
+          </main>
+        </SidebarInset>
+      </SidebarProvider>
     </AuthGuard>
   );
 }

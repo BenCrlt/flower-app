@@ -10,7 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SalesRouteImport } from './routes/sales'
-import { Route as PaymentsRouteImport } from './routes/payments'
+import { Route as InvoicesRouteImport } from './routes/invoices'
 import { Route as EditionsRouteImport } from './routes/editions'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BudgetTableRouteImport } from './routes/budget-table'
@@ -22,9 +22,9 @@ const SalesRoute = SalesRouteImport.update({
   path: '/sales',
   getParentRoute: () => rootRouteImport,
 } as any)
-const PaymentsRoute = PaymentsRouteImport.update({
-  id: '/payments',
-  path: '/payments',
+const InvoicesRoute = InvoicesRouteImport.update({
+  id: '/invoices',
+  path: '/invoices',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EditionsRoute = EditionsRouteImport.update({
@@ -58,7 +58,7 @@ export interface FileRoutesByFullPath {
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/editions': typeof EditionsRoute
-  '/payments': typeof PaymentsRoute
+  '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
   '/auth/sign-in': typeof AuthSignInRoute
 }
@@ -67,7 +67,7 @@ export interface FileRoutesByTo {
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/editions': typeof EditionsRoute
-  '/payments': typeof PaymentsRoute
+  '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
   '/auth/sign-in': typeof AuthSignInRoute
 }
@@ -77,7 +77,7 @@ export interface FileRoutesById {
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/editions': typeof EditionsRoute
-  '/payments': typeof PaymentsRoute
+  '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
   '/auth/sign-in': typeof AuthSignInRoute
 }
@@ -88,7 +88,7 @@ export interface FileRouteTypes {
     | '/budget-table'
     | '/dashboard'
     | '/editions'
-    | '/payments'
+    | '/invoices'
     | '/sales'
     | '/auth/sign-in'
   fileRoutesByTo: FileRoutesByTo
@@ -97,7 +97,7 @@ export interface FileRouteTypes {
     | '/budget-table'
     | '/dashboard'
     | '/editions'
-    | '/payments'
+    | '/invoices'
     | '/sales'
     | '/auth/sign-in'
   id:
@@ -106,7 +106,7 @@ export interface FileRouteTypes {
     | '/budget-table'
     | '/dashboard'
     | '/editions'
-    | '/payments'
+    | '/invoices'
     | '/sales'
     | '/auth/sign-in'
   fileRoutesById: FileRoutesById
@@ -116,7 +116,7 @@ export interface RootRouteChildren {
   BudgetTableRoute: typeof BudgetTableRoute
   DashboardRoute: typeof DashboardRoute
   EditionsRoute: typeof EditionsRoute
-  PaymentsRoute: typeof PaymentsRoute
+  InvoicesRoute: typeof InvoicesRoute
   SalesRoute: typeof SalesRoute
   AuthSignInRoute: typeof AuthSignInRoute
 }
@@ -130,11 +130,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SalesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/payments': {
-      id: '/payments'
-      path: '/payments'
-      fullPath: '/payments'
-      preLoaderRoute: typeof PaymentsRouteImport
+    '/invoices': {
+      id: '/invoices'
+      path: '/invoices'
+      fullPath: '/invoices'
+      preLoaderRoute: typeof InvoicesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/editions': {
@@ -180,7 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   BudgetTableRoute: BudgetTableRoute,
   DashboardRoute: DashboardRoute,
   EditionsRoute: EditionsRoute,
-  PaymentsRoute: PaymentsRoute,
+  InvoicesRoute: InvoicesRoute,
   SalesRoute: SalesRoute,
   AuthSignInRoute: AuthSignInRoute,
 }

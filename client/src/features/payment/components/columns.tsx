@@ -2,8 +2,8 @@ import { RowPrice } from "@/components/Table/RowPrice";
 import { SortableHeader } from "@/components/Table/SortableHeader";
 import { InvoiceStatus } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
-import { PaymentStatusBadge } from "./payment-status-badge";
-import { PaymentsTableActionsLine } from "./payments-table-actions-line";
+import { InvoiceStatusBadge } from "./invoice-status-badge";
+import { InvoicesTableActionsLine } from "./invoices-table-actions-line";
 
 export interface PaymentLineRow {
   id: number;
@@ -12,7 +12,7 @@ export interface PaymentLineRow {
   unitPrice: number;
 }
 
-export interface PaymentTableRow {
+export interface InvoiceTableRow {
   id: number;
   name: string;
   vendorId: number;
@@ -24,15 +24,15 @@ export interface PaymentTableRow {
   payments: PaymentLineRow[];
 }
 
-interface GetPaymentTableColumns {
+interface GetInvoicesTableColumns {
   onDelete: (id: number) => void;
-  onEdit: (row: PaymentTableRow) => void;
+  onEdit: (row: InvoiceTableRow) => void;
 }
 
 export function getColumns({
   onDelete,
   onEdit,
-}: GetPaymentTableColumns): ColumnDef<PaymentTableRow>[] {
+}: GetInvoicesTableColumns): ColumnDef<InvoiceTableRow>[] {
   return [
     {
       header: ({ column }) => <SortableHeader column={column} title="Nom" />,
@@ -66,7 +66,7 @@ export function getColumns({
         if (!filterValue.length) return true;
         return filterValue.includes(row.getValue(columnId));
       },
-      cell: ({ row }) => <PaymentStatusBadge status={row.original.status} />,
+      cell: ({ row }) => <InvoiceStatusBadge status={row.original.status} />,
     },
     {
       header: "Exécuté le",
@@ -87,7 +87,7 @@ export function getColumns({
       id: "actions",
       meta: { className: "w-px whitespace-nowrap" },
       cell: ({ row }) => (
-        <PaymentsTableActionsLine
+        <InvoicesTableActionsLine
           row={row}
           onDelete={onDelete}
           onEdit={onEdit}

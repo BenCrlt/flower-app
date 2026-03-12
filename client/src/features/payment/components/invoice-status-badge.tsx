@@ -7,7 +7,7 @@ interface Props {
   status: InvoiceStatus;
 }
 
-export function PaymentStatusBadge({ status }: Props): ReactElement {
+export function InvoiceStatusBadge({ status }: Props): ReactElement {
   return (
     <Badge variant={getStatusColor(status)}>{getStatusText(status)}</Badge>
   );

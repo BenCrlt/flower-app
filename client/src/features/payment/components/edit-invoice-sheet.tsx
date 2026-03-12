@@ -14,13 +14,13 @@ import { LineTypeEnum } from "@/generated/graphql";
 import { ReactElement } from "react";
 import { useGetVendorsQuery } from "../hooks/useGetVendorsQuery";
 import { useInvoiceForm } from "../hooks/useInvoiceForm";
-import { PaymentTableRow } from "./columns";
+import { InvoiceTableRow } from "./columns";
 import { InvoiceFormFields } from "./invoice-form-fields";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  invoice: PaymentTableRow;
+  invoice: InvoiceTableRow;
 }
 
 export function EditInvoiceSheet({

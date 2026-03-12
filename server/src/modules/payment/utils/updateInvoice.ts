@@ -66,15 +66,17 @@ export async function updateInvoice({
       .where(inArray(paymentsTable.id, existingPaymentIds));
   }
 
-  await db.insert(paymentsTable).values(
-    payments.map((payment) => ({
-      invoiceId: id,
-      quantity: payment.quantity,
-      unitPrice: payment.unitPrice.toString(),
-      budgetLineId: payment.budgetLineId,
-      editionId: input.editionId,
-    })),
-  );
+  if (invoiceUpdated.status === "PAID") {
+    await db.insert(paymentsTable).values(
+      payments.map((payment) => ({
+        invoiceId: id,
+        quantity: payment.quantity,
+        unitPrice: payment.unitPrice.toString(),
+        budgetLineId: payment.budgetLineId,
+        editionId: input.editionId,
+      })),
+    );
+  }
 
   return invoiceUpdated;
 }

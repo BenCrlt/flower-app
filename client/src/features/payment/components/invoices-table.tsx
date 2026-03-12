@@ -4,14 +4,13 @@ import { useEdition } from "@/features/edition/EditionContext";
 import { useState } from "react";
 import { useDeleteInvoiceMutation } from "../hooks/useDeleteInvoiceMutation";
 import { useGetInvoicesQuery } from "../hooks/useGetInvoicesQuery";
-import { AddInvoiceSheet } from "./add-invoice-sheet";
-import { getColumns, PaymentTableRow } from "./columns";
+import { getColumns, InvoiceTableRow } from "./columns";
 import { EditInvoiceSheet } from "./edit-invoice-sheet";
-import { PaymentsTableFilter } from "./payments-table-filters";
+import { InvoicesTableFiltersAndActions } from "./invoices-table-filters";
 
-export function PaymentsTable() {
+export function InvoicesTable() {
   const { edition } = useEdition();
-  const [selectedRow, setSelectedRow] = useState<PaymentTableRow | null>(null);
+  const [selectedRow, setSelectedRow] = useState<InvoiceTableRow | null>(null);
 
   const { data } = useGetInvoicesQuery({
     variables: { editionId: edition.id },
@@ -23,7 +22,7 @@ export function PaymentsTable() {
     deleteInvoice({ id });
   };
 
-  const rows: PaymentTableRow[] =
+  const rows: InvoiceTableRow[] =
     data?.invoices.map((invoice) => ({
       id: invoice.id,
       name: invoice.name,
@@ -49,14 +48,13 @@ export function PaymentsTable() {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center justify-between">
-        <TypographyH2>Paiements</TypographyH2>
-        <AddInvoiceSheet />
+        <TypographyH2>Factures / devis</TypographyH2>
       </div>
       <DataTable
         columns={columns}
         data={rows}
         onRowClick={(row) => setSelectedRow(row)}
-        actions={(table) => <PaymentsTableFilter table={table} />}
+        actions={(table) => <InvoicesTableFiltersAndActions table={table} />}
       />
       {selectedRow && (
         <EditInvoiceSheet
