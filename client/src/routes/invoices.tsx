@@ -6,9 +6,5 @@ export const Route = createFileRoute("/invoices")({
 });
 
 function RouteComponent() {
-  return (
-    <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6">
-      <InvoicesTable />
-    </div>
-  );
+  return <InvoicesTable />;
 }

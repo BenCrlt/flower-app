@@ -6,9 +6,5 @@ export const Route = createFileRoute("/dashboard")({
 });
 
 function DashboardPage() {
-  return (
-    <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6">
-      <EditionDashboard />
-    </div>
-  );
+  return <EditionDashboard />;
 }

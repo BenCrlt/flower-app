@@ -1,9 +1,5 @@
 import { AppSidebar } from "@/components/AppSidebar";
-import {
-  SidebarInset,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 import { useEditionContext } from "@/features/edition/EditionContext";
 import { authClient } from "@/lib/auth-client";
 import {
@@ -78,16 +74,11 @@ function RootLayout() {
     <AuthGuard>
       <SidebarProvider>
         <AppSidebar />
-        <SidebarInset>
-          <header className="flex h-12 items-center gap-2 border-b px-4">
-            <SidebarTrigger className="md:hidden" />
-          </header>
-          <main>
-            <EditionGuard>
-              <Outlet />
-            </EditionGuard>
-          </main>
-        </SidebarInset>
+        <main className="px-6 py-10 w-full">
+          <EditionGuard>
+            <Outlet />
+          </EditionGuard>
+        </main>
       </SidebarProvider>
     </AuthGuard>
   );

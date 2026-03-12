@@ -1,0 +1,75 @@
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+} from "@/components/ui/sidebar";
+import { useEditionContext } from "@/features/edition/EditionContext";
+import { CalendarDays, ChevronsUpDown, SquarePlus } from "lucide-react";
+
+export function SidebarEditionSelector() {
+  const { edition, setEdition, editions } = useEditionContext();
+
+  return (
+    <SidebarMenu>
+      <SidebarMenuItem>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <SidebarMenuButton
+              size="lg"
+              className="flex justify-between"
+              aria-label="Changer d’édition"
+            >
+              <div className="flex items-center gap-3">
+                <div className="flex h-8 w-8 shrink-0 items-center justify-center overflow-hidden rounded-md bg-primary/10 text-primary">
+                  <CalendarDays className="h-4 w-4" />
+                </div>
+                <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
+                  <span className="truncate text-sm font-medium">
+                    {edition?.name ?? "Édition"}
+                  </span>
+                </div>
+              </div>
+              <ChevronsUpDown className="h-4 w-4 shrink-0 text-muted-foreground group-data-[collapsible=icon]:hidden" />
+            </SidebarMenuButton>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent
+            side="right"
+            align="start"
+            sideOffset={8}
+            className="min-w-48"
+          >
+            <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
+              Editions
+            </DropdownMenuLabel>
+            {editions.map((e) => (
+              <DropdownMenuItem
+                key={e.id}
+                onClick={() => setEdition(e)}
+                className="flex items-center justify-between gap-2"
+              >
+                <span className="truncate">{e.name}</span>
+              </DropdownMenuItem>
+            ))}
+            <DropdownMenuSeparator />
+            <DropdownMenuItem
+              onSelect={() => {
+                // TODO: ouvrir formulaire / modal ajout édition
+              }}
+            >
+              <SquarePlus className="h-5 w-5" />
+              <span>Ajouter une édition</span>
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </SidebarMenuItem>
+    </SidebarMenu>
+  );
+}

@@ -6,9 +6,5 @@ export const Route = createFileRoute("/budget-table")({
 });
 
 function BudgetTablePage() {
-  return (
-    <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6">
-      <BudgetTable />
-    </div>
-  );
+  return <BudgetTable />;
 }
