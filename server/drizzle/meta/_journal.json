@@ -92,6 +92,13 @@
       "when": 1773159245515,
       "tag": "0012_update-auth-for-admin-plugin",
       "breakpoints": true
+    },
+    {
+      "idx": 13,
+      "version": "7",
+      "when": 1773761487990,
+      "tag": "0013_add-active-edition",
+      "breakpoints": true
     }
   ]
 }

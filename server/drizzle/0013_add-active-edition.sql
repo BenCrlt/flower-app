@@ -1,0 +1,2 @@
+ALTER TABLE "editions" ADD COLUMN "active" boolean NOT NULL;--> statement-breakpoint
+CREATE UNIQUE INDEX "editions_active_unique" ON "editions" USING btree ("active") WHERE "editions"."active" IS TRUE;
