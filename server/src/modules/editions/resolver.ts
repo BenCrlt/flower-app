@@ -1,4 +1,5 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
+import { desc } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../db/index";
 import { editionsTable } from "../../db/schema/editions";
@@ -15,7 +16,9 @@ import { updateEdition, updateEditionInput } from "./utils/updateEdition";
 
 export const editionsResolver = resolver.of(editionsTable, {
   editions: query(editionsTable.$list()).resolve(() =>
-    db.query.editionsTable.findMany(),
+    db.query.editionsTable.findMany({
+      orderBy: [desc(editionsTable.active), desc(editionsTable.startDate)],
+    }),
   ),
   getBudgetStatsByCategories: query(statsByCategoryOutput)
     .input({ editionId: z.number().min(1), lineType: LineTypeEnum })

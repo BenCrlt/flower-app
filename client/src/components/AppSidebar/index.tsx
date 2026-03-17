@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { AppSidebarFooter } from "./footer";
 import { AppSidebarHeader } from "./header";
-import { SidebarEditionSelector } from "./SidebarEditionSelector";
+import { SidebarEditionSelector } from "./sidebar-editions-selector";
 
 const navItems = [
   { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },

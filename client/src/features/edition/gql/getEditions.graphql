@@ -2,6 +2,7 @@ query getEditions {
   editions {
     id
     name
+    active
     startDate
     totalExpense
     totalIncome

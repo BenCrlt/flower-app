@@ -3,7 +3,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
@@ -12,7 +11,8 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useEditionContext } from "@/features/edition/EditionContext";
-import { CalendarDays, ChevronsUpDown, SquarePlus } from "lucide-react";
+import { CalendarDays, ChevronsUpDown } from "lucide-react";
+import { SidebarEditionItem } from "./sidebar-edition-item";
 
 export function SidebarEditionSelector() {
   const { edition, setEdition, editions } = useEditionContext();
@@ -32,9 +32,11 @@ export function SidebarEditionSelector() {
                   <CalendarDays className="h-4 w-4" />
                 </div>
                 <div className="flex flex-col text-left group-data-[collapsible=icon]:hidden">
-                  <span className="truncate text-sm font-medium">
-                    {edition?.name ?? "Édition"}
-                  </span>
+                  {edition ? (
+                    <SidebarEditionItem edition={edition} />
+                  ) : (
+                    <span className="truncate text-sm font-medium">-</span>
+                  )}
                 </div>
               </div>
               <ChevronsUpDown className="h-4 w-4 shrink-0 text-muted-foreground group-data-[collapsible=icon]:hidden" />
@@ -55,18 +57,9 @@ export function SidebarEditionSelector() {
                 onClick={() => setEdition(e)}
                 className="flex items-center justify-between gap-2"
               >
-                <span className="truncate">{e.name}</span>
+                <SidebarEditionItem edition={e} />
               </DropdownMenuItem>
             ))}
-            <DropdownMenuSeparator />
-            <DropdownMenuItem
-              onSelect={() => {
-                // TODO: ouvrir formulaire / modal ajout édition
-              }}
-            >
-              <SquarePlus className="h-5 w-5" />
-              <span>Ajouter une édition</span>
-            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </SidebarMenuItem>
