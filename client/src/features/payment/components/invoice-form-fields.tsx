@@ -1,4 +1,3 @@
-import { EditableField } from "@/components/EditableField";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
@@ -19,7 +18,6 @@ import {
   FieldArrayWithId,
   FieldErrors,
   UseFormRegister,
-  useWatch,
 } from "react-hook-form";
 import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
 import { InvoiceStatusBadge } from "./invoice-status-badge";
@@ -47,144 +45,73 @@ export function InvoiceFormFields({
   removePayment,
   totalAmount,
 }: Props): ReactElement {
-  const vendorIdValue = useWatch({ control, name: "vendorId" });
-  const statusValue = useWatch({ control, name: "status" });
-  const noteValue = useWatch({ control, name: "note" });
-  const nameValue = useWatch({ control, name: "name" });
-
-  const currentVendor = vendors.find((v) => v.id === vendorIdValue);
-
   return (
     <>
       {/* Nom */}
       <Field>
-        <EditableField
-          label="Nom"
-          displayValue={nameValue ?? ""}
-          placeholder="Ajouter un nom..."
-        >
-          {({ onEditDone }) => {
-            const { onBlur: rhfBlur, ...rest } = register("name");
-            return (
-              <Input
-                autoFocus
-                onBlur={(e) => {
-                  rhfBlur(e);
-                  onEditDone();
-                }}
-                {...rest}
-              />
-            );
-          }}
-        </EditableField>
+        <span className="text-sm font-medium text-foreground">Nom</span>
+        <Input {...register("name")} placeholder="Ajouter un nom..." />
       </Field>
       {/* Fournisseur */}
       <Field data-invalid={!!errors.vendorId}>
-        <EditableField
-          label="Fournisseur"
-          displayValue={currentVendor?.name}
-          placeholder="Sélectionnez un fournisseur..."
-        >
-          {({ onEditDone }) => (
-            <Controller
-              name="vendorId"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  value={field.value?.toString()}
-                  onValueChange={(val) => {
-                    field.onChange(Number(val));
-                    onEditDone();
-                  }}
-                  defaultOpen
-                  onOpenChange={(o) => {
-                    if (!o) onEditDone();
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionnez un fournisseur..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {vendors.map((vendor) => (
-                      <SelectItem key={vendor.id} value={vendor.id.toString()}>
-                        {vendor.name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
+        <span className="text-sm font-medium text-foreground">
+          Fournisseur
+        </span>
+        <Controller
+          name="vendorId"
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={field.value?.toString()}
+              onValueChange={(val) => field.onChange(Number(val))}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionnez un fournisseur..." />
+              </SelectTrigger>
+              <SelectContent>
+                {vendors.map((vendor) => (
+                  <SelectItem key={vendor.id} value={vendor.id.toString()}>
+                    {vendor.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
-        </EditableField>
+        />
         <FieldError errors={[errors.vendorId]} />
       </Field>
 
       {/* Statut */}
       <Field data-invalid={!!errors.status}>
-        <EditableField
-          label="Statut"
-          displayValue={
-            statusValue ? (
-              <InvoiceStatusBadge status={statusValue} />
-            ) : undefined
-          }
-          placeholder="Sélectionnez un statut..."
-        >
-          {({ onEditDone }) => (
-            <Controller
-              name="status"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  value={field.value}
-                  onValueChange={(val) => {
-                    field.onChange(val as InvoiceStatus);
-                    onEditDone();
-                  }}
-                  defaultOpen
-                  onOpenChange={(o) => {
-                    if (!o) onEditDone();
-                  }}
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="Sélectionnez un statut..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {Object.values(InvoiceStatus).map((status) => (
-                      <SelectItem key={status} value={status}>
-                        <InvoiceStatusBadge status={status} />
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              )}
-            />
+        <span className="text-sm font-medium text-foreground">Statut</span>
+        <Controller
+          name="status"
+          control={control}
+          render={({ field }) => (
+            <Select
+              value={field.value}
+              onValueChange={(val) => field.onChange(val as InvoiceStatus)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Sélectionnez un statut..." />
+              </SelectTrigger>
+              <SelectContent>
+                {Object.values(InvoiceStatus).map((status) => (
+                  <SelectItem key={status} value={status}>
+                    <InvoiceStatusBadge status={status} />
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
-        </EditableField>
+        />
         <FieldError errors={[errors.status]} />
       </Field>
 
       {/* Note */}
       <Field>
-        <EditableField
-          label="Note"
-          displayValue={noteValue ?? ""}
-          placeholder="Ajouter une note..."
-        >
-          {({ onEditDone }) => {
-            const { onBlur: rhfBlur, ...rest } = register("note");
-            return (
-              <Textarea
-                autoFocus
-                onBlur={(e) => {
-                  rhfBlur(e);
-                  onEditDone();
-                }}
-                {...rest}
-              />
-            );
-          }}
-        </EditableField>
+        <span className="text-sm font-medium text-foreground">Note</span>
+        <Textarea {...register("note")} placeholder="Ajouter une note..." />
       </Field>
 
       {/* Lignes de paiement */}
@@ -200,7 +127,7 @@ export function InvoiceFormFields({
           Prix
         </span>
         <div></div>
-        {paymentFields.map((field, index) => (
+        {paymentFields.map((_, index) => (
           <>
             <Field className="col-span-10">
               <Controller

@@ -1,0 +1,24 @@
+mutation addOrUpdateVendor(
+  $id: Float
+  $name: String!
+  $address: String
+  $email: String
+  $phone: String
+  $description: String
+) {
+  addOrUpdateVendor(
+    id: $id
+    name: $name
+    address: $address
+    email: $email
+    phone: $phone
+    description: $description
+  ) {
+    id
+    name
+    address
+    email
+    phoneNumber
+    description
+  }
+}
