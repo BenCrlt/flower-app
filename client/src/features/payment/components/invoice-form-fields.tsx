@@ -1,20 +1,8 @@
+import { PopoverCommand } from "@/components/PopoverCommand";
 import { Button } from "@/components/ui/button";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-  CommandSeparator,
-} from "@/components/ui/command";
+import { CommandItem } from "@/components/ui/command";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -24,8 +12,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { InvoiceStatus, VendorsItem } from "@/generated/graphql";
-import { cn } from "@/lib/utils";
-import { Check, ChevronsUpDown, CirclePlus, Plus, Trash2 } from "lucide-react";
+import { CirclePlus, Plus, Trash2 } from "lucide-react";
 import { ReactElement, useState } from "react";
 import {
   Control,
@@ -73,73 +60,34 @@ export function InvoiceFormFields({
         <Input {...register("name")} placeholder="Ajouter un nom..." />
       </Field>
       {/* Fournisseur */}
+      {/*  setValue("vendorId", vendor.id) */}
       <Field data-invalid={!!errors.vendorId}>
         <span className="text-sm font-medium text-foreground">Fournisseur</span>
         <Controller
           name="vendorId"
           control={control}
           render={({ field }) => (
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  className={cn(
-                    "w-[200px] justify-between",
-                    !field.value && "text-muted-foreground",
-                  )}
+            <PopoverCommand
+              items={vendors.map((vendor) => ({
+                label: vendor.name,
+                value: vendor.id,
+              }))}
+              selectedValue={field.value}
+              setSelectedValue={(value) => field.onChange(value)}
+              actions={[
+                <CommandItem
+                  key="add-vendor"
+                  onSelect={() => setOpenAddVendorDialog(true)}
                 >
-                  {field.value
-                    ? vendors.find((vendor) => vendor.id === field.value)?.name
-                    : "Sélectionner un fournisseur..."}
-                  <ChevronsUpDown className="opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[400px] p-0" align="start">
-                <Command>
-                  <CommandInput
-                    placeholder="Rechercher un fournisseur..."
-                    className="h-9"
-                  />
-                  <CommandList
-                    className="max-h-[300px] overflow-y-auto overscroll-contain scrollbar-hide"
-                    onWheel={(e) => e.stopPropagation()}
-                  >
-                    <CommandEmpty>Pas de fournisseur trouvé.</CommandEmpty>
-                    <CommandGroup heading="Fournisseurs">
-                      {vendors.map((vendor) => (
-                        <CommandItem
-                          value={vendor.id.toString()}
-                          key={vendor.id}
-                          onSelect={() => {
-                            setValue("vendorId", vendor.id);
-                          }}
-                        >
-                          {vendor.name}
-                          <Check
-                            className={cn(
-                              "ml-auto",
-                              vendor.id === field.value
-                                ? "opacity-100"
-                                : "opacity-0",
-                            )}
-                          />
-                        </CommandItem>
-                      ))}
-                    </CommandGroup>
-                    <CommandSeparator />
-                    <CommandGroup heading="Actions" forceMount>
-                      <CommandItem
-                        onSelect={() => setOpenAddVendorDialog(true)}
-                      >
-                        <Plus className="h-4 w-4" />
-                        Ajouter un fournisseur
-                      </CommandItem>
-                    </CommandGroup>
-                  </CommandList>
-                </Command>
-              </PopoverContent>
-            </Popover>
+                  <Plus className="h-4 w-4" />
+                  Ajouter un fournisseur
+                </CommandItem>,
+              ]}
+              inputPlaceholder="Sélectionner un fournisseur..."
+              commandInputPlaceholder="Rechercher un fournisseur..."
+              title="Fournisseurs"
+              emptyMessage="Pas de fournisseur trouvé."
+            />
           )}
         />
         <FieldError errors={[errors.vendorId]} />
