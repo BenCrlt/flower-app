@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { ReactElement, ReactNode } from "react";
+import { ReactElement, ReactNode, useState } from "react";
 import { Button } from "./ui/button";
 import {
   Command,
@@ -56,6 +56,7 @@ export function PopoverCommand<T extends DefaultItem = DefaultItem>({
   renderItem,
   renderTriggerValue,
 }: Props<T>) {
+  const [open, setOpen] = useState(false);
   const selectedItem = items.find(
     (item) => getItemValue(item) === selectedValue,
   );
@@ -66,7 +67,7 @@ export function PopoverCommand<T extends DefaultItem = DefaultItem>({
       : inputPlaceholder;
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="outline"
@@ -112,6 +113,7 @@ export function PopoverCommand<T extends DefaultItem = DefaultItem>({
                     key={itemValue}
                     onSelect={() => {
                       setSelectedValue(itemValue);
+                      setOpen(false);
                     }}
                     className="justify-between"
                   >
