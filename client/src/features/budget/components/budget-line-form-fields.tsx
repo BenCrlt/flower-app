@@ -1,4 +1,5 @@
 import { AddCategoryDialog } from "@/components/add-category-dialog";
+import { CategoryBadge } from "@/components/CategoryBadge";
 import { PopoverCommand } from "@/components/PopoverCommand";
 import { CommandItem } from "@/components/ui/command";
 import { Field, FieldError } from "@/components/ui/field";
@@ -46,6 +47,10 @@ export function BudgetLineFormFields({
   const totalEstimated =
     Number(estimatedQuantity) * Number(estimatedUnitPrice) || 0;
   const [openAddCategoryDialog, setOpenAddCategoryDialog] = useState(false);
+
+  const getCategoryColor = (categoryId: number) => {
+    return allCategories?.find((category) => category.id === categoryId)?.color;
+  };
 
   return (
     <>
@@ -121,6 +126,24 @@ export function BudgetLineFormFields({
               commandInputPlaceholder="Rechercher une catégorie..."
               title="Catégories"
               emptyMessage="Pas de catégorie trouvée."
+              renderItem={(item) => (
+                <CategoryBadge
+                  name={item.label}
+                  color={getCategoryColor(item.value)}
+                />
+              )}
+              renderTriggerValue={(item) =>
+                item ? (
+                  <CategoryBadge
+                    name={item.label}
+                    color={getCategoryColor(item.value)}
+                  />
+                ) : (
+                  <span className="text-muted-foreground">
+                    Sélectionnez une catégorie...
+                  </span>
+                )
+              }
             />
           )}
         />

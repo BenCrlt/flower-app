@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Check, ChevronsUpDown } from "lucide-react";
-import { ReactElement } from "react";
+import { ReactElement, ReactNode } from "react";
 import { Button } from "./ui/button";
 import {
   Command,
@@ -13,19 +13,32 @@ import {
 } from "./ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
 
-interface Props {
-  items: { label: string; value: number }[];
-  selectedValue: number;
-  setSelectedValue: (value: number) => void;
-  actions: ReactElement[];
+type PrimitiveValue = string | number;
+type DefaultItem = { label: string; value: PrimitiveValue };
+
+interface Props<T extends DefaultItem = DefaultItem> {
+  items: T[];
+  selectedValue?: PrimitiveValue;
+  setSelectedValue: (value: PrimitiveValue) => void;
+  actions?: ReactElement[];
   inputPlaceholder: string;
   commandInputPlaceholder: string;
   title: string;
   emptyMessage: string;
+  actionsTitle?: string;
   className?: string;
+  contentClassName?: string;
+  getItemValue?: (item: T) => PrimitiveValue;
+  getItemLabel?: (item: T) => string;
+  getItemSearchValue?: (item: T) => string;
+  renderItem?: (
+    item: T,
+    ctx: { isSelected: boolean; label: string },
+  ) => ReactNode;
+  renderTriggerValue?: (selectedItem?: T) => ReactNode;
 }
 
-export function PopoverCommand({
+export function PopoverCommand<T extends DefaultItem = DefaultItem>({
   inputPlaceholder,
   title,
   commandInputPlaceholder,
@@ -33,9 +46,25 @@ export function PopoverCommand({
   items,
   selectedValue,
   setSelectedValue,
-  actions,
+  actions = [],
+  actionsTitle = "Actions",
   className,
-}: Props) {
+  contentClassName,
+  getItemValue = (item) => item.value,
+  getItemLabel = (item) => item.label,
+  getItemSearchValue,
+  renderItem,
+  renderTriggerValue,
+}: Props<T>) {
+  const selectedItem = items.find(
+    (item) => getItemValue(item) === selectedValue,
+  );
+  const triggerValue = renderTriggerValue
+    ? renderTriggerValue(selectedItem)
+    : selectedItem
+      ? getItemLabel(selectedItem)
+      : inputPlaceholder;
+
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -44,17 +73,18 @@ export function PopoverCommand({
           role="combobox"
           className={cn(
             "justify-between",
-            !selectedValue && "text-muted-foreground",
+            selectedValue == null && "text-muted-foreground",
             className,
           )}
         >
-          {selectedValue
-            ? items.find((item) => item.value === selectedValue)?.label
-            : inputPlaceholder}
+          {triggerValue}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[400px] p-0" align="start">
+      <PopoverContent
+        className={cn("w-[400px] p-0", contentClassName)}
+        align="start"
+      >
         <Command>
           <CommandInput placeholder={commandInputPlaceholder} className="h-9" />
           <CommandList
@@ -63,26 +93,36 @@ export function PopoverCommand({
           >
             <CommandEmpty>{emptyMessage}</CommandEmpty>
             <CommandGroup heading={title}>
-              {items.map((item) => (
-                <CommandItem
-                  value={item.value.toString()}
-                  key={item.value}
-                  onSelect={() => {
-                    setSelectedValue(item.value);
-                  }}
-                  className="justify-between"
-                >
-                  <span>{item.label}</span>
-                  <Check
-                    className="h-4 w-4"
-                    opacity={selectedValue === item.value ? 1 : 0}
-                  />
-                </CommandItem>
-              ))}
+              {items.map((item) => {
+                const itemValue = getItemValue(item);
+                const label = getItemLabel(item);
+                const isSelected = selectedValue === itemValue;
+                const itemContent = renderItem ? (
+                  renderItem(item, { isSelected, label })
+                ) : (
+                  <>
+                    <span>{label}</span>
+                    <Check className="h-4 w-4" opacity={isSelected ? 1 : 0} />
+                  </>
+                );
+
+                return (
+                  <CommandItem
+                    value={getItemSearchValue?.(item) ?? label}
+                    key={itemValue}
+                    onSelect={() => {
+                      setSelectedValue(itemValue);
+                    }}
+                    className="justify-between"
+                  >
+                    {itemContent}
+                  </CommandItem>
+                );
+              })}
             </CommandGroup>
             <CommandSeparator />
             {actions.length > 0 && (
-              <CommandGroup heading="Actions" forceMount>
+              <CommandGroup heading={actionsTitle} forceMount>
                 {actions}
               </CommandGroup>
             )}

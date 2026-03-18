@@ -2,10 +2,10 @@ import { Badge } from "./ui/badge";
 
 interface Props {
   name: string;
-  color: string;
+  color: string | undefined;
 }
 
-export function CategoryBadge({ name, color }: Props) {
+export function CategoryBadge({ name, color = "#3b82f6" }: Props) {
   return (
     <Badge
       style={{
