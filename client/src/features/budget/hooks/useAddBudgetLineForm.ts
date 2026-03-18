@@ -5,6 +5,7 @@ import {
   FieldErrors,
   useForm,
   UseFormRegister,
+  UseFormSetValue,
 } from "react-hook-form";
 import {
   budgetLineFormResolver,
@@ -23,6 +24,7 @@ export function useAddBudgetLineForm({ setOpen, lineType }: Props): {
   register: UseFormRegister<BudgetLineFormValues>;
   control: Control<BudgetLineFormValues>;
   errors: FieldErrors<BudgetLineFormValues>;
+  setValue: UseFormSetValue<BudgetLineFormValues>;
 } {
   const { edition } = useEdition();
   const { mutate } = useAddBudgetLineMutation();
@@ -31,6 +33,7 @@ export function useAddBudgetLineForm({ setOpen, lineType }: Props): {
     handleSubmit,
     reset,
     control,
+    setValue,
     formState: { errors },
   } = useForm<BudgetLineFormValues>({
     resolver: budgetLineFormResolver,
@@ -58,5 +61,6 @@ export function useAddBudgetLineForm({ setOpen, lineType }: Props): {
     register,
     control,
     errors,
+    setValue,
   };
 }

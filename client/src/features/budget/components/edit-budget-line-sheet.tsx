@@ -35,7 +35,7 @@ export function EditBudgetLineSheet({
   line,
   allCategories,
 }: Props): ReactElement {
-  const { register, control, errors, handleClose, handleSubmit } =
+  const { register, control, errors, handleClose, handleSubmit, setValue } =
     useEditBudgetLineForm({
       setOpen: onOpenChange,
       defaultValues: line,
@@ -61,6 +61,7 @@ export function EditBudgetLineSheet({
               errors={errors}
               allCategories={allCategories}
               currentValues={line}
+              setValue={setValue}
             />
           </div>
           <SheetFooter>

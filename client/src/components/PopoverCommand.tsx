@@ -22,6 +22,7 @@ interface Props {
   commandInputPlaceholder: string;
   title: string;
   emptyMessage: string;
+  className?: string;
 }
 
 export function PopoverCommand({
@@ -33,6 +34,7 @@ export function PopoverCommand({
   selectedValue,
   setSelectedValue,
   actions,
+  className,
 }: Props) {
   return (
     <Popover>
@@ -41,8 +43,9 @@ export function PopoverCommand({
           variant="outline"
           role="combobox"
           className={cn(
-            "w-[200px] justify-between",
+            "justify-between",
             !selectedValue && "text-muted-foreground",
+            className,
           )}
         >
           {selectedValue
@@ -67,15 +70,12 @@ export function PopoverCommand({
                   onSelect={() => {
                     setSelectedValue(item.value);
                   }}
+                  className="justify-between"
                 >
-                  {item.label}
+                  <span>{item.label}</span>
                   <Check
-                    className={cn(
-                      "ml-auto",
-                      item.value === selectedValue
-                        ? "opacity-100"
-                        : "opacity-0",
-                    )}
+                    className="h-4 w-4"
+                    opacity={selectedValue === item.value ? 1 : 0}
                   />
                 </CommandItem>
               ))}

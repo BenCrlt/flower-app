@@ -28,7 +28,7 @@ export function AddBudgetLineSheet({
   const lineTypeString = getBudgetLineTypeString(lineType);
   const [open, setOpen] = useState(false);
 
-  const { register, control, errors, handleClose, handleSubmit } =
+  const { register, control, errors, handleClose, handleSubmit, setValue } =
     useAddBudgetLineForm({ setOpen, lineType });
 
   return (
@@ -57,6 +57,7 @@ export function AddBudgetLineSheet({
               errors={errors}
               allCategories={allCategories}
               namePlaceholder={`Nom de la ${lineTypeString}`}
+              setValue={setValue}
             />
           </div>
           <SheetFooter>

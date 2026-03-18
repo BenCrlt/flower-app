@@ -8,10 +8,10 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
+import { useAddOrUpdateVendor } from "@/features/payment/hooks/useAddOrUpdateVendor";
 import { AddOrUpdateVendorMutationVariables } from "@/generated/graphql";
 import { ReactElement, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { useAddOrUpdateVendor } from "../hooks/useAddOrUpdateVendor";
 
 interface Props {
   onAdded: (vendorId: number) => void;

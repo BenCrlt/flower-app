@@ -1,22 +1,19 @@
-import { CategoryBadge } from "@/components/CategoryBadge";
+import { AddCategoryDialog } from "@/components/add-category-dialog";
+import { PopoverCommand } from "@/components/PopoverCommand";
+import { CommandItem } from "@/components/ui/command";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { BudgetCategoriesItem } from "@/generated/graphql";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
-import { ReactElement } from "react";
+import { Plus } from "lucide-react";
+import { ReactElement, useState } from "react";
 import {
   Control,
   Controller,
   FieldErrors,
   UseFormRegister,
+  UseFormSetValue,
   useWatch,
 } from "react-hook-form";
 import { BudgetLineFormValues } from "../hooks/budgetLineFormResolver";
@@ -33,6 +30,7 @@ interface Props {
     estimatedQuantity: number;
     estimatedUnitPrice: number;
   };
+  setValue: UseFormSetValue<BudgetLineFormValues>;
 }
 
 export function BudgetLineFormFields({
@@ -41,11 +39,13 @@ export function BudgetLineFormFields({
   errors,
   allCategories,
   namePlaceholder,
+  setValue,
 }: Props): ReactElement {
   const estimatedQuantity = useWatch({ control, name: "estimatedQuantity" });
   const estimatedUnitPrice = useWatch({ control, name: "estimatedUnitPrice" });
   const totalEstimated =
     Number(estimatedQuantity) * Number(estimatedUnitPrice) || 0;
+  const [openAddCategoryDialog, setOpenAddCategoryDialog] = useState(false);
 
   return (
     <>
@@ -99,28 +99,37 @@ export function BudgetLineFormFields({
           name="budgetCategoryId"
           control={control}
           render={({ field }) => (
-            <Select
-              aria-invalid={!!errors.budgetCategoryId}
-              value={field.value?.toString()}
-              onValueChange={(val) => field.onChange(Number(val))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="Sélectionnez une catégorie..." />
-              </SelectTrigger>
-              <SelectContent>
-                {allCategories?.map((category) => (
-                  <SelectItem key={category.id} value={category.id.toString()}>
-                    <CategoryBadge
-                      name={category.name}
-                      color={category.color}
-                    />
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <PopoverCommand
+              items={
+                allCategories?.map((category) => ({
+                  label: category.name,
+                  value: category.id,
+                })) || []
+              }
+              selectedValue={field.value}
+              setSelectedValue={(value) => field.onChange(value)}
+              actions={[
+                <CommandItem
+                  key="add-category"
+                  onSelect={() => setOpenAddCategoryDialog(true)}
+                >
+                  <Plus className="h-4 w-4" />
+                  Ajouter une catégorie
+                </CommandItem>,
+              ]}
+              inputPlaceholder="Sélectionnez une catégorie..."
+              commandInputPlaceholder="Rechercher une catégorie..."
+              title="Catégories"
+              emptyMessage="Pas de catégorie trouvée."
+            />
           )}
         />
         <FieldError errors={[errors.budgetCategoryId]} />
+        <AddCategoryDialog
+          onAdded={(categoryId) => setValue("budgetCategoryId", categoryId)}
+          open={openAddCategoryDialog}
+          setOpen={setOpenAddCategoryDialog}
+        />
       </Field>
     </>
   );

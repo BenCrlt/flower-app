@@ -1,3 +1,4 @@
+import { AddVendorDialog } from "@/components/add-vendor-dialog";
 import { PopoverCommand } from "@/components/PopoverCommand";
 import { Button } from "@/components/ui/button";
 import { CommandItem } from "@/components/ui/command";
@@ -23,7 +24,6 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
-import { AddVendorDialog } from "./add-vendor-dialog";
 import { InvoiceStatusBadge } from "./invoice-status-badge";
 
 interface Props {

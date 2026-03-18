@@ -1,7 +1,13 @@
-import { Control, FieldErrors, useForm, UseFormRegister } from "react-hook-form";
 import {
-  BudgetLineFormValues,
+  Control,
+  FieldErrors,
+  useForm,
+  UseFormRegister,
+  UseFormSetValue,
+} from "react-hook-form";
+import {
   budgetLineFormResolver,
+  BudgetLineFormValues,
 } from "./budgetLineFormResolver";
 import { useUpdateBudgetLineMutation } from "./useUpdateBudgetLineMutation";
 
@@ -19,6 +25,7 @@ export function useEditBudgetLineForm({ setOpen, defaultValues }: Props): {
   handleClose: () => void;
   register: UseFormRegister<BudgetLineFormValues>;
   control: Control<BudgetLineFormValues>;
+  setValue: UseFormSetValue<BudgetLineFormValues>;
   errors: FieldErrors<BudgetLineFormValues>;
 } {
   const { mutate } = useUpdateBudgetLineMutation();
@@ -27,6 +34,7 @@ export function useEditBudgetLineForm({ setOpen, defaultValues }: Props): {
     handleSubmit,
     reset,
     control,
+    setValue,
     formState: { errors },
   } = useForm<BudgetLineFormValues>({
     resolver: budgetLineFormResolver,
@@ -50,5 +58,6 @@ export function useEditBudgetLineForm({ setOpen, defaultValues }: Props): {
     register,
     control,
     errors,
+    setValue,
   };
 }
