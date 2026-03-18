@@ -1,6 +1,6 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../src";
-import { user } from "../../src/db/schema";
+import { editionsTable, user } from "../../src/db/schema";
 import { auth } from "../../src/utils/auth";
 
 async function main() {
@@ -20,6 +20,12 @@ async function main() {
     .update(user)
     .set({ username: adminUsername })
     .where(eq(user.id, admin.user.id));
+
+  await db.insert(editionsTable).values({
+    name: "FMF 2026",
+    startDate: "2026-06-27",
+    active: true,
+  });
 
   process.exit(0);
 }
