@@ -4,7 +4,7 @@ import { editionsTable, user } from "../../src/db/schema";
 import { auth } from "../../src/utils/auth";
 
 async function main() {
-  const adminUsername = "admin2";
+  const adminUsername = "admin";
   const adminPassword = "123456";
 
   const admin = await auth.api.createUser({
