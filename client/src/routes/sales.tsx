@@ -6,6 +6,6 @@ export const Route = createFileRoute("/sales")({
 
 function RouteComponent() {
   return (
-    <div className="h-full rounded-4xl border bg-background text-card-foreground shadow p-6"></div>
+    <div>merde</div>
   );
 }
