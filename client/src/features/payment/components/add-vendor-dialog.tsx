@@ -5,89 +5,111 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Spinner } from "@/components/ui/spinner";
 import { AddOrUpdateVendorMutationVariables } from "@/generated/graphql";
-import { Plus } from "lucide-react";
-import { ReactElement, useState } from "react";
+import { ReactElement, useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useAddOrUpdateVendor } from "../hooks/useAddOrUpdateVendor";
 
-export function AddVendorDialog(): ReactElement {
+interface Props {
+  onAdded: (vendorId: number) => void;
+  open: boolean;
+  setOpen: (open: boolean) => void;
+}
+
+export function AddVendorDialog({
+  onAdded,
+  open,
+  setOpen,
+}: Props): ReactElement {
   const [vendorToAdd, setVendorToAdd] =
     useState<AddOrUpdateVendorMutationVariables>({
       name: "",
     });
 
-  const { mutateAsync: addOrUpdateVendor } = useAddOrUpdateVendor();
+  const { mutateAsync: addOrUpdateVendor, isPending } = useAddOrUpdateVendor();
 
-  const handleAddOrUpdateVendor = (
-    e: React.FormEvent<HTMLFormElement>,
-  ): void => {
-    console.log("handleAddOrUpdateVendor", e);
-    e.preventDefault();
-    e.stopPropagation();
+  const handleAddOrUpdateVendor = (): void => {
     if (!vendorToAdd.name.length) return;
 
-    void addOrUpdateVendor(vendorToAdd);
+    void addOrUpdateVendor(vendorToAdd)
+      .then((data) => {
+        if (data.addOrUpdateVendor?.id) {
+          onAdded(data.addOrUpdateVendor.id);
+          toast.success("Fournisseur ajouté avec succès");
+        }
+      })
+      .catch((error) => {
+        toast.error("Erreur lors de l'ajout du fournisseur", {
+          description: error.message,
+        });
+      })
+      .finally(() => {
+        setOpen(false);
+      });
   };
 
+  const isValidForm = useMemo(
+    () => vendorToAdd.name.length > 0,
+    [vendorToAdd.name],
+  );
+
   return (
-    <Dialog>
-      <form onSubmit={handleAddOrUpdateVendor}>
-        <DialogTrigger asChild>
-          <div className="flex itemVjjs-center gap-2">
-            <Plus className="h-4 w-4" />
-            Ajouter un fournisseur
-          </div>
-        </DialogTrigger>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>Ajouter un fournisseur</DialogTitle>
-            <DialogDescription>
-              Ajouter un nouveau fournisseur pour vos factures
-            </DialogDescription>
-          </DialogHeader>
-          <div className="flex flex-col gap-4">
-            <Input
-              placeholder="Nom du fournisseur"
-              value={vendorToAdd.name}
-              onChange={(e) =>
-                setVendorToAdd({ ...vendorToAdd, name: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Adresse du fournisseur"
-              value={vendorToAdd.address ?? ""}
-              onChange={(e) =>
-                setVendorToAdd({ ...vendorToAdd, address: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Email du fournisseur"
-              value={vendorToAdd.email ?? ""}
-              onChange={(e) =>
-                setVendorToAdd({ ...vendorToAdd, email: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Téléphone du fournisseur"
-              value={vendorToAdd.phone ?? ""}
-              onChange={(e) =>
-                setVendorToAdd({ ...vendorToAdd, phone: e.target.value })
-              }
-            />
-            <Input
-              placeholder="Description du fournisseur"
-              value={vendorToAdd.description ?? ""}
-              onChange={(e) =>
-                setVendorToAdd({ ...vendorToAdd, description: e.target.value })
-              }
-            />
-          </div>
-          <Button type="submit">Ajouter</Button>
-        </DialogContent>
-      </form>
+    <Dialog open={open} onOpenChange={setOpen}>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Ajouter un fournisseur</DialogTitle>
+          <DialogDescription>
+            Ajouter un nouveau fournisseur pour vos factures
+          </DialogDescription>
+        </DialogHeader>
+        <div className="flex flex-col gap-4">
+          <Input
+            placeholder="* Nom du fournisseur"
+            value={vendorToAdd.name}
+            onChange={(e) =>
+              setVendorToAdd({ ...vendorToAdd, name: e.target.value })
+            }
+          />
+          <Input
+            placeholder="Adresse du fournisseur"
+            value={vendorToAdd.address ?? ""}
+            onChange={(e) =>
+              setVendorToAdd({ ...vendorToAdd, address: e.target.value })
+            }
+          />
+          <Input
+            placeholder="Email du fournisseur"
+            value={vendorToAdd.email ?? ""}
+            onChange={(e) =>
+              setVendorToAdd({ ...vendorToAdd, email: e.target.value })
+            }
+          />
+          <Input
+            placeholder="Téléphone du fournisseur"
+            value={vendorToAdd.phone ?? ""}
+            onChange={(e) =>
+              setVendorToAdd({ ...vendorToAdd, phone: e.target.value })
+            }
+          />
+          <Input
+            placeholder="Description du fournisseur"
+            value={vendorToAdd.description ?? ""}
+            onChange={(e) =>
+              setVendorToAdd({ ...vendorToAdd, description: e.target.value })
+            }
+          />
+        </div>
+        <Button
+          type="button"
+          onClick={handleAddOrUpdateVendor}
+          disabled={!isValidForm || isPending}
+        >
+          {isPending ? <Spinner /> : "Ajouter"}
+        </Button>
+      </DialogContent>
     </Dialog>
   );
 }

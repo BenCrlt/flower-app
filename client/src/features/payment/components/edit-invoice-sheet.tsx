@@ -45,6 +45,7 @@ export function EditInvoiceSheet({
     appendPayment,
     removePayment,
     totalAmount,
+    setValue,
   } = useInvoiceForm({ setOpen: onOpenChange, existingInvoice: invoice });
 
   return (
@@ -71,6 +72,7 @@ export function EditInvoiceSheet({
               appendPayment={appendPayment}
               removePayment={removePayment}
               totalAmount={totalAmount}
+              setValue={setValue}
             />
           </div>
           <SheetFooter>

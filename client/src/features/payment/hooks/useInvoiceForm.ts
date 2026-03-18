@@ -1,4 +1,5 @@
 import { useEdition } from "@/features/edition/EditionContext";
+import { authClient } from "@/lib/auth-client";
 import _ from "lodash";
 import {
   Control,
@@ -7,6 +8,7 @@ import {
   useFieldArray,
   useForm,
   UseFormRegister,
+  UseFormSetValue,
 } from "react-hook-form";
 import { invoiceFormResolver, InvoiceFormValues } from "./invoiceFormResolver";
 import { useAddInvoiceMutation } from "./useAddInvoiceMutation";
@@ -27,6 +29,7 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
   appendPayment: () => void;
   removePayment: (index: number) => void;
   totalAmount: number;
+  setValue: UseFormSetValue<InvoiceFormValues>;
 } {
   const { edition } = useEdition();
   const { mutate: updateInvoice } = useUpdateInvoiceMutation();
@@ -39,11 +42,14 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
     control,
     watch,
     formState: { errors },
+    setValue,
   } = useForm<InvoiceFormValues>({
     resolver: invoiceFormResolver,
     mode: "onChange",
     defaultValues: existingInvoice,
   });
+
+  const { data: session } = authClient.useSession();
 
   const { fields, append, remove } = useFieldArray({
     control,
@@ -64,7 +70,7 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
         id: invoiceId,
         editionId: edition.id,
         totalAmount,
-        authorId: 1,
+        authorId: session?.user?.id ?? "",
         note: data.note.length > 0 ? data.note : undefined,
       });
     } else {
@@ -72,7 +78,7 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
         ..._.omit(data, ["id"]),
         editionId: edition.id,
         totalAmount,
-        authorId: 1,
+        authorId: session?.user?.id ?? "",
         note: data.note.length > 0 ? data.note : undefined,
       });
     }
@@ -94,5 +100,6 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
     appendPayment: () => append({ budgetLineId: 0, quantity: 1, unitPrice: 0 }),
     removePayment: remove,
     totalAmount,
+    setValue,
   };
 }

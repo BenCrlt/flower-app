@@ -37,6 +37,7 @@ export function AddInvoiceSheet(): ReactElement {
     appendPayment,
     removePayment,
     totalAmount,
+    setValue,
   } = useInvoiceForm({ setOpen });
 
   return (
@@ -68,6 +69,7 @@ export function AddInvoiceSheet(): ReactElement {
               appendPayment={appendPayment}
               removePayment={removePayment}
               totalAmount={totalAmount}
+              setValue={setValue}
             />
           </div>
           <SheetFooter>
