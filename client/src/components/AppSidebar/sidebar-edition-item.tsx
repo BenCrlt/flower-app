@@ -12,7 +12,7 @@ export function SidebarEditionItem({
   return (
     <div className={cn("flex items-center gap-2", className)}>
       <span className="truncate text-sm font-medium">{edition.name}</span>
-      {edition.active && <Badge variant="success">Active</Badge>}
+      {edition.active && <Badge variant="default">Active</Badge>}
     </div>
   );
 }
