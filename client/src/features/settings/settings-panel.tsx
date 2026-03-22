@@ -11,10 +11,15 @@ import {
   TypographyH3,
   TypographyP,
 } from "@/components/ui/typography";
+import { authClient } from "@/lib/auth-client";
+import { AddUserDialog } from "./add-user-dialog";
 import { ChangePinDialog } from "./change-pin-dialog";
 import { UpdateUsernameField } from "./update-username-field";
 
 export function SettingsPanel() {
+  const { data: session } = authClient.useSession();
+  const isAdmin = session?.user?.role === "admin";
+
   return (
     <div className="flex flex-col gap-4">
       <TypographyH2>Paramètres</TypographyH2>
@@ -35,6 +40,26 @@ export function SettingsPanel() {
           </div>
         </CardContent>
       </Card>
+      {isAdmin && (
+        <Card className="flex flex-col gap-4">
+          <CardHeader>
+            <CardTitle>
+              <TypographyH3>Actions administrateurs</TypographyH3>
+            </CardTitle>
+            <CardDescription>
+              <TypographyP>
+                Dans cette section, vous pouvez ajouter des nouveaux
+                utilisateurs et gérer les permissions.
+              </TypographyP>
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="flex flex-col gap-4">
+            <div className="flex flex-col gap-2 w-fit">
+              <AddUserDialog />
+            </div>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 }
