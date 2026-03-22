@@ -6,7 +6,6 @@ export const authRoutes: FastifyPluginAsync = async (fastify) => {
     method: ["GET", "POST"],
     url: "/*",
     async handler(request, reply) {
-      console.log("AUTH");
       try {
         // Construct request URL
         const url = new URL(request.url, `http://${request.headers.host}`);

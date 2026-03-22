@@ -18,16 +18,16 @@ import { AppSidebarFooter } from "./footer";
 import { AppSidebarHeader } from "./header";
 import { SidebarEditionSelector } from "./sidebar-editions-selector";
 
-const navItems = [
-  { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-  { to: "/budget-table", icon: ChartNoAxesCombined, label: "Budget" },
-  { to: "/invoices", icon: CreditCard, label: "Factures" },
-  { to: "/sales", icon: Coins, label: "Ventes" },
-] as const;
-
 export function AppSidebar() {
   const routerState = useRouterState();
   const pathname = routerState.location.pathname;
+
+  const navItems = [
+    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+    { to: "/budget-table", icon: ChartNoAxesCombined, label: "Budget" },
+    { to: "/invoices", icon: CreditCard, label: "Factures" },
+    { to: "/sales", icon: Coins, label: "Ventes" },
+  ];
 
   return (
     <Sidebar collapsible="icon" variant="floating">

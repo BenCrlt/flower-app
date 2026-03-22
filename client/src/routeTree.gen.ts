@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SalesRouteImport } from './routes/sales'
 import { Route as InvoicesRouteImport } from './routes/invoices'
 import { Route as EditionsRouteImport } from './routes/editions'
@@ -17,6 +18,11 @@ import { Route as BudgetTableRouteImport } from './routes/budget-table'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SalesRoute = SalesRouteImport.update({
   id: '/sales',
   path: '/sales',
@@ -60,6 +66,7 @@ export interface FileRoutesByFullPath {
   '/editions': typeof EditionsRoute
   '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
+  '/settings': typeof SettingsRoute
   '/auth/sign-in': typeof AuthSignInRoute
 }
 export interface FileRoutesByTo {
@@ -69,6 +76,7 @@ export interface FileRoutesByTo {
   '/editions': typeof EditionsRoute
   '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
+  '/settings': typeof SettingsRoute
   '/auth/sign-in': typeof AuthSignInRoute
 }
 export interface FileRoutesById {
@@ -79,6 +87,7 @@ export interface FileRoutesById {
   '/editions': typeof EditionsRoute
   '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
+  '/settings': typeof SettingsRoute
   '/auth/sign-in': typeof AuthSignInRoute
 }
 export interface FileRouteTypes {
@@ -90,6 +99,7 @@ export interface FileRouteTypes {
     | '/editions'
     | '/invoices'
     | '/sales'
+    | '/settings'
     | '/auth/sign-in'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -99,6 +109,7 @@ export interface FileRouteTypes {
     | '/editions'
     | '/invoices'
     | '/sales'
+    | '/settings'
     | '/auth/sign-in'
   id:
     | '__root__'
@@ -108,6 +119,7 @@ export interface FileRouteTypes {
     | '/editions'
     | '/invoices'
     | '/sales'
+    | '/settings'
     | '/auth/sign-in'
   fileRoutesById: FileRoutesById
 }
@@ -118,11 +130,19 @@ export interface RootRouteChildren {
   EditionsRoute: typeof EditionsRoute
   InvoicesRoute: typeof InvoicesRoute
   SalesRoute: typeof SalesRoute
+  SettingsRoute: typeof SettingsRoute
   AuthSignInRoute: typeof AuthSignInRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/sales': {
       id: '/sales'
       path: '/sales'
@@ -182,6 +202,7 @@ const rootRouteChildren: RootRouteChildren = {
   EditionsRoute: EditionsRoute,
   InvoicesRoute: InvoicesRoute,
   SalesRoute: SalesRoute,
+  SettingsRoute: SettingsRoute,
   AuthSignInRoute: AuthSignInRoute,
 }
 export const routeTree = rootRouteImport

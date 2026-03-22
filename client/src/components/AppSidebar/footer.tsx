@@ -1,4 +1,5 @@
 import { authClient } from "@/lib/auth-client";
+import { Link } from "@tanstack/react-router";
 import { ChevronsUpDown, LogOut, Settings } from "lucide-react";
 import { ReactElement } from "react";
 import {
@@ -63,9 +64,11 @@ export function AppSidebarFooter(): ReactElement {
               </div>
 
               <DropdownMenuSeparator />
-              <DropdownMenuItem>
-                <Settings className="h-4 w-4" />
-                <span>Paramètres</span>
+              <DropdownMenuItem asChild>
+                <Link to="/settings">
+                  <Settings className="h-4 w-4" />
+                  <span>Paramètres</span>
+                </Link>
               </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
