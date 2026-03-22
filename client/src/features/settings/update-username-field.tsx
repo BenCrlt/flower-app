@@ -73,7 +73,11 @@ export const UpdateUsernameField = () => {
               <Button type="submit" variant="outline">
                 <Save />
               </Button>
-              <Button type="button" variant="destructive" onClick={handleClose}>
+              <Button
+                type="button"
+                variant="destructive"
+                onClick={() => handleClose()}
+              >
                 <X />
               </Button>
             </div>
