@@ -1,9 +1,7 @@
 import cors from "@fastify/cors";
 import Fastify, { FastifyInstance } from "fastify";
-import mercurius from "mercurius";
-import { authRoutes } from "./routes/auth";
-import { filesRoutes } from "./routes/file";
-import { schema } from "./schema";
+import { privateRoutesPlugin } from "./routes/private";
+import { publicRoutesPlugin } from "./routes/public";
 
 export function buildApp(): FastifyInstance {
   const app = Fastify({
@@ -15,13 +13,8 @@ export function buildApp(): FastifyInstance {
     credentials: true,
   });
 
-  app.register(filesRoutes, { prefix: "/files" });
-  app.register(authRoutes, { prefix: "/api/auth" });
-
-  app.register(mercurius, {
-    schema,
-    graphiql: true,
-  });
+  app.register(publicRoutesPlugin);
+  app.register(privateRoutesPlugin);
 
   return app;
 }

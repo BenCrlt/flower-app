@@ -1,7 +1,7 @@
 import fastifyMultipart from "@fastify/multipart";
 import { FastifyPluginAsync } from "fastify";
-import { S3Connect } from "../utils/S3Connect";
-import { uploadImageToBucket } from "../utils/upload";
+import { S3Connect } from "../../utils/S3Connect";
+import { uploadImageToBucket } from "../../utils/upload";
 
 export const filesRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.register(fastifyMultipart, {
@@ -16,7 +16,7 @@ export const filesRoutes: FastifyPluginAsync = async (fastify) => {
     res.send({ url: imageUrl });
   });
 
-  fastify.get("/invoices/:filename", async (request, reply) => {
+  fastify.get("/invoices/:filename", async (request) => {
     const { filename } = request.params as { filename: string };
     const client = new S3Connect();
     const url = await client.getFile(

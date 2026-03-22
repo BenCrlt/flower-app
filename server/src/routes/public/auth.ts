@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { auth } from "../utils/auth";
+import { auth, fromNodeHeaders } from "../../utils/auth";
 
 export const authRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.route({
@@ -11,10 +11,7 @@ export const authRoutes: FastifyPluginAsync = async (fastify) => {
         const url = new URL(request.url, `http://${request.headers.host}`);
 
         // Convert Fastify headers to standard Headers object
-        const headers = new Headers();
-        Object.entries(request.headers).forEach(([key, value]) => {
-          if (value) headers.append(key, value.toString());
-        });
+        const headers = fromNodeHeaders(request);
         // Create Fetch API-compatible request
         const req = new Request(url.toString(), {
           method: request.method,
