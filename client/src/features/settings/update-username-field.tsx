@@ -34,21 +34,27 @@ export const UpdateUsernameField = () => {
       fetchOptions: {
         onSuccess: () => {
           toast.success("Le nom d'utilisateur a été modifié avec succès");
+          handleClose(data.username);
         },
         onError: ({ error }) => {
           toast.error("Erreur lors de la modification du nom d'utilisateur", {
             description: error.message,
           });
+          handleClose();
         },
       },
     });
-    handleClose();
   };
 
-  const handleClose = () => {
+  const handleClose = (newUsername?: string) => {
     setEditMode(false);
     clearErrors();
-    reset();
+
+    if (newUsername) {
+      reset({ username: newUsername });
+    } else {
+      reset();
+    }
   };
 
   return (
