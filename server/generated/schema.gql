@@ -80,7 +80,7 @@ enum LineTypeEnum {
 type Mutation {
   addBudgetCategory(color: String!, name: String!): BudgetCategoriesItem
   addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, lineType: LineTypeEnum!, name: String!): BudgetLinesItem
-  addEdition(name: String!, startDate: String!): EditionsItem
+  addEdition(active: Boolean, name: String!, startDate: String!): EditionsItem
   addInvoice(authorId: ID!, editionId: Float!, name: String!, note: String, payments: [AddInvoicePaymentsInput!]!, status: InvoiceStatus!, totalAmount: Float!, vendorId: Float!): InvoicesItem
   addOrUpdateVendor(address: String, description: String, email: String, id: Float, name: String!, phone: String): VendorsItem
   deleteBudgetCategory(id: Float!): BudgetCategoriesItem

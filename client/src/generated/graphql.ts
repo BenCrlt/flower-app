@@ -137,6 +137,7 @@ export type MutationAddBudgetLineArgs = {
 
 
 export type MutationAddEditionArgs = {
+  active?: InputMaybe<Scalars['Boolean']['input']>;
   name: Scalars['String']['input'];
   startDate: Scalars['String']['input'];
 };

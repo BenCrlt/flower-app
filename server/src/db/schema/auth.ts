@@ -1,7 +1,8 @@
 import { drizzleSilk } from "@gqloom/drizzle";
-import { relations } from "drizzle-orm";
+import { InferSelectModel, relations } from "drizzle-orm";
 import { boolean, index, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
+export type User = InferSelectModel<typeof user>;
 export const user = drizzleSilk(
   pgTable("user", {
     id: text("id").primaryKey(),

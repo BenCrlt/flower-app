@@ -5,6 +5,7 @@ import { Edition, editionsTable } from "../../../db/schema";
 export const addEditionInput = z.object({
   name: z.string(),
   startDate: z.string().date(),
+  active: z.boolean().default(false),
 });
 
 export const addEdition = async (
