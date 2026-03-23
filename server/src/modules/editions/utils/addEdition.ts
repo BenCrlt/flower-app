@@ -1,6 +1,6 @@
 import z from "zod";
-import { db } from "../../../db";
-import { Edition, editionsTable } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { Edition, editionsTable } from "../../../db/schema/index.js";
 
 export const addEditionInput = z.object({
   name: z.string(),

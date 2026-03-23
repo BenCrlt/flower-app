@@ -1,7 +1,8 @@
+import "dotenv/config";
 import { eq } from "drizzle-orm";
-import { db } from "../../src";
-import { editionsTable, user } from "../../src/db/schema";
-import { auth } from "../../src/utils/auth";
+import { db } from "../../src/db/index.js";
+import { editionsTable, user } from "../../src/db/schema/index.js";
+import { auth } from "../../src/utils/auth.js";
 
 async function main() {
   const adminUsername = "admin";
@@ -9,9 +10,9 @@ async function main() {
 
   const admin = await auth.api.createUser({
     body: {
-      email: `${adminUsername}@flower2.fr`, // required
-      password: `${adminPassword}`, // required
-      name: "Benoit Cournault", // required
+      email: `${adminUsername}@flower2.fr`,
+      password: String(adminPassword),
+      name: "Benoit Cournault",
       role: "admin",
     },
   });

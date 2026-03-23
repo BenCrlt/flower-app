@@ -1,5 +1,5 @@
-import { db } from "../../../db";
-import { Vendor } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { Vendor } from "../../../db/schema/index.js";
 
 export async function loadVendors(
   vendorIds: number[],

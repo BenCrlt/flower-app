@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db";
-import { editionsTable } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { editionsTable } from "../../../db/schema/index.js";
 
 export const deleteEditionInput = z.object({
   id: z.number(),

@@ -1,9 +1,9 @@
 import z from "zod";
-import { db } from "../../../db";
+import { db } from "../../../db/index.js";
 import {
   BudgetCategory,
   budgetCategoriesTable,
-} from "../../../db/schema/budget-categories";
+} from "../../../db/schema/budget-categories.js";
 
 export const addBudgetCategoryInput = z.object({
   name: z.string().min(1).max(255),

@@ -1,6 +1,6 @@
 import { and, eq, inArray, ne, sql } from "drizzle-orm";
-import { db } from "../../../db";
-import { invoicesTable, paymentsTable } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { invoicesTable, paymentsTable } from "../../../db/schema/index.js";
 
 export async function getTotalExpense(editionIds: number[]): Promise<number[]> {
   const totalExpenseByEditionId = await db

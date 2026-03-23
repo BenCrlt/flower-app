@@ -1,6 +1,6 @@
 import _ from "lodash";
-import { db } from "../../../db";
-import { Payment } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { Payment } from "../../../db/schema/index.js";
 
 export const loadPayments = async (
   invoiceIds: number[],

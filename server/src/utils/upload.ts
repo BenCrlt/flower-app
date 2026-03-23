@@ -1,7 +1,7 @@
 import { randomUUID } from "crypto";
 import { FastifyReply, FastifyRequest } from "fastify";
 import path from "path";
-import { S3Connect } from "./S3Connect";
+import { S3Connect } from "./S3Connect.js";
 
 export async function uploadImageToBucket(
   request: FastifyRequest,

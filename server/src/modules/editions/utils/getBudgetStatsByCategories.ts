@@ -1,12 +1,12 @@
 import { and, eq, sql } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db";
+import { db } from "../../../db/index.js";
 import {
   budgetCategoriesTable,
   budgetLinesTable,
   LineType,
   paymentsTable,
-} from "../../../db/schema";
+} from "../../../db/schema/index.js";
 
 export const statsByCategoryOutput = z.array(
   z.object({

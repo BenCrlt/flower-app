@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db";
-import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines";
+import { db } from "../../../db/index.js";
+import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines.js";
 
 export const deleteBudgetLineInput = z.object({
   id: z.number().min(1),

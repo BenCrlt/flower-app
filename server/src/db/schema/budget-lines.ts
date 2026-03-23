@@ -9,8 +9,8 @@ import {
   text,
   varchar,
 } from "drizzle-orm/pg-core";
-import { budgetCategoriesTable } from "./budget-categories";
-import { editionsTable } from "./editions";
+import { budgetCategoriesTable } from "./budget-categories.js";
+import { editionsTable } from "./editions.js";
 
 export const lineTypeEnum = pgEnum("lineType", ["income", "expense"]);
 export type LineType = (typeof lineTypeEnum.enumValues)[number];

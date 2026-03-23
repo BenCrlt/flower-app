@@ -1,20 +1,20 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
 import _ from "lodash";
-import { invoicesTable, paymentsTable, vendorsTable } from "../../db/schema";
-import { user } from "../../db/schema/auth";
-import { addInvoice, addInvoiceInput } from "./utils/addInvoice";
+import { invoicesTable, paymentsTable, vendorsTable } from "../../db/schema/index.js";
+import { user } from "../../db/schema/auth.js";
+import { addInvoice, addInvoiceInput } from "./utils/addInvoice.js";
 import {
   addOrUpdateVendor,
   addOrUpdateVendorInput,
-} from "./utils/addOrUpdateVendor";
-import { deleteInvoice, deleteInvoiceInput } from "./utils/deleteInvoice";
-import { deleteVendor, deleteVendorInput } from "./utils/deleteVendor";
-import { getInvoices, getInvoicesInput } from "./utils/getInvoices";
-import { getVendors } from "./utils/getVendors";
-import { loadAuthors } from "./utils/loadAuthors";
-import { loadPayments } from "./utils/loadPayments";
-import { loadVendors } from "./utils/loadVendors";
-import { updateInvoice, updateInvoiceInput } from "./utils/updateInvoice";
+} from "./utils/addOrUpdateVendor.js";
+import { deleteInvoice, deleteInvoiceInput } from "./utils/deleteInvoice.js";
+import { deleteVendor, deleteVendorInput } from "./utils/deleteVendor.js";
+import { getInvoices, getInvoicesInput } from "./utils/getInvoices.js";
+import { getVendors } from "./utils/getVendors.js";
+import { loadAuthors } from "./utils/loadAuthors.js";
+import { loadPayments } from "./utils/loadPayments.js";
+import { loadVendors } from "./utils/loadVendors.js";
+import { updateInvoice, updateInvoiceInput } from "./utils/updateInvoice.js";
 
 export const invoiceResolver = resolver.of(invoicesTable, {
   invoices: query(invoicesTable.$list())

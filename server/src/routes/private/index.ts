@@ -1,8 +1,8 @@
 import { FastifyPluginAsync } from "fastify";
 import mercurius from "mercurius";
-import { registerAuthorizationHook } from "../../middleware/authorization";
-import { schema } from "../../schema";
-import { filesRoutes } from "./file";
+import { registerAuthorizationHook } from "../../middleware/authorization.js";
+import { schema } from "../../schema.js";
+import { filesRoutes } from "./file.js";
 
 export const privateRoutesPlugin: FastifyPluginAsync = async (fastify) => {
   registerAuthorizationHook(fastify);

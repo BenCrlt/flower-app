@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db";
-import { Invoice, invoicesTable } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { Invoice, invoicesTable } from "../../../db/schema/index.js";
 
 export const deleteInvoiceInput = z.object({
   id: z.number().min(1),

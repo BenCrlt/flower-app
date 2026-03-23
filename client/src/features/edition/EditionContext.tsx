@@ -6,7 +6,7 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import { useGetEditionsSuspenseQuery } from "./hooks/useGetEditions";
+import { useGetEditionsQuery } from "./hooks/useGetEditions";
 
 export interface EditionContextValue {
   edition: EditionsItem;
@@ -25,8 +25,8 @@ export const EditionContext = createContext<
 >(null);
 
 function EditionProviderInner({ children }: { children: ReactNode }) {
-  const { data } = useGetEditionsSuspenseQuery();
-  const editions = data.editions;
+  const { data } = useGetEditionsQuery();
+  const editions = data?.editions ?? [];
 
   const [edition, setEdition] = useState<EditionsItem | null>(
     editions[0] ?? null,

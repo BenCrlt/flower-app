@@ -1,6 +1,6 @@
 import { inArray, sql } from "drizzle-orm";
-import { db } from "../../../db";
-import { paymentsTable } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { paymentsTable } from "../../../db/schema/index.js";
 
 export const loadRealCost = async (
   lineIds: number[],

@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "./dist",
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "rootDir": "./src",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "target": "esnext",
     "types": [],
     "sourceMap": true,
@@ -17,5 +18,6 @@
     "moduleDetection": "force",
     "skipLibCheck": true,
     "esModuleInterop": true
-  }
+  },
+  "include": ["src/**/*"]
 }

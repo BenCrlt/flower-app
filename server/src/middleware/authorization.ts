@@ -1,5 +1,5 @@
 import type { FastifyInstance } from "fastify";
-import { auth, fromNodeHeaders } from "../utils/auth";
+import { auth, fromNodeHeaders } from "../utils/auth.js";
 
 export function registerAuthorizationHook(app: FastifyInstance): void {
   app.addHook("onRequest", async (request, reply) => {

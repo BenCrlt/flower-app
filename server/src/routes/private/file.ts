@@ -1,7 +1,7 @@
 import fastifyMultipart from "@fastify/multipart";
 import { FastifyPluginAsync } from "fastify";
-import { S3Connect } from "../../utils/S3Connect";
-import { uploadImageToBucket } from "../../utils/upload";
+import { S3Connect } from "../../utils/S3Connect.js";
+import { uploadImageToBucket } from "../../utils/upload.js";
 
 export const filesRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.register(fastifyMultipart, {

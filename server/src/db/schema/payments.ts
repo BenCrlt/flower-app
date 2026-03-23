@@ -1,9 +1,9 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { InferSelectModel } from "drizzle-orm";
 import { integer, numeric, pgTable, smallint } from "drizzle-orm/pg-core";
-import { budgetLinesTable } from "./budget-lines";
-import { editionsTable } from "./editions";
-import { invoicesTable } from "./invoices";
+import { budgetLinesTable } from "./budget-lines.js";
+import { editionsTable } from "./editions.js";
+import { invoicesTable } from "./invoices.js";
 
 export type Payment = InferSelectModel<typeof paymentsTable>;
 

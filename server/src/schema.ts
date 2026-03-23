@@ -3,9 +3,9 @@ import { ZodWeaver } from "@gqloom/zod";
 import {
   budgetCategoriesResolver,
   budgetLinesResolver,
-} from "./modules/budget/resolver";
-import { editionsResolver } from "./modules/editions/resolver";
-import { invoiceResolver, vendorResolver } from "./modules/payment/resolver";
+} from "./modules/budget/resolver.js";
+import { editionsResolver } from "./modules/editions/resolver.js";
+import { invoiceResolver, vendorResolver } from "./modules/payment/resolver.js";
 
 export const schema = weave(
   ZodWeaver,

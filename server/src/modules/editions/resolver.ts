@@ -1,18 +1,18 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
 import { desc } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../db/index";
-import { editionsTable } from "../../db/schema/editions";
-import { LineTypeEnum } from "../budget/types";
-import { addEdition, addEditionInput } from "./utils/addEdition";
-import { deleteEdition, deleteEditionInput } from "./utils/deleteEdition";
+import { db } from "../../db/index.js";
+import { editionsTable } from "../../db/schema/editions.js";
+import { LineTypeEnum } from "../budget/types.js";
+import { addEdition, addEditionInput } from "./utils/addEdition.js";
+import { deleteEdition, deleteEditionInput } from "./utils/deleteEdition.js";
 import {
   getBudgetStatsByCategories,
   statsByCategoryOutput,
-} from "./utils/getBudgetStatsByCategories";
-import { getTotalEstimatedForEditions } from "./utils/getTotalEstimatedForEditions";
-import { getTotalExpense } from "./utils/getTotalExpense";
-import { updateEdition, updateEditionInput } from "./utils/updateEdition";
+} from "./utils/getBudgetStatsByCategories.js";
+import { getTotalEstimatedForEditions } from "./utils/getTotalEstimatedForEditions.js";
+import { getTotalExpense } from "./utils/getTotalExpense.js";
+import { updateEdition, updateEditionInput } from "./utils/updateEdition.js";
 
 export const editionsResolver = resolver.of(editionsTable, {
   editions: query(editionsTable.$list()).resolve(() =>

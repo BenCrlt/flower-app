@@ -7,9 +7,9 @@ import {
   text,
   timestamp,
 } from "drizzle-orm/pg-core";
-import { user } from "./auth";
-import { editionsTable } from "./editions";
-import { productsTable } from "./products";
+import { user } from "./auth.js";
+import { editionsTable } from "./editions.js";
+import { productsTable } from "./products.js";
 
 export const paymentMethod = pgEnum("payment_method", ["cash", "card"]);
 export type PaymentMethod = (typeof paymentMethod.enumValues)[number];

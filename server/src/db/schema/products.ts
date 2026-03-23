@@ -1,7 +1,7 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { integer, numeric, pgTable, varchar } from "drizzle-orm/pg-core";
-import { budgetLinesTable } from "./budget-lines";
-import { editionsTable } from "./editions";
+import { budgetLinesTable } from "./budget-lines.js";
+import { editionsTable } from "./editions.js";
 
 export const productsTable = drizzleSilk(
   pgTable("products", {

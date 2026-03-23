@@ -1,5 +1,5 @@
-import { db } from "../../../db";
-import { BudgetCategory } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { BudgetCategory } from "../../../db/schema/index.js";
 
 export const loadBudgetCategory = async (
   categoryIds: number[],

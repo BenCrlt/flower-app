@@ -1,8 +1,8 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db";
-import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines";
-import { LineTypeEnum } from "../types";
+import { db } from "../../../db/index.js";
+import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines.js";
+import { LineTypeEnum } from "../types.js";
 
 export const updateBudgetLineInput = z.object({
   id: z.number().min(1),

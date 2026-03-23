@@ -1,32 +1,32 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
 import z from "zod";
-import { db } from "../../db/index";
-import { budgetCategoriesTable } from "../../db/schema/budget-categories";
-import { budgetLinesTable } from "../../db/schema/budget-lines";
+import { db } from "../../db/index.js";
+import { budgetCategoriesTable } from "../../db/schema/budget-categories.js";
+import { budgetLinesTable } from "../../db/schema/budget-lines.js";
 import {
   addBudgetCategory,
   addBudgetCategoryInput,
-} from "./utils/addBudgetCategory";
-import { addBudgetLine, addBudgetLineInput } from "./utils/addBudgetLine";
+} from "./utils/addBudgetCategory.js";
+import { addBudgetLine, addBudgetLineInput } from "./utils/addBudgetLine.js";
 import {
   deleteBudgetCategory,
   deleteBudgetCategoryInput,
-} from "./utils/deleteBudgetCategory";
+} from "./utils/deleteBudgetCategory.js";
 import {
   deleteBudgetLine,
   deleteBudgetLineInput,
-} from "./utils/deleteBudgetLine";
-import { getBudgetLines, getBudgetLinesFilter } from "./utils/getBudgetLines";
-import { loadBudgetCategory } from "./utils/loadBudgetCategory";
-import { loadRealCost } from "./utils/loadRealData";
+} from "./utils/deleteBudgetLine.js";
+import { getBudgetLines, getBudgetLinesFilter } from "./utils/getBudgetLines.js";
+import { loadBudgetCategory } from "./utils/loadBudgetCategory.js";
+import { loadRealCost } from "./utils/loadRealData.js";
 import {
   updateBudgetCategory,
   updateBudgetCategoryInput,
-} from "./utils/updateBudgetCategory";
+} from "./utils/updateBudgetCategory.js";
 import {
   updateBudgetLine,
   updateBudgetLineInput,
-} from "./utils/updateBudgetLine";
+} from "./utils/updateBudgetLine.js";
 
 export const budgetCategoriesResolver = resolver.of(budgetCategoriesTable, {
   budgetCategories: query(budgetCategoriesTable.$list()).resolve(() =>

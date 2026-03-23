@@ -1,5 +1,5 @@
 import { FastifyPluginAsync } from "fastify";
-import { auth, fromNodeHeaders } from "../../utils/auth";
+import { auth, fromNodeHeaders } from "../../utils/auth.js";
 
 export const authRoutes: FastifyPluginAsync = async (fastify) => {
   fastify.route({

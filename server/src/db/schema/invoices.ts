@@ -10,9 +10,9 @@ import {
   varchar,
 } from "drizzle-orm/pg-core";
 import z from "zod";
-import { user } from "./auth";
-import { editionsTable } from "./editions";
-import { vendorsTable } from "./vendors";
+import { user } from "./auth.js";
+import { editionsTable } from "./editions.js";
+import { vendorsTable } from "./vendors.js";
 
 const INVOICE_STATUS_VALUES = ["PENDING", "PAID", "CANCELLED"] as const;
 export const invoiceStatusSchema = z

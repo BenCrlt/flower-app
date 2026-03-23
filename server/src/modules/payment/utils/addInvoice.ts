@@ -1,11 +1,11 @@
 import z from "zod";
-import { db } from "../../../db";
+import { db } from "../../../db/index.js";
 import {
   Invoice,
   invoicesTable,
   invoiceStatusSchema,
   paymentsTable,
-} from "../../../db/schema";
+} from "../../../db/schema/index.js";
 
 const addPaymentInput = z.object({
   quantity: z.number().min(1),

@@ -1,7 +1,7 @@
 import { and, eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db";
-import { invoicesTable, invoiceStatusSchema } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { invoicesTable, invoiceStatusSchema } from "../../../db/schema/index.js";
 
 export const getInvoicesInput = z.object({
   editionId: z.number().min(1),

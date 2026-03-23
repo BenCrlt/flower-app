@@ -1,13 +1,13 @@
 import { relations } from "drizzle-orm";
-import { user } from "./auth";
-import { budgetCategoriesTable } from "./budget-categories";
-import { budgetLinesTable } from "./budget-lines";
-import { editionsTable } from "./editions";
-import { invoicesTable } from "./invoices";
-import { paymentsTable } from "./payments";
-import { productsTable } from "./products";
-import { salesTable } from "./sales";
-import { vendorsTable } from "./vendors";
+import { user } from "./auth.js";
+import { budgetCategoriesTable } from "./budget-categories.js";
+import { budgetLinesTable } from "./budget-lines.js";
+import { editionsTable } from "./editions.js";
+import { invoicesTable } from "./invoices.js";
+import { paymentsTable } from "./payments.js";
+import { productsTable } from "./products.js";
+import { salesTable } from "./sales.js";
+import { vendorsTable } from "./vendors.js";
 
 export const budgetCategoriesRelations = relations(
   budgetCategoriesTable,

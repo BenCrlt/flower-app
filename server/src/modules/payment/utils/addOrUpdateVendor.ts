@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db";
-import { Vendor, vendorsTable } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { Vendor, vendorsTable } from "../../../db/schema/index.js";
 
 export const addOrUpdateVendorInput = z.object({
   id: z.number().min(1).optional(),

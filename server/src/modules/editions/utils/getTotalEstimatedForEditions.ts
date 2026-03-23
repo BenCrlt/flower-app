@@ -1,6 +1,6 @@
 import { and, eq, inArray, sql } from "drizzle-orm";
-import { db } from "../../../db";
-import { budgetLinesTable, LineType } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { budgetLinesTable, LineType } from "../../../db/schema/index.js";
 
 export const getTotalEstimatedForEditions = async (
   editionIds: number[],

@@ -1,7 +1,7 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db";
-import { Edition, editionsTable } from "../../../db/schema/editions";
+import { db } from "../../../db/index.js";
+import { Edition, editionsTable } from "../../../db/schema/editions.js";
 
 export const updateEditionInput = z.object({
   id: z.number().min(1),

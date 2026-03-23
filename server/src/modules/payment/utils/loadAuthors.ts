@@ -1,5 +1,5 @@
-import { db } from "../../../db";
-import { User } from "../../../db/schema";
+import { db } from "../../../db/index.js";
+import { User } from "../../../db/schema/index.js";
 
 export async function loadAuthors(
   authorIds: string[],
