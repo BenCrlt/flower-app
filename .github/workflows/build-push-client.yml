@@ -34,6 +34,8 @@ jobs:
         with:
           context: ./client
           push: true
+          build-args: |
+            VITE_API_URL=${{ vars.VITE_API_URL }}
           # Ceci tag l'image avec "latest" et le hash du commit
           tags: |
             ghcr.io/${{ env.IMAGE_NAME }}:latest
