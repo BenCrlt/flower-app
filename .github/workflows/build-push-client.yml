@@ -32,7 +32,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
-          context: ./server
+          context: ./client
           push: true
           # Ceci tag l'image avec "latest" et le hash du commit
           tags: |
