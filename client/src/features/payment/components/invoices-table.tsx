@@ -1,6 +1,7 @@
 import { DataTable } from "@/components/Table/DataTable";
 import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
+import { InvoiceStatus } from "@/generated/graphql";
 import { useState } from "react";
 import { useDeleteInvoiceMutation } from "../hooks/useDeleteInvoiceMutation";
 import { useGetInvoicesQuery } from "../hooks/useGetInvoicesQuery";
@@ -28,7 +29,7 @@ export function InvoicesTable() {
       name: invoice.name,
       vendorId: invoice.vendorId,
       vendorName: invoice.vendor?.name ?? "-",
-      status: invoice.status,
+      status: invoice.status as unknown as InvoiceStatus,
       totalAmount: Number(invoice.totalAmount),
       note: invoice.note ?? "-",
       executedAt: invoice.executedAt ?? "-",
