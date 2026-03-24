@@ -17,6 +17,7 @@ RUN pnpm build
 
 FROM nginx:1.29.6-alpine AS runner
 
+RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY --from=deps /app/dist /usr/share/nginx/html
 
