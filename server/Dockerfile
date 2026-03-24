@@ -25,7 +25,7 @@ WORKDIR /app
 ENV NODE_ENV=production
 COPY --from=build /app/package.json /app/pnpm-lock.yaml ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile --prod
-COPY --from=build /app/dist ./dist
+COPY --from=build /app/dist /app/drizzle /app/drizzle.config.ts ./
 
 EXPOSE 3000
 CMD ["pnpm", "start"]
