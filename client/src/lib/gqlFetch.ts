@@ -1,7 +1,7 @@
 import type { TypedDocumentNode } from "@graphql-typed-document-node/core";
 import { print } from "graphql";
 
-const GQL_ENDPOINT = "http://localhost:3000/graphql";
+const GQL_ENDPOINT = `${import.meta.env.VITE_API_URL ?? "http://localhost:3000"}/graphql`;
 
 interface GQLFetchProps<TData, TVariables> {
   document: TypedDocumentNode<TData, TVariables>;

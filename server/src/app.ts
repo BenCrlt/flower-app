@@ -7,9 +7,10 @@ export function buildApp(): FastifyInstance {
   const app = Fastify({
     logger: true,
   });
+  const frontendUrl = process.env.FRONTEND_URL ?? "http://localhost:5173";
 
   app.register(cors, {
-    origin: "http://localhost:5173",
+    origin: frontendUrl,
     credentials: true,
   });
 
