@@ -12,13 +12,16 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
 RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
 
-COPY . .
+COPY tsconfig.json tsconfig.app.json tsconfig.node.json ./
+COPY vite.config.ts ./
+COPY index.html ./
+COPY public ./public
+COPY src ./src
 RUN pnpm build
 
 FROM nginx:1.29.6-alpine AS runner
 
-RUN rm /etc/nginx/conf.d/default.conf
-COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 COPY --from=deps /app/dist /usr/share/nginx/html
 
 EXPOSE 80
