@@ -1,9 +1,18 @@
 import { TypographyH2 } from "@/components/ui/typography";
+import { useEdition } from "@/features/edition/EditionContext";
+import { useGetEditionStatsSuspenseQuery } from "../hooks/useGetEditionStats";
 import { BudgetByCategoriesChart } from "./budget-by-categories-chart";
 import { CurrentBalanceCard } from "./current-balance-card";
 import { IncomeExpenseCard } from "./income-expense-card";
 
 export function EditionDashboard() {
+  const { edition } = useEdition();
+
+  const { data } = useGetEditionStatsSuspenseQuery({
+    variables: {
+      editionId: edition.id,
+    },
+  });
   return (
     <div className="w-full max-w-300">
       <TypographyH2>Tableau de bord</TypographyH2>
@@ -12,7 +21,7 @@ export function EditionDashboard() {
           <CurrentBalanceCard />
         </div>
         <div className="*:h-full md:col-start-1 md:col-span-2 md:row-start-2 md:row-span-2">
-          <IncomeExpenseCard />
+          <IncomeExpenseCard edition={data.edition} />
         </div>
         <div className="*:h-full md:col-start-3 md:col-span-3 md:row-start-1 md:row-span-3">
           <BudgetByCategoriesChart />

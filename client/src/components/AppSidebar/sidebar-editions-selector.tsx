@@ -10,12 +10,12 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { useEditionContext } from "@/features/edition/EditionContext";
+import { useEdition } from "@/features/edition/EditionContext";
 import { CalendarDays, ChevronsUpDown } from "lucide-react";
 import { SidebarEditionItem } from "./sidebar-edition-item";
 
 export function SidebarEditionSelector() {
-  const { edition, setEdition, editions } = useEditionContext();
+  const { edition, setEdition, editions } = useEdition();
 
   return (
     <SidebarMenu>

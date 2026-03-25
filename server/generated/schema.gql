@@ -106,6 +106,7 @@ type PaymentsItem {
 type Query {
   budgetCategories: [BudgetCategoriesItem!]!
   budgetLines(budgetLineType: LineTypeEnum, editionId: Float!): [BudgetLinesItem!]!
+  edition(id: Float!): EditionsItem
   editions: [EditionsItem!]!
   getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!

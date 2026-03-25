@@ -1,0 +1,13 @@
+query getEditionStats($editionId: Float!) {
+  edition(id: $editionId) {
+    ...EditionStats
+  }
+}
+
+fragment EditionStats on EditionsItem {
+  id
+  totalExpense
+  totalIncome
+  totalPrevisionnalExpense
+  totalPrevisionnalIncome
+}
