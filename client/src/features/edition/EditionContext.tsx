@@ -3,6 +3,7 @@ import {
   createContext,
   Suspense,
   useContext,
+  useMemo,
   useState,
   type ReactNode,
 } from "react";
@@ -25,8 +26,14 @@ export const EditionContext = createContext<
 >(null);
 
 function EditionProviderInner({ children }: { children: ReactNode }) {
-  const { data } = useGetEditionsQuery();
-  const editions = data?.editions ?? [];
+  const { data } = useGetEditionsQuery({
+    onComplete: (data) => {
+      if (data.editions.length > 0) {
+        setEdition(data.editions[0]);
+      }
+    },
+  });
+  const editions = useMemo(() => data?.editions ?? [], [data]);
 
   const [edition, setEdition] = useState<EditionsItem | null>(
     editions[0] ?? null,
