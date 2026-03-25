@@ -4,4 +4,4 @@ import { buildApp } from "./app.js";
 const app = buildApp();
 const port = Number.parseInt(process.env.PORT ?? "", 10) || 3000;
 
-app.listen({ port });
+app.listen({ port, host: "0.0.0.0" });
