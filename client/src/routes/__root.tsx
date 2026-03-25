@@ -1,6 +1,6 @@
 import { AppSidebar } from "@/components/AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
-import { EditionProvider, useEdition } from "@/features/edition/EditionContext";
+import { EditionProvider } from "@/features/edition/EditionContext";
 import { authClient } from "@/lib/auth-client";
 import {
   createRootRoute,
@@ -13,28 +13,6 @@ import { useEffect } from "react";
 export const Route = createRootRoute({
   component: RootLayout,
 });
-
-const NOT_PROTECTED_ROUTES = ["/auth/", "/no-editions"];
-
-function EditionGuard({ children }: { children: React.ReactNode }) {
-  const { editions } = useEdition();
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  const isProtected = !NOT_PROTECTED_ROUTES.some((r) =>
-    location.pathname.startsWith(r),
-  );
-
-  useEffect(() => {
-    if (editions.length === 0 && isProtected) {
-      navigate({ to: "/no-editions" });
-    }
-  }, [editions.length, isProtected, navigate]);
-
-  if (editions.length === 0 && isProtected) return null;
-
-  return <>{children}</>;
-}
 
 function AuthGuard({ children }: { children: React.ReactNode }) {
   const { data: session, isPending } = authClient.useSession();
@@ -73,14 +51,12 @@ function RootLayout() {
   return (
     <AuthGuard>
       <SidebarProvider>
-        <AppSidebar />
-        <main className="px-6 py-10 w-full">
-          <EditionProvider>
-            <EditionGuard>
-              <Outlet />
-            </EditionGuard>
-          </EditionProvider>
-        </main>
+        <EditionProvider>
+          <AppSidebar />
+          <main className="px-6 py-10 w-full">
+            <Outlet />
+          </main>
+        </EditionProvider>
       </SidebarProvider>
     </AuthGuard>
   );

@@ -11,7 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SalesRouteImport } from './routes/sales'
-import { Route as NoEditionsRouteImport } from './routes/no-editions'
 import { Route as InvoicesRouteImport } from './routes/invoices'
 import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as BudgetTableRouteImport } from './routes/budget-table'
@@ -26,11 +25,6 @@ const SettingsRoute = SettingsRouteImport.update({
 const SalesRoute = SalesRouteImport.update({
   id: '/sales',
   path: '/sales',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const NoEditionsRoute = NoEditionsRouteImport.update({
-  id: '/no-editions',
-  path: '/no-editions',
   getParentRoute: () => rootRouteImport,
 } as any)
 const InvoicesRoute = InvoicesRouteImport.update({
@@ -64,7 +58,6 @@ export interface FileRoutesByFullPath {
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/invoices': typeof InvoicesRoute
-  '/no-editions': typeof NoEditionsRoute
   '/sales': typeof SalesRoute
   '/settings': typeof SettingsRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -74,7 +67,6 @@ export interface FileRoutesByTo {
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/invoices': typeof InvoicesRoute
-  '/no-editions': typeof NoEditionsRoute
   '/sales': typeof SalesRoute
   '/settings': typeof SettingsRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -85,7 +77,6 @@ export interface FileRoutesById {
   '/budget-table': typeof BudgetTableRoute
   '/dashboard': typeof DashboardRoute
   '/invoices': typeof InvoicesRoute
-  '/no-editions': typeof NoEditionsRoute
   '/sales': typeof SalesRoute
   '/settings': typeof SettingsRoute
   '/auth/sign-in': typeof AuthSignInRoute
@@ -97,7 +88,6 @@ export interface FileRouteTypes {
     | '/budget-table'
     | '/dashboard'
     | '/invoices'
-    | '/no-editions'
     | '/sales'
     | '/settings'
     | '/auth/sign-in'
@@ -107,7 +97,6 @@ export interface FileRouteTypes {
     | '/budget-table'
     | '/dashboard'
     | '/invoices'
-    | '/no-editions'
     | '/sales'
     | '/settings'
     | '/auth/sign-in'
@@ -117,7 +106,6 @@ export interface FileRouteTypes {
     | '/budget-table'
     | '/dashboard'
     | '/invoices'
-    | '/no-editions'
     | '/sales'
     | '/settings'
     | '/auth/sign-in'
@@ -128,7 +116,6 @@ export interface RootRouteChildren {
   BudgetTableRoute: typeof BudgetTableRoute
   DashboardRoute: typeof DashboardRoute
   InvoicesRoute: typeof InvoicesRoute
-  NoEditionsRoute: typeof NoEditionsRoute
   SalesRoute: typeof SalesRoute
   SettingsRoute: typeof SettingsRoute
   AuthSignInRoute: typeof AuthSignInRoute
@@ -148,13 +135,6 @@ declare module '@tanstack/react-router' {
       path: '/sales'
       fullPath: '/sales'
       preLoaderRoute: typeof SalesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/no-editions': {
-      id: '/no-editions'
-      path: '/no-editions'
-      fullPath: '/no-editions'
-      preLoaderRoute: typeof NoEditionsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/invoices': {
@@ -200,7 +180,6 @@ const rootRouteChildren: RootRouteChildren = {
   BudgetTableRoute: BudgetTableRoute,
   DashboardRoute: DashboardRoute,
   InvoicesRoute: InvoicesRoute,
-  NoEditionsRoute: NoEditionsRoute,
   SalesRoute: SalesRoute,
   SettingsRoute: SettingsRoute,
   AuthSignInRoute: AuthSignInRoute,

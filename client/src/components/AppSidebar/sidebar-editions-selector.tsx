@@ -15,7 +15,7 @@ import { CalendarDays, ChevronsUpDown } from "lucide-react";
 import { SidebarEditionItem } from "./sidebar-edition-item";
 
 export function SidebarEditionSelector() {
-  const { edition, setEdition, editions } = useEdition();
+  const { edition, handleSetEdition, editions } = useEdition();
 
   return (
     <SidebarMenu>
@@ -54,7 +54,7 @@ export function SidebarEditionSelector() {
             {editions.map((e) => (
               <DropdownMenuItem
                 key={e.id}
-                onClick={() => setEdition(e)}
+                onClick={() => handleSetEdition(e)}
                 className="flex items-center justify-between gap-2"
               >
                 <SidebarEditionItem edition={e} />

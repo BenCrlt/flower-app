@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import {
   GetEditionStatsDocument,
   GetEditionStatsQueryVariables,
@@ -9,10 +9,10 @@ interface UseGetEditionStatsQueryProps {
   variables: GetEditionStatsQueryVariables;
 }
 
-export function useGetEditionStatsSuspenseQuery({
+export function useGetEditionStatsQuery({
   variables,
 }: UseGetEditionStatsQueryProps) {
-  return useSuspenseQuery({
+  return useQuery({
     queryKey: ["getEditionStats", variables],
     queryFn: () =>
       gqlFetch({

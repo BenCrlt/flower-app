@@ -1,4 +1,4 @@
-import { EditionsItem } from "@/generated/graphql";
+import { Spinner } from "@/components/ui/spinner";
 import {
   createContext,
   useContext,
@@ -7,50 +7,68 @@ import {
   type ReactNode,
 } from "react";
 import { useGetEditionsQuery } from "./hooks/useGetEditions";
+import { NoEditions } from "./no-editions";
 
 const EDITION_KEY = "edition";
 
+export type EditionBaseInfo = {
+  id: number;
+  name: string;
+  active: boolean;
+  startDate: string;
+};
+
 export interface EditionContextValue {
-  edition: EditionsItem | null;
-  setEdition: (edition: EditionsItem) => void;
-  editions: EditionsItem[];
+  edition: EditionBaseInfo;
+  handleSetEdition: (edition: EditionBaseInfo) => void;
+  editions: EditionBaseInfo[];
 }
 
-export const EditionContext = createContext<EditionContextValue>({
-  edition: null,
-  setEdition: () => {},
-  editions: [],
-});
+export const EditionContext = createContext<EditionContextValue | null>(null);
 
 export function EditionProvider({ children }: { children: ReactNode }) {
-  const [edition, setEdition] = useState<EditionsItem | null>(() => {
+  const [edition, setEdition] = useState<EditionBaseInfo | null>(() => {
     const storedEdition = localStorage.getItem(EDITION_KEY);
     return storedEdition ? JSON.parse(storedEdition) : null;
   });
 
-  const { data } = useGetEditionsQuery({
+  const { data, isLoading } = useGetEditionsQuery({
     onComplete: (data) => {
-      if (
-        (edition && !data.editions.some((e) => e.id === edition.id)) ||
-        !edition
-      ) {
-        handleSetEdition(data.editions.length > 0 ? data.editions[0] : null);
+      if (data.editions.length === 0) {
+        clearEdition();
+        return;
+      }
+
+      const editionId = edition?.id;
+      if (editionId == null || !data.editions.some((e) => e.id === editionId)) {
+        handleSetEdition(data.editions[0]);
       }
     },
   });
   const editions = useMemo(() => data?.editions ?? [], [data]);
 
-  const handleSetEdition = (edition: EditionsItem | null) => {
+  const clearEdition = () => {
+    setEdition(null);
+    localStorage.removeItem(EDITION_KEY);
+  };
+
+  const handleSetEdition = (edition: EditionBaseInfo) => {
     setEdition(edition);
     if (edition) {
       localStorage.setItem(EDITION_KEY, JSON.stringify(edition));
-    } else {
-      localStorage.removeItem(EDITION_KEY);
     }
   };
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (!edition) {
+    return <NoEditions />;
+  }
+
   return (
-    <EditionContext.Provider value={{ edition, setEdition, editions }}>
+    <EditionContext.Provider value={{ edition, handleSetEdition, editions }}>
       {children}
     </EditionContext.Provider>
   );
@@ -61,5 +79,10 @@ export function useEdition(): EditionContextValue {
   if (!context) {
     throw new Error("useEdition must be used within an EditionProvider");
   }
+
+  if (!context.edition) {
+    throw new Error("useEdition need at least one edition");
+  }
+
   return context as EditionContextValue;
 }
