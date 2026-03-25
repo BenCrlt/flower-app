@@ -17,6 +17,7 @@ export async function gqlFetch<TData, TVariables>({
   const res = await fetch(GQL_ENDPOINT, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
+    credentials: "include",
     body: JSON.stringify({
       query: print(document),
       variables: variables ?? undefined,
