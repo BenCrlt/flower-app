@@ -1,0 +1,9 @@
+query getEditionStats($editionId: Float!) {
+  edition(id: $editionId) {
+    id
+    totalExpense
+    totalIncome
+    totalPrevisionnalExpense
+    totalPrevisionnalIncome
+  }
+}

@@ -1,5 +1,5 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
-import { desc } from "drizzle-orm";
+import { desc, eq } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../db/index.js";
 import { editionsTable } from "../../db/schema/editions.js";
@@ -20,6 +20,14 @@ export const editionsResolver = resolver.of(editionsTable, {
       orderBy: [desc(editionsTable.active), desc(editionsTable.startDate)],
     }),
   ),
+  edition: query(editionsTable.$nullable())
+    .input(z.object({ id: z.number().min(1) }))
+    .resolve(async ({ id }) =>
+      db.query.editionsTable.findFirst({
+        where: eq(editionsTable.id, id),
+      }),
+    ),
+
   getBudgetStatsByCategories: query(statsByCategoryOutput)
     .input({ editionId: z.number().min(1), lineType: LineTypeEnum })
     .resolve(async ({ editionId, lineType }) =>

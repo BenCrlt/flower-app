@@ -7,6 +7,7 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import { useEdition } from "@/features/edition/EditionContext";
 import { Link, useRouterState } from "@tanstack/react-router";
 import {
   ChartNoAxesCombined,
@@ -19,15 +20,18 @@ import { AppSidebarHeader } from "./header";
 import { SidebarEditionSelector } from "./sidebar-editions-selector";
 
 export function AppSidebar() {
+  const { edition } = useEdition();
   const routerState = useRouterState();
   const pathname = routerState.location.pathname;
 
-  const navItems = [
-    { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
-    { to: "/budget-table", icon: ChartNoAxesCombined, label: "Budget" },
-    { to: "/invoices", icon: CreditCard, label: "Factures" },
-    { to: "/sales", icon: Coins, label: "Ventes" },
-  ];
+  const navItems = edition
+    ? [
+        { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
+        { to: "/budget-table", icon: ChartNoAxesCombined, label: "Budget" },
+        { to: "/invoices", icon: CreditCard, label: "Factures" },
+        { to: "/sales", icon: Coins, label: "Ventes" },
+      ]
+    : [];
 
   return (
     <Sidebar collapsible="icon" variant="floating">

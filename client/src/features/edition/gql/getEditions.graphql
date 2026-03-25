@@ -4,9 +4,5 @@ query getEditions {
     name
     active
     startDate
-    totalExpense
-    totalIncome
-    totalPrevisionnalExpense
-    totalPrevisionnalIncome
   }
 }
