@@ -1,7 +1,10 @@
 import { drizzleSilk } from "@gqloom/drizzle";
+import { InferSelectModel } from "drizzle-orm";
 import { integer, numeric, pgTable, varchar } from "drizzle-orm/pg-core";
 import { budgetLinesTable } from "./budget-lines.js";
 import { editionsTable } from "./editions.js";
+
+export type Product = InferSelectModel<typeof productsTable>;
 
 export const productsTable = drizzleSilk(
   pgTable("products", {

@@ -237,6 +237,15 @@ export type PaymentsItem = {
   unitPrice: Scalars['String']['output'];
 };
 
+export type ProductsItem = {
+  __typename?: 'ProductsItem';
+  budgetLineId: Scalars['Int']['output'];
+  editionId: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  name: Scalars['String']['output'];
+  unitPrice: Scalars['String']['output'];
+};
+
 export type Query = {
   __typename?: 'Query';
   budgetCategories: Array<BudgetCategoriesItem>;
@@ -245,6 +254,7 @@ export type Query = {
   editions: Array<EditionsItem>;
   getBudgetStatsByCategories: Array<GetBudgetStatsByCategories>;
   invoices: Array<InvoicesItem>;
+  products: Array<ProductsItem>;
   vendors: Array<VendorsItem>;
 };
 
@@ -269,6 +279,11 @@ export type QueryGetBudgetStatsByCategoriesArgs = {
 export type QueryInvoicesArgs = {
   editionId: Scalars['Float']['input'];
   status?: InputMaybe<InvoiceStatus>;
+};
+
+
+export type QueryProductsArgs = {
+  editionId: Scalars['Float']['input'];
 };
 
 export type UpdateInvoicePaymentsInput = {

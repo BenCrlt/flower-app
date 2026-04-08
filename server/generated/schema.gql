@@ -103,6 +103,14 @@ type PaymentsItem {
   unitPrice: String!
 }
 
+type ProductsItem {
+  budgetLineId: Int!
+  editionId: Int!
+  id: Int!
+  name: String!
+  unitPrice: String!
+}
+
 type Query {
   budgetCategories: [BudgetCategoriesItem!]!
   budgetLines(budgetLineType: LineTypeEnum, editionId: Float!): [BudgetLinesItem!]!
@@ -110,6 +118,7 @@ type Query {
   editions: [EditionsItem!]!
   getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!
+  products(editionId: Float!): [ProductsItem!]!
   vendors: [VendorsItem!]!
 }
 
