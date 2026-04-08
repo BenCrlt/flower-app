@@ -1,3 +1,4 @@
+import { ProductsTable } from "@/features/sales/components/products-table";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/sales")({
@@ -5,7 +6,5 @@ export const Route = createFileRoute("/sales")({
 });
 
 function RouteComponent() {
-  return (
-    <div>merde</div>
-  );
+  return <ProductsTable />;
 }
