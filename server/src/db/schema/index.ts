@@ -5,5 +5,6 @@ export * from "./editions.js";
 export * from "./invoices.js";
 export * from "./payments.js";
 export * from "./products.js";
+export * from "./relations.js";
 export * from "./sales.js";
 export * from "./vendors.js";

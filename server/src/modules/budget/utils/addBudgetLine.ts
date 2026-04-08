@@ -1,6 +1,10 @@
 import z from "zod";
 import { db } from "../../../db/index.js";
-import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines.js";
+import {
+  BudgetLine,
+  budgetLinesTable,
+} from "../../../db/schema/budget-lines.js";
+import { productsTable } from "../../../db/schema/index.js";
 import { LineTypeEnum } from "../types.js";
 
 export const addBudgetLineInput = z.object({
@@ -16,7 +20,7 @@ export const addBudgetLineInput = z.object({
 export const addBudgetLine = async (
   input: z.infer<typeof addBudgetLineInput>,
 ): Promise<BudgetLine | null> => {
-  return db
+  const budgetLineAdded = await db
     .insert(budgetLinesTable)
     .values({
       ...input,
@@ -27,4 +31,15 @@ export const addBudgetLine = async (
     .catch((error) => {
       throw error;
     });
+
+  if (budgetLineAdded?.lineType === "income") {
+    await db.insert(productsTable).values({
+      name: budgetLineAdded.name,
+      unitPrice: budgetLineAdded.estimatedUnitPrice,
+      budgetLineId: budgetLineAdded.id,
+      editionId: budgetLineAdded.editionId,
+    });
+  }
+
+  return budgetLineAdded;
 };
