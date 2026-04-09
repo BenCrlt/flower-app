@@ -20,6 +20,7 @@ export function ProductsTable() {
         id: item.id,
         name: item.name,
         unitPrice: Number(item.unitPrice),
+        salesCount: item.salesCount,
       })) || [],
     [data],
   );

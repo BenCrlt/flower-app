@@ -3,5 +3,6 @@ query getProducts($editionId: Float!) {
     id
     name
     unitPrice
+    salesCount
   }
 }
