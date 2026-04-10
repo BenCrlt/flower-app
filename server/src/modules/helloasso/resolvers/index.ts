@@ -1,22 +1,22 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
 import { eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../db/index.js";
-import { helloAssoConfigTable } from "../../db/schema/hello-asso-config.js";
-import { helloAssoMappingTable } from "../../db/schema/hello-asso-mapping.js";
+import { db } from "../../../db/index.js";
+import { helloAssoConfigTable } from "../../../db/schema/hello-asso-config.js";
+import { helloAssoMappingTable } from "../../../db/schema/hello-asso-mapping.js";
 import {
   addHelloAssoConfig,
   addHelloAssoConfigInput,
-} from "./utils/addHelloAssoConfig.js";
+} from "./addHelloAssoConfig.js";
 import {
   addOrUpdateMapping,
   addOrUpdateMappingInput,
-} from "./utils/addOrUpdateMapping.js";
-import { loadMapping } from "./utils/loadMapping.js";
+} from "./addOrUpdateMapping.js";
+import { loadMapping } from "./loadMapping.js";
 import {
   updateHelloAssoConfig,
   updateHelloAssoConfigInput,
-} from "./utils/updateHelloAssoConfig.js";
+} from "./updateHelloAssoConfig.js";
 
 export const helloAssoResolver = resolver.of(helloAssoConfigTable, {
   helloAssoConfig: query(helloAssoConfigTable.$nullable())

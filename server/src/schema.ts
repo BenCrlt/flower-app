@@ -8,7 +8,7 @@ import { editionsResolver } from "./modules/editions/resolver.js";
 import {
   helloAssoMappingResolver,
   helloAssoResolver,
-} from "./modules/helloasso/resolver.js";
+} from "./modules/helloasso/resolvers/index.js";
 import { invoiceResolver, vendorResolver } from "./modules/payment/resolver.js";
 import { productsResolver } from "./modules/sale/resolver.js";
 
