@@ -3,6 +3,8 @@ import { user } from "./auth.js";
 import { budgetCategoriesTable } from "./budget-categories.js";
 import { budgetLinesTable } from "./budget-lines.js";
 import { editionsTable } from "./editions.js";
+import { helloAssoConfigTable } from "./hello-asso-config.js";
+import { helloAssoMappingTable } from "./hello-asso-mapping.js";
 import { invoicesTable } from "./invoices.js";
 import { paymentsTable } from "./payments.js";
 import { productsTable } from "./products.js";
@@ -107,3 +109,20 @@ export const usersRelations = relations(user, ({ many }) => ({
 export const vendorsRelations = relations(vendorsTable, ({ many }) => ({
   invoices: many(invoicesTable),
 }));
+
+export const helloAssoConfigRelations = relations(
+  helloAssoConfigTable,
+  ({ many }) => ({
+    mappings: many(helloAssoMappingTable),
+  }),
+);
+
+export const helloAssoMappingRelations = relations(
+  helloAssoMappingTable,
+  ({ one }) => ({
+    config: one(helloAssoConfigTable, {
+      fields: [helloAssoMappingTable.configId],
+      references: [helloAssoConfigTable.id],
+    }),
+  }),
+);

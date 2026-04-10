@@ -12,7 +12,7 @@
     "lint:fix": "eslint src --fix",
     "format": "prettier --write src",
     "format:check": "prettier --check src",
-    "mig:gen": "drizzle-kit generate",
+    "mig:gen": "pnpm build && DRIZZLE_SCHEMA=./dist/db/schema/*.js drizzle-kit generate",
     "mig:run": "drizzle-kit migrate",
     "generate:schema": "tsx devtools/scripts/generate-schema.ts",
     "seed": "tsx devtools/scripts/seed.ts",

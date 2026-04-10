@@ -99,6 +99,13 @@
       "when": 1773761487990,
       "tag": "0013_add-active-edition",
       "breakpoints": true
+    },
+    {
+      "idx": 14,
+      "version": "7",
+      "when": 1775817436521,
+      "tag": "0014_add-hello-asso-entities",
+      "breakpoints": true
     }
   ]
 }
