@@ -36,7 +36,9 @@ export function getColumns(): ColumnDef<ProductTableRow>[] {
           className="justify-end"
         />
       ),
-      cell: () => <div className="text-right font-medium">0</div>,
+      cell: ({ row }) => (
+        <div className="text-right font-medium">{row.original.salesCount}</div>
+      ),
     },
     {
       id: "totalSales",
