@@ -2,6 +2,8 @@ export * from "./auth.js";
 export * from "./budget-categories.js";
 export * from "./budget-lines.js";
 export * from "./editions.js";
+export * from "./hello-asso-config.js";
+export * from "./hello-asso-mapping.js";
 export * from "./invoices.js";
 export * from "./payments.js";
 export * from "./products.js";

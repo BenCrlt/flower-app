@@ -62,6 +62,22 @@ export type GetBudgetStatsByCategories = {
   totalEstimated: Scalars['Float']['output'];
 };
 
+export type HelloAssoConfigItem = {
+  __typename?: 'HelloAssoConfigItem';
+  editionId: Scalars['Int']['output'];
+  formSlug: Scalars['String']['output'];
+  id: Scalars['Int']['output'];
+  mappings: Array<HelloAssoMappingItem>;
+};
+
+export type HelloAssoMappingItem = {
+  __typename?: 'HelloAssoMappingItem';
+  configId: Scalars['Int']['output'];
+  helloAssoProductId: Scalars['Int']['output'];
+  id: Scalars['Int']['output'];
+  productId: Scalars['Int']['output'];
+};
+
 export enum InvoiceStatus {
   Cancelled = 'CANCELLED',
   Paid = 'PAID',
@@ -105,7 +121,9 @@ export type Mutation = {
   addBudgetCategory?: Maybe<BudgetCategoriesItem>;
   addBudgetLine?: Maybe<BudgetLinesItem>;
   addEdition?: Maybe<EditionsItem>;
+  addHelloAssoConfig?: Maybe<HelloAssoConfigItem>;
   addInvoice?: Maybe<InvoicesItem>;
+  addOrUpdateMapping?: Maybe<HelloAssoMappingItem>;
   addOrUpdateVendor?: Maybe<VendorsItem>;
   deleteBudgetCategory?: Maybe<BudgetCategoriesItem>;
   deleteBudgetLine?: Maybe<BudgetLinesItem>;
@@ -115,6 +133,7 @@ export type Mutation = {
   updateBudgetCategory?: Maybe<BudgetCategoriesItem>;
   updateBudgetLine?: Maybe<BudgetLinesItem>;
   updateEdition?: Maybe<EditionsItem>;
+  updateHelloAssoConfig?: Maybe<HelloAssoConfigItem>;
   updateInvoice?: Maybe<InvoicesItem>;
 };
 
@@ -143,6 +162,12 @@ export type MutationAddEditionArgs = {
 };
 
 
+export type MutationAddHelloAssoConfigArgs = {
+  editionId: Scalars['Float']['input'];
+  formSlug: Scalars['String']['input'];
+};
+
+
 export type MutationAddInvoiceArgs = {
   authorId: Scalars['ID']['input'];
   editionId: Scalars['Float']['input'];
@@ -152,6 +177,14 @@ export type MutationAddInvoiceArgs = {
   status: InvoiceStatus;
   totalAmount: Scalars['Float']['input'];
   vendorId: Scalars['Float']['input'];
+};
+
+
+export type MutationAddOrUpdateMappingArgs = {
+  configId: Scalars['Float']['input'];
+  helloAssoProductId: Scalars['Float']['input'];
+  id?: InputMaybe<Scalars['Float']['input']>;
+  productId: Scalars['Float']['input'];
 };
 
 
@@ -215,6 +248,12 @@ export type MutationUpdateEditionArgs = {
 };
 
 
+export type MutationUpdateHelloAssoConfigArgs = {
+  formSlug: Scalars['String']['input'];
+  id: Scalars['Float']['input'];
+};
+
+
 export type MutationUpdateInvoiceArgs = {
   authorId?: InputMaybe<Scalars['ID']['input']>;
   editionId: Scalars['Float']['input'];
@@ -254,6 +293,7 @@ export type Query = {
   edition?: Maybe<EditionsItem>;
   editions: Array<EditionsItem>;
   getBudgetStatsByCategories: Array<GetBudgetStatsByCategories>;
+  helloAssoConfig?: Maybe<HelloAssoConfigItem>;
   invoices: Array<InvoicesItem>;
   products: Array<ProductsItem>;
   vendors: Array<VendorsItem>;
@@ -274,6 +314,11 @@ export type QueryEditionArgs = {
 export type QueryGetBudgetStatsByCategoriesArgs = {
   editionId: Scalars['Float']['input'];
   lineType: LineTypeEnum;
+};
+
+
+export type QueryHelloAssoConfigArgs = {
+  editionId: Scalars['Float']['input'];
 };
 
 
