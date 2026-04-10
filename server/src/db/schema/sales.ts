@@ -28,5 +28,6 @@ export const salesTable = drizzleSilk(
     authorId: text()
       .notNull()
       .references(() => user.id),
+    helloAssoId: integer().unique(),
   }),
 );
