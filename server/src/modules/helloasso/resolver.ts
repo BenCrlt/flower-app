@@ -3,10 +3,12 @@ import { eq } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../db/index.js";
 import { helloAssoConfigTable } from "../../db/schema/hello-asso-config.js";
+import { salesTable } from "../../db/schema/sales.js";
 import {
   addHelloAssoConfig,
   addHelloAssoConfigInput,
 } from "./utils/addHelloAssoConfig.js";
+import { synchroSales, synchroSalesInput } from "./utils/synchroSales.js";
 import {
   updateHelloAssoConfig,
   updateHelloAssoConfigInput,
@@ -27,4 +29,7 @@ export const helloAssoResolver = resolver.of(helloAssoConfigTable, {
   updateHelloAssoConfig: mutation(helloAssoConfigTable.$nullable())
     .input(updateHelloAssoConfigInput)
     .resolve(updateHelloAssoConfig),
+  synchroSales: mutation(salesTable.$list())
+    .input(synchroSalesInput)
+    .resolve(synchroSales),
 });

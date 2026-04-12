@@ -1,4 +1,5 @@
 import { drizzleSilk } from "@gqloom/drizzle";
+import { InferSelectModel } from "drizzle-orm";
 import {
   integer,
   pgTable,
@@ -9,6 +10,8 @@ import {
 import { user } from "./auth.js";
 import { budgetLinesTable } from "./budget-lines.js";
 import { editionsTable } from "./editions.js";
+
+export type Sale = InferSelectModel<typeof salesTable>;
 
 export const salesTable = drizzleSilk(
   pgTable("sales", {
@@ -21,9 +24,7 @@ export const salesTable = drizzleSilk(
     editionId: integer()
       .notNull()
       .references(() => editionsTable.id),
-    authorId: text()
-      .notNull()
-      .references(() => user.id),
+    authorId: text().references(() => user.id),
     helloAssoSaleItemId: integer().unique(),
   }),
 );

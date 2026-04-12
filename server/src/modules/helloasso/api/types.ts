@@ -7,6 +7,15 @@ export const getTokenResponse = z.object({
   expires_in: z.number(),
 });
 
+const helloAssoOrderSchema = z
+  .object({
+    id: z.number(),
+    date: z.string().datetime(),
+    formSlug: z.string().optional(),
+    formType: z.string(),
+  })
+  .passthrough();
+
 export const helloAssoItemSchema = z
   .object({
     id: z.number(),
@@ -20,6 +29,7 @@ export const helloAssoItemSchema = z
     state: z.string(),
     initialAmount: z.number(),
     type: z.string(),
+    order: helloAssoOrderSchema,
   })
   .passthrough();
 
