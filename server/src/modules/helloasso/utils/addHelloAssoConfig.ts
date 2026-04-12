@@ -10,12 +10,14 @@ export const addHelloAssoConfigInput = z.object({
   formSlug: z.string().min(1).max(255),
   editionId: z.number().min(1),
   importProductFromHelloAsso: z.boolean().default(true),
+  budgetCategoryId: z.number().min(1).optional(),
 });
 
 export async function addHelloAssoConfig({
   editionId,
   formSlug,
   importProductFromHelloAsso,
+  budgetCategoryId,
 }: z.infer<typeof addHelloAssoConfigInput>): Promise<HelloAssoConfig | null> {
   const config = await db
     .insert(helloAssoConfigTable)
@@ -29,8 +31,8 @@ export async function addHelloAssoConfig({
       throw error;
     });
 
-  if (config && importProductFromHelloAsso) {
-    await importProducts(config);
+  if (config && importProductFromHelloAsso && budgetCategoryId) {
+    await importProducts(config, budgetCategoryId);
   }
   return config;
 }

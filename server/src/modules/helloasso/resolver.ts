@@ -1,16 +1,16 @@
 import { mutation, query, resolver } from "@gqloom/core";
 import { eq } from "drizzle-orm";
 import z from "zod";
-import { db } from "../../../db/index.js";
-import { helloAssoConfigTable } from "../../../db/schema/hello-asso-config.js";
+import { db } from "../../db/index.js";
+import { helloAssoConfigTable } from "../../db/schema/hello-asso-config.js";
 import {
   addHelloAssoConfig,
   addHelloAssoConfigInput,
-} from "./addHelloAssoConfig.js";
+} from "./utils/addHelloAssoConfig.js";
 import {
   updateHelloAssoConfig,
   updateHelloAssoConfigInput,
-} from "./updateHelloAssoConfig.js";
+} from "./utils/updateHelloAssoConfig.js";
 
 export const helloAssoResolver = resolver.of(helloAssoConfigTable, {
   helloAssoConfig: query(helloAssoConfigTable.$nullable())
