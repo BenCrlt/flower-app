@@ -28,7 +28,7 @@ const paginationSchema = z.object({
   totalCount: z.number(),
   pageIndex: z.number(),
   totalPages: z.number(),
-  continuationToken: z.string().nullable().optional(),
+  continuationToken: z.string().optional().optional(),
 });
 
 export const getFormItemsResponse = z.object({
@@ -39,24 +39,23 @@ export const getFormItemsResponse = z.object({
 export const tierSchema = z
   .object({
     id: z.number(),
-    label: z.string().nullable(),
-    description: z.string().nullable(),
+    label: z.string().optional(),
+    description: z.string().optional(),
     tierType: z.string(),
-    price: z.number().nullable(),
+    price: z.number().optional(),
   })
   .passthrough();
 
 export const getFormInfoResponse = z
   .object({
-    id: z.number(),
-    organizationLogo: z.string().nullable(),
-    organizationName: z.string().nullable(),
-    tiers: z.array(tierSchema).nullable(),
-    formSlug: z.string().nullable(),
-    formType: z.string().nullable(),
-    url: z.string().nullable(),
-    organizationSlug: z.string().nullable(),
-    title: z.string().nullable(),
+    organizationLogo: z.string().optional(),
+    organizationName: z.string().optional(),
+    tiers: z.array(tierSchema).optional(),
+    formSlug: z.string().optional(),
+    formType: z.string().optional(),
+    url: z.string().optional(),
+    organizationSlug: z.string().optional(),
+    title: z.string().optional(),
     state: z.string(),
   })
   .passthrough();

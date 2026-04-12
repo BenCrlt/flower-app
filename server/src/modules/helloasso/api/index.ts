@@ -154,17 +154,24 @@ export class HelloAssoApi {
     const url = new URL(
       `https://api.helloasso.com/v5/organizations/${this.organizationSlug}/forms/Event/${formSlug}/public`,
     );
+
     const response = await this.fetchJson<unknown>(url.toString(), {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
       },
     });
+
     const responseParsed = getFormInfoResponse.safeParse(response);
+
     if (!responseParsed.success) {
-      console.error(responseParsed.error);
-      throw new Error("HelloAsso API: Failed to parse getFormInfo response");
+      throw new Error(
+        `HelloAsso API: échec parse getFormInfo — ${JSON.stringify(
+          responseParsed.error.flatten(),
+        )}`,
+      );
     }
+
     return responseParsed.data;
   }
 }

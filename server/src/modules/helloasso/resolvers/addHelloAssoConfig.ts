@@ -4,17 +4,20 @@ import {
   HelloAssoConfig,
   helloAssoConfigTable,
 } from "../../../db/schema/hello-asso-config.js";
+import { importProducts } from "./importProducts.js";
 
 export const addHelloAssoConfigInput = z.object({
   formSlug: z.string().min(1).max(255),
   editionId: z.number().min(1),
+  importProductFromHelloAsso: z.boolean().default(true),
 });
 
-export function addHelloAssoConfig({
+export async function addHelloAssoConfig({
   editionId,
   formSlug,
+  importProductFromHelloAsso,
 }: z.infer<typeof addHelloAssoConfigInput>): Promise<HelloAssoConfig | null> {
-  return db
+  const config = await db
     .insert(helloAssoConfigTable)
     .values({
       editionId,
@@ -25,4 +28,9 @@ export function addHelloAssoConfig({
     .catch((error) => {
       throw error;
     });
+
+  if (config && importProductFromHelloAsso) {
+    await importProducts(config);
+  }
+  return config;
 }
