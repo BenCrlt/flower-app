@@ -76,15 +76,20 @@ enum InvoicesStatusEnum {
 }
 
 enum LineType {
+  EXPENSE
+  INCOME
+}
+
+enum LineTypeEnum {
   expense
   income
 }
 
 type Mutation {
   addBudgetCategory(color: String!, name: String!): BudgetCategoriesItem
-  addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, lineType: LineType!, name: String!): BudgetLinesItem
+  addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, lineType: LineTypeEnum!, name: String!): BudgetLinesItem
   addEdition(active: Boolean, name: String!, startDate: String!): EditionsItem
-  addHelloAssoConfig(editionId: Float!, formSlug: String!, importProductFromHelloAsso: Boolean): HelloAssoConfigItem
+  addHelloAssoConfig(budgetCategoryId: Float, editionId: Float!, formSlug: String!, importProductFromHelloAsso: Boolean): HelloAssoConfigItem
   addInvoice(authorId: ID!, editionId: Float!, name: String!, note: String, payments: [AddInvoicePaymentsInput!]!, status: InvoiceStatus!, totalAmount: Float!, vendorId: Float!): InvoicesItem
   addOrUpdateVendor(address: String, description: String, email: String, id: Float, name: String!, phone: String): VendorsItem
   deleteBudgetCategory(id: Float!): BudgetCategoriesItem
@@ -93,7 +98,7 @@ type Mutation {
   deleteInvoice(id: Float!): InvoicesItem
   deleteVendor(id: Float!): VendorsItem
   updateBudgetCategory(id: Float!, name: String!): BudgetCategoriesItem
-  updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, helloAssoProductId: Float, id: Float!, lineType: LineType, name: String): BudgetLinesItem
+  updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, helloAssoProductId: Float, id: Float!, lineType: LineTypeEnum, name: String): BudgetLinesItem
   updateEdition(id: Float!, name: String, startDate: String): EditionsItem
   updateHelloAssoConfig(formSlug: String!, id: Float!): HelloAssoConfigItem
   updateInvoice(authorId: ID, editionId: Float!, id: Float!, name: String, note: String, payments: [UpdateInvoicePaymentsInput!], status: InvoiceStatus, totalAmount: Float, vendorId: Float): InvoicesItem
@@ -110,10 +115,10 @@ type PaymentsItem {
 
 type Query {
   budgetCategories: [BudgetCategoriesItem!]!
-  budgetLines(budgetLineType: LineType, editionId: Float!): [BudgetLinesItem!]!
+  budgetLines(budgetLineType: LineTypeEnum, editionId: Float!): [BudgetLinesItem!]!
   edition(id: Float!): EditionsItem
   editions: [EditionsItem!]!
-  getBudgetStatsByCategories(editionId: Float!, lineType: LineType!): [GetBudgetStatsByCategories!]!
+  getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
   helloAssoConfig(editionId: Float!): HelloAssoConfigItem
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!
   vendors: [VendorsItem!]!
