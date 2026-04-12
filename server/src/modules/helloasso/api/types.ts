@@ -10,7 +10,7 @@ export const getTokenResponse = z.object({
 const helloAssoOrderSchema = z
   .object({
     id: z.number(),
-    date: z.string().datetime(),
+    date: z.string(),
     formSlug: z.string().optional(),
     formType: z.string(),
   })

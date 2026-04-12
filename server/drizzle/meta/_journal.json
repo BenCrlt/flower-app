@@ -120,6 +120,13 @@
       "when": 1776000872423,
       "tag": "0016_remove-product-entity",
       "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1776017852160,
+      "tag": "0017_set-not-nullable-author-id-sales",
+      "breakpoints": true
     }
   ]
 }

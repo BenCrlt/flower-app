@@ -19,6 +19,7 @@ export async function importProducts(
       budgetCategoryId,
       estimatedQuantity: 1,
       estimatedUnitPrice: ((tier.price ?? 0) / 100).toFixed(2),
+      helloAssoProductId: tier.id,
     })) ?? [];
 
   if (budgetLinesToCreate.length > 0) {

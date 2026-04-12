@@ -32,11 +32,11 @@ export async function synchroSales({
 
   const formItems = await helloAssoApi.getFormItems(config.formSlug, from, to);
 
-  const tierIds = formItems.map((item) => item.tierId);
+  const tierIds = new Set(formItems.map((item) => item.tierId));
 
   const budgetLinesByHelloAssoProductId = await db.query.budgetLinesTable
     .findMany({
-      where: inArray(budgetLinesTable.helloAssoProductId, tierIds),
+      where: inArray(budgetLinesTable.helloAssoProductId, Array.from(tierIds)),
     })
     .then((rows) =>
       rows.reduce((map, row) => {

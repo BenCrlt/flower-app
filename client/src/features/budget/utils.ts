@@ -1,4 +1,4 @@
-import { LineTypeEnum } from "@/generated/graphql";
+import { BudgetLinesItem, LineType, LineTypeEnum } from "@/generated/graphql";
 
 export const getBudgetLineTypeString = (lineType: LineTypeEnum) => {
   switch (lineType) {
@@ -48,4 +48,19 @@ export const getTextColorForGapFromLineType = (
     default:
       return "";
   }
+};
+
+export const getRealCostForBudgetLine = (
+  line: Pick<
+    BudgetLinesItem,
+    "lineType" | "realCost" | "estimatedUnitPrice" | "salesCount"
+  >,
+): number | null => {
+  if (line.lineType === LineType.Expense) {
+    return line.realCost ?? null;
+  }
+
+  return line.salesCount
+    ? Number(line.estimatedUnitPrice) * line.salesCount
+    : null;
 };

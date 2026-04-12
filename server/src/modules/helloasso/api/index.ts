@@ -128,7 +128,9 @@ export class HelloAssoApi {
     const responseParsed = getFormItemsResponse.safeParse(response);
 
     if (!responseParsed.success) {
-      throw new Error("HelloAsso API: Failed to parse getFormItems response");
+      throw new Error(
+        `HelloAsso API: Failed to parse getFormItems response: ${JSON.stringify(responseParsed.error.flatten())}`,
+      );
     }
 
     const formItems = responseParsed.data.data;

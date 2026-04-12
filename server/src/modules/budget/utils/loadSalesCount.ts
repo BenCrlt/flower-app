@@ -4,7 +4,7 @@ import { salesTable } from "../../../db/schema/sales.js";
 
 export const loadSalesCount = async (
   budgetLineIds: number[],
-): Promise<number[]> => {
+): Promise<(number | null)[]> => {
   const salesCountByBudgetLineId = await db
     .select({
       budgetLineId: salesTable.budgetLineId,
@@ -21,6 +21,6 @@ export const loadSalesCount = async (
     );
 
   return budgetLineIds.map(
-    (budgetLineId) => salesCountByBudgetLineId.get(budgetLineId) ?? 0,
+    (budgetLineId) => salesCountByBudgetLineId.get(budgetLineId) ?? null,
   );
 };

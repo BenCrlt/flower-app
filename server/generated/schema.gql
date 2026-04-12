@@ -97,6 +97,7 @@ type Mutation {
   deleteEdition(id: Float!): EditionsItem
   deleteInvoice(id: Float!): InvoicesItem
   deleteVendor(id: Float!): VendorsItem
+  synchroSales(from: String!, helloAssoConfigId: Float!, to: String!): [SalesItem!]!
   updateBudgetCategory(id: Float!, name: String!): BudgetCategoriesItem
   updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, helloAssoProductId: Float, id: Float!, lineType: LineTypeEnum, name: String): BudgetLinesItem
   updateEdition(id: Float!, name: String, startDate: String): EditionsItem
@@ -122,6 +123,16 @@ type Query {
   helloAssoConfig(editionId: Float!): HelloAssoConfigItem
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!
   vendors: [VendorsItem!]!
+}
+
+type SalesItem {
+  authorId: String
+  budgetLineId: Int!
+  editionId: Int!
+  executedAt: String!
+  helloAssoSaleItemId: Int
+  id: Int!
+  quantity: Float!
 }
 
 input UpdateInvoicePaymentsInput {

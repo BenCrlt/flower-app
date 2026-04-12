@@ -6,6 +6,7 @@ import { useMemo, useState } from "react";
 import { useDeleteBudgetLineMutation } from "../hooks/useDeleteBudgetLineMutation";
 import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategoriesQuery";
 import { useGetBudgetLinesQuery } from "../hooks/useGetBudgetLinesQuery";
+import { getRealCostForBudgetLine } from "../utils";
 import { BudgetTableFiltersAndActions } from "./budget-table-actions";
 import { BudgetTableRow, getColumns } from "./columns";
 import { EditBudgetLineSheet } from "./edit-budget-line-sheet";
@@ -38,7 +39,7 @@ export function BudgetTable() {
         categoryName: item.category?.name ?? "",
         categoryColor: item.category?.color ?? "",
         budgetCategoryId: item.category?.id ?? 0,
-        realCost: item.realCost ?? null,
+        realCost: getRealCostForBudgetLine(item),
       })) || [],
     [data],
   );
