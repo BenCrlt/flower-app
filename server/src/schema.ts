@@ -5,12 +5,8 @@ import {
   budgetLinesResolver,
 } from "./modules/budget/resolver.js";
 import { editionsResolver } from "./modules/editions/resolver.js";
-import {
-  helloAssoMappingResolver,
-  helloAssoResolver,
-} from "./modules/helloasso/resolvers/index.js";
+import { helloAssoResolver } from "./modules/helloasso/resolvers/index.js";
 import { invoiceResolver, vendorResolver } from "./modules/payment/resolver.js";
-import { productsResolver } from "./modules/sale/resolver.js";
 
 export const schema = weave(
   ZodWeaver,
@@ -19,7 +15,5 @@ export const schema = weave(
   budgetLinesResolver,
   vendorResolver,
   invoiceResolver,
-  productsResolver,
   helloAssoResolver,
-  helloAssoMappingResolver,
 );

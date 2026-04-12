@@ -35,3 +35,28 @@ export const getFormItemsResponse = z.object({
   data: z.array(helloAssoItemSchema),
   pagination: paginationSchema,
 });
+
+export const tierSchema = z
+  .object({
+    id: z.number(),
+    label: z.string().nullable(),
+    description: z.string().nullable(),
+    tierType: z.string(),
+    price: z.number().nullable(),
+  })
+  .passthrough();
+
+export const getFormInfoResponse = z
+  .object({
+    id: z.number(),
+    organizationLogo: z.string().nullable(),
+    organizationName: z.string().nullable(),
+    tiers: z.array(tierSchema).nullable(),
+    formSlug: z.string().nullable(),
+    formType: z.string().nullable(),
+    url: z.string().nullable(),
+    organizationSlug: z.string().nullable(),
+    title: z.string().nullable(),
+    state: z.string(),
+  })
+  .passthrough();

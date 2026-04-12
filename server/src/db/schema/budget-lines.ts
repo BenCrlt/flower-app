@@ -34,6 +34,7 @@ export const budgetLinesTable = drizzleSilk(
     })
       .default("0.00")
       .notNull(),
+    helloAssoProductId: integer().unique(),
   }),
 );
 

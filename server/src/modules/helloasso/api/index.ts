@@ -1,5 +1,6 @@
 import z from "zod";
 import {
+  getFormInfoResponse,
   getFormItemsResponse,
   getTokenResponse,
   helloAssoItemSchema,
@@ -145,5 +146,25 @@ export class HelloAssoApi {
     }
 
     return formItems;
+  }
+
+  public async getFormInfo(
+    formSlug: string,
+  ): Promise<z.infer<typeof getFormInfoResponse>> {
+    const url = new URL(
+      `https://api.helloasso.com/v5/organizations/${this.organizationSlug}/forms/Event/${formSlug}/public`,
+    );
+    const response = await this.fetchJson<unknown>(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    const responseParsed = getFormInfoResponse.safeParse(response);
+    if (!responseParsed.success) {
+      console.error(responseParsed.error);
+      throw new Error("HelloAsso API: Failed to parse getFormInfo response");
+    }
+    return responseParsed.data;
   }
 }

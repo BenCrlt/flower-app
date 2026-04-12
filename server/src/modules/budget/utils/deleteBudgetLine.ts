@@ -5,7 +5,7 @@ import {
   BudgetLine,
   budgetLinesTable,
 } from "../../../db/schema/budget-lines.js";
-import { productsTable } from "../../../db/schema/index.js";
+import { salesTable } from "../../../db/schema/index.js";
 
 export const deleteBudgetLineInput = z.object({
   id: z.number().min(1),
@@ -14,21 +14,12 @@ export const deleteBudgetLineInput = z.object({
 export const deleteBudgetLine = async ({
   id,
 }: z.infer<typeof deleteBudgetLineInput>): Promise<BudgetLine | null> => {
-  const productsLinkedToBudgetLine = await db.query.productsTable.findFirst({
-    where: eq(productsTable.budgetLineId, id),
-    with: {
-      sales: true,
-    },
+  const salesLinkedToBudgetLine = await db.query.salesTable.findMany({
+    where: eq(salesTable.budgetLineId, id),
   });
 
-  if (productsLinkedToBudgetLine?.sales.length) {
+  if (salesLinkedToBudgetLine?.length) {
     throw new Error("Budget line has sales linked to it");
-  }
-
-  if (productsLinkedToBudgetLine) {
-    await db
-      .delete(productsTable)
-      .where(eq(productsTable.id, productsLinkedToBudgetLine.id));
   }
 
   return db
