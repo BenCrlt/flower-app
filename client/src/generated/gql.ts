@@ -32,6 +32,7 @@ type Documents = {
     "query getOrders($editionId: Float!) {\n  orders(editionId: $editionId) {\n    id\n    totalAmount\n    executedAt\n    payerFirstName\n    payerLastName\n    payerEmail\n    helloAssoOrderId\n    author {\n      id\n      username\n    }\n  }\n}": typeof types.GetOrdersDocument,
     "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}": typeof types.AddHelloAssoConfigDocument,
     "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}": typeof types.GetHelloAssoConfigDocument,
+    "mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}": typeof types.SynchroSalesDocument,
 };
 const documents: Documents = {
     "mutation AddBudgetCategory($name: String!, $color: String!) {\n  addBudgetCategory(name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}": types.AddBudgetCategoryDocument,
@@ -52,6 +53,7 @@ const documents: Documents = {
     "query getOrders($editionId: Float!) {\n  orders(editionId: $editionId) {\n    id\n    totalAmount\n    executedAt\n    payerFirstName\n    payerLastName\n    payerEmail\n    helloAssoOrderId\n    author {\n      id\n      username\n    }\n  }\n}": types.GetOrdersDocument,
     "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}": types.AddHelloAssoConfigDocument,
     "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}": types.GetHelloAssoConfigDocument,
+    "mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}": types.SynchroSalesDocument,
 };
 
 /**
@@ -140,6 +142,10 @@ export function graphql(source: "mutation AddHelloAssoConfig($formSlug: String!,
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}"): (typeof documents)["query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}"): (typeof documents)["mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

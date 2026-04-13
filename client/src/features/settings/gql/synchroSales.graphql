@@ -1,0 +1,9 @@
+mutation synchroSales(
+  $helloAssoConfigId: Float!
+  $from: String!
+  $to: String!
+) {
+  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {
+    id
+  }
+}
