@@ -89,7 +89,7 @@ export function BudgetTableFiltersAndActions({
       </div>
       <div className="flex items-center gap-2">
         <Tabs
-          defaultValue="expense"
+          defaultValue={LineTypeEnum.Income}
           onValueChange={(value) => onChangeLineType(value as LineTypeEnum)}
         >
           <TabsList>

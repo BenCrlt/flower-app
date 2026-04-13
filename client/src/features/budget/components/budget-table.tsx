@@ -13,7 +13,7 @@ import { EditBudgetLineSheet } from "./edit-budget-line-sheet";
 
 export function BudgetTable() {
   const { edition } = useEdition();
-  const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Expense);
+  const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Income);
   const [selectedRow, setSelectedRow] = useState<BudgetTableRow | null>(null);
   const [showGapInPercent, setShowGapInPercent] = useState<boolean>(true);
 
