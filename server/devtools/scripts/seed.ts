@@ -1,26 +1,34 @@
 import "dotenv/config";
-import { readFileSync } from "fs";
-import path from "path";
-import pg from "pg";
+import { eq } from "drizzle-orm";
+import { db } from "../../src/db/index.js";
+import { editionsTable, user } from "../../src/db/schema/index.js";
+import { auth } from "../../src/utils/auth.js";
 
-const { Pool } = pg;
+async function main() {
+  const adminUsername = "admin";
+  const adminPassword = "123456";
 
-async function seed() {
-  const pool = new Pool({
-    connectionString: process.env.DATABASE_URL,
+  const admin = await auth.api.createUser({
+    body: {
+      email: `${adminUsername}@flower2.fr`,
+      password: String(adminPassword),
+      name: "Benoit Cournault",
+      role: "admin",
+    },
   });
 
-  const sql = readFileSync(path.resolve("seed.sql"), "utf-8");
+  await db
+    .update(user)
+    .set({ username: adminUsername })
+    .where(eq(user.id, admin.user.id));
 
-  try {
-    await pool.query(sql);
-    console.log("✅ Données de test insérées avec succès");
-  } catch (error) {
-    console.error("❌ Erreur lors de l'insertion des données :", error);
-    process.exit(1);
-  } finally {
-    await pool.end();
-  }
+  await db.insert(editionsTable).values({
+    name: "FMF 2026",
+    startDate: "2026-06-27",
+    active: true,
+  });
+
+  process.exit(0);
 }
 
-seed();
+main();

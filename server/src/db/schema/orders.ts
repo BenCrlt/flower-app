@@ -9,7 +9,9 @@ export const ordersTable = pgTable("orders", {
   editionId: integer()
     .notNull()
     .references(() => editionsTable.id),
-  authorId: text().references(() => user.id),
+  authorId: text()
+    .references(() => user.id)
+    .notNull(),
   payerFirstName: text(),
   payerLastName: text(),
   payerEmail: text(),

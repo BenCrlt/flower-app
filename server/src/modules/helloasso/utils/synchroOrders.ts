@@ -10,6 +10,7 @@ import {
   salesTable,
 } from "../../../db/schema/index.js";
 import { HelloAssoApi } from "../api/index.js";
+import { getHelloAssoUser } from "./utils.js";
 
 export const synchroOrdersInput = z.object({
   helloAssoConfigId: z.number().min(1),
@@ -63,6 +64,8 @@ export async function synchroOrders({
     throw new Error("[HelloAsso] SynchroOrders: No budget lines found");
   }
 
+  const author = await getHelloAssoUser();
+
   return db.transaction(async (tx) => {
     const ordersToCreate = formOrders.map((order) => ({
       helloAssoOrderId: order.id,
@@ -71,6 +74,7 @@ export async function synchroOrders({
       payerFirstName: order.payer?.firstName ?? null,
       payerLastName: order.payer?.lastName ?? null,
       payerEmail: order.payer?.email ?? null,
+      authorId: author.id,
     }));
 
     if (ordersToCreate.length > 0) {

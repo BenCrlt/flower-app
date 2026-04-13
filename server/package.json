@@ -14,9 +14,10 @@
     "format:check": "prettier --check src",
     "mig:gen": "pnpm build && DRIZZLE_SCHEMA=./dist/db/schema/*.js drizzle-kit generate",
     "mig:run": "drizzle-kit migrate",
+    "db:reset:sql": "tsx devtools/scripts/reset-db.ts",
+    "db:reset": "pnpm db:reset:sql && pnpm mig:run && pnpm seed",
     "generate:schema": "tsx devtools/scripts/generate-schema.ts",
-    "seed": "tsx devtools/scripts/seed.ts",
-    "add-admin": "tsx devtools/scripts/add-admin.ts"
+    "seed": "tsx devtools/scripts/seed.ts"
   },
   "keywords": [],
   "author": "",

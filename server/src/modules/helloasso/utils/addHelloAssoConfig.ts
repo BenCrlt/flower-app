@@ -6,7 +6,7 @@ import {
   helloAssoConfigTable,
 } from "../../../db/schema/hello-asso-config.js";
 import { importProducts } from "./importProducts.js";
-import { synchroOrders } from "./synchroSales.js";
+import { synchroOrders } from "./synchroOrders.js";
 
 export const addHelloAssoConfigInput = z.object({
   formSlug: z.string().min(1).max(255),

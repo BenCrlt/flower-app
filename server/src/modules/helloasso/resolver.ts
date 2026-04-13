@@ -8,7 +8,7 @@ import {
   addHelloAssoConfig,
   addHelloAssoConfigInput,
 } from "./utils/addHelloAssoConfig.js";
-import { synchroOrders, synchroOrdersInput } from "./utils/synchroSales.js";
+import { synchroOrders, synchroOrdersInput } from "./utils/synchroOrders.js";
 import {
   updateHelloAssoConfig,
   updateHelloAssoConfigInput,
