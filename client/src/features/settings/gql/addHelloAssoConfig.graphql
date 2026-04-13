@@ -1,0 +1,16 @@
+mutation AddHelloAssoConfig(
+  $formSlug: String!
+  $editionId: Float!
+  $enableSynchro: Boolean!
+  $budgetCategoryId: Float
+) {
+  addHelloAssoConfig(
+    formSlug: $formSlug
+    editionId: $editionId
+    enableSynchro: $enableSynchro
+    budgetCategoryId: $budgetCategoryId
+  ) {
+    id
+    formSlug
+  }
+}

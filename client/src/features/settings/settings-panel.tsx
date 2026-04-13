@@ -14,6 +14,7 @@ import {
 import { authClient } from "@/lib/auth-client";
 import { AddUserDialog } from "./add-user-dialog";
 import { ChangePinDialog } from "./change-pin-dialog";
+import { HelloAssoCard } from "./hello-asso/card";
 import { UpdateUsernameField } from "./update-username-field";
 
 export function SettingsPanel() {
@@ -44,12 +45,11 @@ export function SettingsPanel() {
         <Card className="flex flex-col gap-4">
           <CardHeader>
             <CardTitle>
-              <TypographyH3>Actions administrateurs</TypographyH3>
+              <TypographyH3>Danger zone</TypographyH3>
             </CardTitle>
             <CardDescription>
               <TypographyP>
-                Dans cette section, vous pouvez ajouter des nouveaux
-                utilisateurs et gérer les permissions.
+                Dans cette section, vous retrouverez toutes les actions admins
               </TypographyP>
             </CardDescription>
           </CardHeader>
@@ -60,6 +60,7 @@ export function SettingsPanel() {
           </CardContent>
         </Card>
       )}
+      <HelloAssoCard />
     </div>
   );
 }

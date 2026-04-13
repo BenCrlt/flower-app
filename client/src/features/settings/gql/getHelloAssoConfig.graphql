@@ -1,0 +1,6 @@
+query getHelloAssoConfig($editionId: Float!) {
+  helloAssoConfig(editionId: $editionId) {
+    id
+    formSlug
+  }
+}

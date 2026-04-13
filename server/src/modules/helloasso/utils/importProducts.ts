@@ -23,6 +23,9 @@ export async function importProducts(
     })) ?? [];
 
   if (budgetLinesToCreate.length > 0) {
-    await db.insert(budgetLinesTable).values(budgetLinesToCreate);
+    await db
+      .insert(budgetLinesTable)
+      .values(budgetLinesToCreate)
+      .onConflictDoNothing();
   }
 }

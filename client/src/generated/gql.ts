@@ -29,6 +29,8 @@ type Documents = {
     "query getInvoices($editionId: Float!, $status: InvoiceStatus) {\n  invoices(editionId: $editionId, status: $status) {\n    id\n    name\n    vendorId\n    vendor {\n      id\n      name\n    }\n    totalAmount\n    note\n    author {\n      id\n    }\n    executedAt\n    status\n    payments {\n      id\n      budgetLineId\n      quantity\n      unitPrice\n    }\n  }\n}": typeof types.GetInvoicesDocument,
     "query getVendors {\n  vendors {\n    id\n    name\n  }\n}": typeof types.GetVendorsDocument,
     "mutation updateInvoice($id: Float!, $name: String, $authorId: ID, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    name: $name\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": typeof types.UpdateInvoiceDocument,
+    "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}": typeof types.AddHelloAssoConfigDocument,
+    "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}": typeof types.GetHelloAssoConfigDocument,
 };
 const documents: Documents = {
     "mutation AddBudgetCategory($name: String!, $color: String!) {\n  addBudgetCategory(name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}": types.AddBudgetCategoryDocument,
@@ -46,6 +48,8 @@ const documents: Documents = {
     "query getInvoices($editionId: Float!, $status: InvoiceStatus) {\n  invoices(editionId: $editionId, status: $status) {\n    id\n    name\n    vendorId\n    vendor {\n      id\n      name\n    }\n    totalAmount\n    note\n    author {\n      id\n    }\n    executedAt\n    status\n    payments {\n      id\n      budgetLineId\n      quantity\n      unitPrice\n    }\n  }\n}": types.GetInvoicesDocument,
     "query getVendors {\n  vendors {\n    id\n    name\n  }\n}": types.GetVendorsDocument,
     "mutation updateInvoice($id: Float!, $name: String, $authorId: ID, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    name: $name\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": types.UpdateInvoiceDocument,
+    "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}": types.AddHelloAssoConfigDocument,
+    "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}": types.GetHelloAssoConfigDocument,
 };
 
 /**
@@ -122,6 +126,14 @@ export function graphql(source: "query getVendors {\n  vendors {\n    id\n    na
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation updateInvoice($id: Float!, $name: String, $authorId: ID, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    name: $name\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}"): (typeof documents)["mutation updateInvoice($id: Float!, $name: String, $authorId: ID, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    name: $name\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}"): (typeof documents)["mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}"): (typeof documents)["query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

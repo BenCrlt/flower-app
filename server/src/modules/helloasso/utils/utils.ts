@@ -1,4 +1,3 @@
-import { randomInt } from "crypto";
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/index.js";
 import { User, user } from "../../../db/schema/index.js";
@@ -18,17 +17,15 @@ export async function getHelloAssoUser(): Promise<User> {
   const newHelloAssoUserResponse = await auth.api.createUser({
     body: {
       email: `${HELLO_ASSO_USERNAME}@flower.fr`,
-      password: String(randomInt(100000, 999999)),
-      name: "helloasso",
+      password: process.env.HELLO_ASSO_USER_PASSWORD!,
+      name: "Hello Asso",
+      role: "user",
     },
   });
 
   await db
     .update(user)
-    .set({
-      id: newHelloAssoUserResponse.user.id,
-      username: HELLO_ASSO_USERNAME,
-    })
+    .set({ username: HELLO_ASSO_USERNAME })
     .where(eq(user.id, newHelloAssoUserResponse.user.id));
 
   const helloAssoUserCreated = await db.query.user.findFirst({

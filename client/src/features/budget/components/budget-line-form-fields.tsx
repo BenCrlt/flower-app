@@ -1,17 +1,12 @@
-import { AddCategoryDialog } from "@/components/add-category-dialog";
-import { CategoryBadge } from "@/components/CategoryBadge";
-import { PopoverCommand } from "@/components/PopoverCommand";
-import { CommandItem } from "@/components/ui/command";
+import { CategoryCommand } from "@/components/category-command";
 import { Field, FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { BudgetCategoriesItem } from "@/generated/graphql";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
-import { Plus } from "lucide-react";
-import { ReactElement, useState } from "react";
+import { ReactElement } from "react";
 import {
   Control,
-  Controller,
   FieldErrors,
   UseFormRegister,
   UseFormSetValue,
@@ -46,11 +41,6 @@ export function BudgetLineFormFields({
   const estimatedUnitPrice = useWatch({ control, name: "estimatedUnitPrice" });
   const totalEstimated =
     Number(estimatedQuantity) * Number(estimatedUnitPrice) || 0;
-  const [openAddCategoryDialog, setOpenAddCategoryDialog] = useState(false);
-
-  const getCategoryColor = (categoryId: number) => {
-    return allCategories?.find((category) => category.id === categoryId)?.color;
-  };
 
   return (
     <>
@@ -98,62 +88,13 @@ export function BudgetLineFormFields({
         <Textarea {...register("description")} placeholder="Description..." />
       </Field>
 
-      <Field data-invalid={!!errors.budgetCategoryId}>
-        <span className="text-sm font-medium text-foreground">Catégorie</span>
-        <Controller
-          name="budgetCategoryId"
-          control={control}
-          render={({ field }) => (
-            <PopoverCommand
-              items={
-                allCategories?.map((category) => ({
-                  label: category.name,
-                  value: category.id,
-                })) || []
-              }
-              selectedValue={field.value}
-              setSelectedValue={(value) => field.onChange(value)}
-              actions={[
-                <CommandItem
-                  key="add-category"
-                  onSelect={() => setOpenAddCategoryDialog(true)}
-                >
-                  <Plus className="h-4 w-4" />
-                  Ajouter une catégorie
-                </CommandItem>,
-              ]}
-              inputPlaceholder="Sélectionnez une catégorie..."
-              commandInputPlaceholder="Rechercher une catégorie..."
-              title="Catégories"
-              emptyMessage="Pas de catégorie trouvée."
-              renderItem={(item) => (
-                <CategoryBadge
-                  name={item.label}
-                  color={getCategoryColor(item.value)}
-                />
-              )}
-              renderTriggerValue={(item) =>
-                item ? (
-                  <CategoryBadge
-                    name={item.label}
-                    color={getCategoryColor(item.value)}
-                  />
-                ) : (
-                  <span className="text-muted-foreground">
-                    Sélectionnez une catégorie...
-                  </span>
-                )
-              }
-            />
-          )}
-        />
-        <FieldError errors={[errors.budgetCategoryId]} />
-        <AddCategoryDialog
-          onAdded={(categoryId) => setValue("budgetCategoryId", categoryId)}
-          open={openAddCategoryDialog}
-          setOpen={setOpenAddCategoryDialog}
-        />
-      </Field>
+      <CategoryCommand
+        onAdded={(categoryId) => setValue("budgetCategoryId", categoryId)}
+        control={control}
+        error={errors.budgetCategoryId?.message}
+        fieldName="budgetCategoryId"
+        allCategories={allCategories || []}
+      />
     </>
   );
 }
