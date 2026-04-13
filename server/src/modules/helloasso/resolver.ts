@@ -8,7 +8,7 @@ import {
   addHelloAssoConfig,
   addHelloAssoConfigInput,
 } from "./utils/addHelloAssoConfig.js";
-import { synchroSales, synchroSalesInput } from "./utils/synchroSales.js";
+import { synchroOrders, synchroOrdersInput } from "./utils/synchroSales.js";
 import {
   updateHelloAssoConfig,
   updateHelloAssoConfigInput,
@@ -30,6 +30,6 @@ export const helloAssoResolver = resolver.of(helloAssoConfigTable, {
     .input(updateHelloAssoConfigInput)
     .resolve(updateHelloAssoConfig),
   synchroSales: mutation(salesTable.$list())
-    .input(synchroSalesInput)
-    .resolve(synchroSales),
+    .input(synchroOrdersInput)
+    .resolve(synchroOrders),
 });

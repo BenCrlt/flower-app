@@ -1,15 +1,8 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { InferSelectModel } from "drizzle-orm";
-import {
-  integer,
-  pgTable,
-  smallint,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
-import { user } from "./auth.js";
+import { integer, pgTable, smallint, timestamp } from "drizzle-orm/pg-core";
 import { budgetLinesTable } from "./budget-lines.js";
-import { editionsTable } from "./editions.js";
+import { ordersTable } from "./orders.js";
 
 export type Sale = InferSelectModel<typeof salesTable>;
 
@@ -21,10 +14,9 @@ export const salesTable = drizzleSilk(
     budgetLineId: integer()
       .notNull()
       .references(() => budgetLinesTable.id),
-    editionId: integer()
+    orderId: integer()
       .notNull()
-      .references(() => editionsTable.id),
-    authorId: text().references(() => user.id),
+      .references(() => ordersTable.id, { onDelete: "cascade" }),
     helloAssoSaleItemId: integer().unique(),
   }),
 );

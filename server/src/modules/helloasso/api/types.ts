@@ -7,29 +7,11 @@ export const getTokenResponse = z.object({
   expires_in: z.number(),
 });
 
-const helloAssoOrderSchema = z
+const helloAssoPayerSchema = z
   .object({
-    id: z.number(),
-    date: z.string(),
-    formSlug: z.string().optional(),
-    formType: z.string(),
-  })
-  .passthrough();
-
-export const helloAssoItemSchema = z
-  .object({
-    id: z.number(),
-    tierId: z.number(),
-    tierDescription: z.string(),
-    name: z.string(),
-    amount: z.number(),
-    ticketUrl: z.string(),
-    qrCode: z.string(),
-    priceCategory: z.string(),
-    state: z.string(),
-    initialAmount: z.number(),
-    type: z.string(),
-    order: helloAssoOrderSchema,
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    email: z.string().optional(),
   })
   .passthrough();
 
@@ -41,8 +23,35 @@ const paginationSchema = z.object({
   continuationToken: z.string().optional().optional(),
 });
 
-export const getFormItemsResponse = z.object({
-  data: z.array(helloAssoItemSchema),
+const helloAssoItemSchema = z
+  .object({
+    id: z.number(),
+    tierId: z.number().optional(),
+    tierDescription: z.string().optional(),
+    amount: z.number().optional(),
+    state: z.string(),
+    initialAmount: z.number().optional(),
+  })
+  .passthrough();
+
+export const helloAssoOrderSchema = z
+  .object({
+    id: z.number(),
+    date: z.string(),
+    formSlug: z.string().optional(),
+    formType: z.string(),
+    payer: helloAssoPayerSchema,
+    items: z.array(helloAssoItemSchema).optional(),
+    amount: z
+      .object({
+        total: z.number(),
+      })
+      .passthrough(),
+  })
+  .passthrough();
+
+export const getFormOrdersResponse = z.object({
+  data: z.array(helloAssoOrderSchema),
   pagination: paginationSchema,
 });
 

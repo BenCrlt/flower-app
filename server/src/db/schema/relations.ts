@@ -4,6 +4,7 @@ import { budgetCategoriesTable } from "./budget-categories.js";
 import { budgetLinesTable } from "./budget-lines.js";
 import { editionsTable } from "./editions.js";
 import { invoicesTable } from "./invoices.js";
+import { ordersTable } from "./orders.js";
 import { paymentsTable } from "./payments.js";
 import { salesTable } from "./sales.js";
 import { vendorsTable } from "./vendors.js";
@@ -74,14 +75,22 @@ export const salesRelations = relations(salesTable, ({ one }) => ({
     fields: [salesTable.budgetLineId],
     references: [budgetLinesTable.id],
   }),
+  order: one(ordersTable, {
+    fields: [salesTable.orderId],
+    references: [ordersTable.id],
+  }),
+}));
+
+export const ordersRelations = relations(ordersTable, ({ one, many }) => ({
   edition: one(editionsTable, {
-    fields: [salesTable.editionId],
+    fields: [ordersTable.editionId],
     references: [editionsTable.id],
   }),
   author: one(user, {
-    fields: [salesTable.authorId],
+    fields: [ordersTable.authorId],
     references: [user.id],
   }),
+  sales: many(salesTable),
 }));
 
 export const usersRelations = relations(user, ({ many }) => ({

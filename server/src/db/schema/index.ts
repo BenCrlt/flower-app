@@ -4,6 +4,7 @@ export * from "./budget-lines.js";
 export * from "./editions.js";
 export * from "./hello-asso-config.js";
 export * from "./invoices.js";
+export * from "./orders.js";
 export * from "./payments.js";
 export * from "./relations.js";
 export * from "./sales.js";

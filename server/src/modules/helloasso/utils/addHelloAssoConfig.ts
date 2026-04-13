@@ -1,3 +1,4 @@
+import { format, subYears } from "date-fns";
 import z from "zod";
 import { db } from "../../../db/index.js";
 import {
@@ -5,18 +6,19 @@ import {
   helloAssoConfigTable,
 } from "../../../db/schema/hello-asso-config.js";
 import { importProducts } from "./importProducts.js";
+import { synchroOrders } from "./synchroSales.js";
 
 export const addHelloAssoConfigInput = z.object({
   formSlug: z.string().min(1).max(255),
   editionId: z.number().min(1),
-  importProductFromHelloAsso: z.boolean().default(true),
+  enableSynchro: z.boolean().default(true),
   budgetCategoryId: z.number().min(1).optional(),
 });
 
 export async function addHelloAssoConfig({
   editionId,
   formSlug,
-  importProductFromHelloAsso,
+  enableSynchro,
   budgetCategoryId,
 }: z.infer<typeof addHelloAssoConfigInput>): Promise<HelloAssoConfig | null> {
   const config = await db
@@ -31,8 +33,13 @@ export async function addHelloAssoConfig({
       throw error;
     });
 
-  if (config && importProductFromHelloAsso && budgetCategoryId) {
+  if (config && enableSynchro && budgetCategoryId) {
+    const now = new Date();
+    const from = format(subYears(now, 1), "yyyy-MM-dd");
+    const to = format(now, "yyyy-MM-dd");
+
     await importProducts(config, budgetCategoryId);
+    await synchroOrders({ helloAssoConfigId: config.id, from, to });
   }
   return config;
 }
