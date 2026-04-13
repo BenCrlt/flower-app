@@ -1,6 +1,7 @@
 import { RowPrice } from "@/components/Table/RowPrice";
 import { SortableHeader } from "@/components/Table/SortableHeader";
 import { InvoiceStatus } from "@/generated/graphql";
+import { formatTimestampToLocaleString } from "@/utils/DateUtils";
 import { ColumnDef } from "@tanstack/react-table";
 import { InvoiceStatusBadge } from "./invoice-status-badge";
 import { InvoicesTableActionsLine } from "./invoices-table-actions-line";
@@ -40,6 +41,23 @@ export function getColumns({
       meta: { className: "w-px whitespace-nowrap" },
     },
     {
+      header: "Exécuté le",
+      cell: ({ row }) => (
+        <div className="flex flex-col gap-1">
+          <span className="font-medium">
+            {formatTimestampToLocaleString(
+              row.original.executedAt,
+              "dd MMMM yyyy",
+            )}
+          </span>
+          <span className="text-sm text-gray-500">
+            {formatTimestampToLocaleString(row.original.executedAt, "HH:mm")}
+          </span>
+        </div>
+      ),
+      meta: { className: "w-px whitespace-nowrap" },
+    },
+    {
       header: ({ column }) => (
         <SortableHeader column={column} title="Vendeur" />
       ),
@@ -68,11 +86,7 @@ export function getColumns({
       },
       cell: ({ row }) => <InvoiceStatusBadge status={row.original.status} />,
     },
-    {
-      header: "Exécuté le",
-      accessorKey: "executedAt",
-      meta: { className: "w-px whitespace-nowrap" },
-    },
+
     {
       header: "Note",
       accessorKey: "note",

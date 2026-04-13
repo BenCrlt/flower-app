@@ -1,6 +1,6 @@
 mutation addInvoice(
   $name: String!
-  $authorId: ID!
+  $authorId: String!
   $editionId: Float!
   $note: String
   $payments: [AddInvoicePaymentsInput!]!
