@@ -105,6 +105,20 @@ type Mutation {
   updateInvoice(authorId: ID, editionId: Float!, id: Float!, name: String, note: String, payments: [UpdateInvoicePaymentsInput!], status: InvoiceStatus, totalAmount: Float, vendorId: Float): InvoicesItem
 }
 
+type OrdersItem {
+  author: UserItem
+  authorId: String!
+  editionId: Int!
+  executedAt: String!
+  helloAssoOrderId: Int
+  id: Int!
+  payerEmail: String
+  payerFirstName: String
+  payerLastName: String
+  sales: [SalesItem!]!
+  totalAmount: Float!
+}
+
 type PaymentsItem {
   budgetLineId: Int!
   editionId: Int!
@@ -122,6 +136,7 @@ type Query {
   getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
   helloAssoConfig(editionId: Float!): HelloAssoConfigItem
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!
+  orders(editionId: Float!): [OrdersItem!]!
   vendors: [VendorsItem!]!
 }
 

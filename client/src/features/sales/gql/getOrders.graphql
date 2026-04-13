@@ -1,0 +1,15 @@
+query getOrders($editionId: Float!) {
+  orders(editionId: $editionId) {
+    id
+    totalAmount
+    executedAt
+    payerFirstName
+    payerLastName
+    payerEmail
+    helloAssoOrderId
+    author {
+      id
+      username
+    }
+  }
+}

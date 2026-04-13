@@ -6,6 +6,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { cn } from "@/lib/utils";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -18,13 +19,16 @@ import {
   Table as TableInstance,
   useReactTable,
 } from "@tanstack/react-table";
-import { cn } from "@/lib/utils";
 import React, { useState } from "react";
 import { Button } from "../ui/button";
+
+const DEFAULT_PAGE_SIZE = 100;
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  /** Nombre de lignes par page (pagination client TanStack Table). */
+  pageSize?: number;
   actions?: (table: TableInstance<TData>) => React.ReactNode;
   onRowClick?: (row: TData) => void;
 }
@@ -32,6 +36,7 @@ interface DataTableProps<TData, TValue> {
 export function DataTable<TData, TValue>({
   columns,
   data,
+  pageSize = DEFAULT_PAGE_SIZE,
   actions,
   onRowClick,
 }: DataTableProps<TData, TValue>) {
@@ -43,6 +48,11 @@ export function DataTable<TData, TValue>({
   const table = useReactTable({
     data,
     columns,
+    initialState: {
+      pagination: {
+        pageSize,
+      },
+    },
     getCoreRowModel: getCoreRowModel(),
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
