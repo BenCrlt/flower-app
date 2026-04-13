@@ -18,7 +18,9 @@ interface Props {
 export function AmountProgress({ value, max, title, lineType }: Props) {
   const progress = max > 0 && !!value ? Math.min((value / max) * 100, 100) : 0;
   const gapInPercent =
-    value !== 0 ? getGapBetweenRealAndPrevisionnal(value, max, true) : null;
+    value !== 0 && max > 0
+      ? getGapBetweenRealAndPrevisionnal(value, max, true)
+      : null;
   return (
     <div className="flex flex-col gap-3">
       <div className="flex justify-between items-center">

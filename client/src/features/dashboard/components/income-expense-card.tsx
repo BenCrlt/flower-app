@@ -56,7 +56,7 @@ export function IncomeExpenseCard({ edition, isLoading = false }: Props) {
           <>
             <AmountProgress
               title="Recettes"
-              value={0}
+              value={edition.totalIncome}
               max={edition.totalPrevisionnalIncome}
               lineType={LineType.Income}
             />

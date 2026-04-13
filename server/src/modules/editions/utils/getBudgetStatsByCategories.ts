@@ -6,6 +6,7 @@ import {
   budgetLinesTable,
   LineType,
   paymentsTable,
+  salesTable,
 } from "../../../db/schema/index.js";
 
 export const statsByCategoryOutput = z.array(
@@ -59,6 +60,7 @@ const getTotalByCategoryIdFromLineType = async (
     case "expense":
       return getTotalExpenseStatsByCategoryId(editionId);
     case "income":
+      return getTotalIncomeStatsByCategoryId(editionId);
     default:
       return {};
   }
@@ -78,6 +80,33 @@ const getTotalExpenseStatsByCategoryId = async (
       eq(paymentsTable.budgetLineId, budgetLinesTable.id),
     )
     .where(eq(paymentsTable.editionId, editionId))
+    .groupBy(budgetLinesTable.budgetCategoryId);
+
+  return totalEstimatedStats.reduce(
+    (acc, stat) => {
+      acc[stat.categoryId] = stat.total;
+      return acc;
+    },
+    {} as Record<number, number>,
+  );
+};
+
+const getTotalIncomeStatsByCategoryId = async (
+  editionId: number,
+): Promise<Record<number, number>> => {
+  const totalEstimatedStats = await db
+    .select({
+      categoryId: budgetLinesTable.budgetCategoryId,
+      total: sql<number>`sum(${salesTable.quantity} * ${budgetLinesTable.estimatedUnitPrice})`,
+    })
+    .from(budgetLinesTable)
+    .innerJoin(salesTable, eq(salesTable.budgetLineId, budgetLinesTable.id))
+    .where(
+      and(
+        eq(budgetLinesTable.editionId, editionId),
+        eq(budgetLinesTable.lineType, "income"),
+      ),
+    )
     .groupBy(budgetLinesTable.budgetCategoryId);
 
   return totalEstimatedStats.reduce(

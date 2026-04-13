@@ -6,7 +6,6 @@ mutation updateBudgetLine(
   $editionId: Float
   $estimatedQuantity: Int
   $estimatedUnitPrice: Float
-  $lineType: LineTypeEnum
 ) {
   updateBudgetLine(
     id: $id
@@ -16,7 +15,6 @@ mutation updateBudgetLine(
     editionId: $editionId
     estimatedQuantity: $estimatedQuantity
     estimatedUnitPrice: $estimatedUnitPrice
-    lineType: $lineType
   ) {
     id
     name
