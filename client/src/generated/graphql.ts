@@ -158,8 +158,8 @@ export type MutationAddEditionArgs = {
 export type MutationAddHelloAssoConfigArgs = {
   budgetCategoryId?: InputMaybe<Scalars['Float']['input']>;
   editionId: Scalars['Float']['input'];
+  enableSynchro?: InputMaybe<Scalars['Boolean']['input']>;
   formSlug: Scalars['String']['input'];
-  importProductFromHelloAsso?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
@@ -313,12 +313,11 @@ export type QueryInvoicesArgs = {
 
 export type SalesItem = {
   __typename?: 'SalesItem';
-  authorId?: Maybe<Scalars['String']['output']>;
   budgetLineId: Scalars['Int']['output'];
-  editionId: Scalars['Int']['output'];
   executedAt: Scalars['String']['output'];
   helloAssoSaleItemId?: Maybe<Scalars['Int']['output']>;
   id: Scalars['Int']['output'];
+  orderId: Scalars['Int']['output'];
   quantity: Scalars['Float']['output'];
 };
 
