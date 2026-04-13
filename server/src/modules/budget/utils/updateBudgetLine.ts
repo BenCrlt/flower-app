@@ -1,7 +1,10 @@
 import { eq } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../../db/index.js";
-import { BudgetLine, budgetLinesTable } from "../../../db/schema/budget-lines.js";
+import {
+  BudgetLine,
+  budgetLinesTable,
+} from "../../../db/schema/budget-lines.js";
 import { LineTypeEnum } from "../types.js";
 
 export const updateBudgetLineInput = z.object({
@@ -13,6 +16,7 @@ export const updateBudgetLineInput = z.object({
   budgetCategoryId: z.number().min(1).optional(),
   estimatedQuantity: z.number().int().min(0).optional(),
   estimatedUnitPrice: z.number().min(0).optional(),
+  helloAssoProductId: z.number().min(1).optional(),
 });
 
 export const updateBudgetLine = async (

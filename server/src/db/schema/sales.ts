@@ -1,33 +1,22 @@
 import { drizzleSilk } from "@gqloom/drizzle";
-import {
-  integer,
-  pgEnum,
-  pgTable,
-  smallint,
-  text,
-  timestamp,
-} from "drizzle-orm/pg-core";
-import { user } from "./auth.js";
-import { editionsTable } from "./editions.js";
-import { productsTable } from "./products.js";
+import { InferSelectModel } from "drizzle-orm";
+import { integer, pgTable, smallint, timestamp } from "drizzle-orm/pg-core";
+import { budgetLinesTable } from "./budget-lines.js";
+import { ordersTable } from "./orders.js";
 
-export const paymentMethod = pgEnum("payment_method", ["cash", "card"]);
-export type PaymentMethod = (typeof paymentMethod.enumValues)[number];
+export type Sale = InferSelectModel<typeof salesTable>;
 
 export const salesTable = drizzleSilk(
   pgTable("sales", {
     id: integer().primaryKey().generatedAlwaysAsIdentity(),
     quantity: smallint().notNull().default(0),
     executedAt: timestamp().notNull().defaultNow(),
-    productId: integer()
+    budgetLineId: integer()
       .notNull()
-      .references(() => productsTable.id),
-    editionId: integer()
+      .references(() => budgetLinesTable.id),
+    orderId: integer()
       .notNull()
-      .references(() => editionsTable.id),
-    authorId: text()
-      .notNull()
-      .references(() => user.id),
-    helloAssoId: integer().unique(),
+      .references(() => ordersTable.id, { onDelete: "cascade" }),
+    helloAssoSaleItemId: integer().unique(),
   }),
 );

@@ -4,7 +4,6 @@ import {
   BudgetLine,
   budgetLinesTable,
 } from "../../../db/schema/budget-lines.js";
-import { productsTable } from "../../../db/schema/index.js";
 import { LineTypeEnum } from "../types.js";
 
 export const addBudgetLineInput = z.object({
@@ -31,15 +30,6 @@ export const addBudgetLine = async (
     .catch((error) => {
       throw error;
     });
-
-  if (budgetLineAdded?.lineType === "income") {
-    await db.insert(productsTable).values({
-      name: budgetLineAdded.name,
-      unitPrice: budgetLineAdded.estimatedUnitPrice,
-      budgetLineId: budgetLineAdded.id,
-      editionId: budgetLineAdded.editionId,
-    });
-  }
 
   return budgetLineAdded;
 };

@@ -16,8 +16,7 @@
     "mig:run": "drizzle-kit migrate",
     "generate:schema": "tsx devtools/scripts/generate-schema.ts",
     "seed": "tsx devtools/scripts/seed.ts",
-    "add-admin": "tsx devtools/scripts/add-admin.ts",
-    "create-products": "tsx devtools/scripts/create-products.ts"
+    "add-admin": "tsx devtools/scripts/add-admin.ts"
   },
   "keywords": [],
   "author": "",
@@ -48,6 +47,7 @@
     "@gqloom/drizzle": "^0.11.0",
     "@gqloom/zod": "^0.15.2",
     "better-auth": "^1.5.4",
+    "date-fns": "^4.1.0",
     "dotenv": "^17.3.1",
     "drizzle-orm": "^0.45.1",
     "fastify": "^5.7.4",

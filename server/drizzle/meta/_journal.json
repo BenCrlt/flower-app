@@ -113,6 +113,27 @@
       "when": 1775840798572,
       "tag": "0015_add-product-id-hello-asso-to-sales",
       "breakpoints": true
+    },
+    {
+      "idx": 16,
+      "version": "7",
+      "when": 1776000872423,
+      "tag": "0016_remove-product-entity",
+      "breakpoints": true
+    },
+    {
+      "idx": 17,
+      "version": "7",
+      "when": 1776017852160,
+      "tag": "0017_set-not-nullable-author-id-sales",
+      "breakpoints": true
+    },
+    {
+      "idx": 18,
+      "version": "7",
+      "when": 1776077202160,
+      "tag": "0018_add-orders",
+      "breakpoints": true
     }
   ]
 }

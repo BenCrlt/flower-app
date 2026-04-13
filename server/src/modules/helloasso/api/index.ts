@@ -1,8 +1,9 @@
 import z from "zod";
 import {
-  getFormItemsResponse,
+  getFormInfoResponse,
+  getFormOrdersResponse,
   getTokenResponse,
-  helloAssoItemSchema,
+  helloAssoOrderSchema,
 } from "./types.js";
 import { readJsonBody } from "./utils.js";
 
@@ -100,14 +101,14 @@ export class HelloAssoApi {
     return body as T;
   }
 
-  public async getFormItems(
+  public async getFormOrders(
     formSlug: string,
     from: string,
     to: string,
     continuationToken?: string,
-  ): Promise<z.infer<typeof helloAssoItemSchema>[]> {
+  ): Promise<z.infer<typeof helloAssoOrderSchema>[]> {
     const url = new URL(
-      `https://api.helloasso.com/v5/organizations/${this.organizationSlug}/forms/Event/${formSlug}/items`,
+      `https://api.helloasso.com/v5/organizations/${this.organizationSlug}/forms/Event/${formSlug}/orders`,
     );
     url.searchParams.set("withDetails", "false");
     url.searchParams.set("from", from);
@@ -124,10 +125,12 @@ export class HelloAssoApi {
       },
     });
 
-    const responseParsed = getFormItemsResponse.safeParse(response);
+    const responseParsed = getFormOrdersResponse.safeParse(response);
 
     if (!responseParsed.success) {
-      throw new Error("HelloAsso API: Failed to parse getFormItems response");
+      throw new Error(
+        `HelloAsso API: Failed to parse getFormItems response: ${JSON.stringify(responseParsed.error.flatten())}`,
+      );
     }
 
     const formItems = responseParsed.data.data;
@@ -135,7 +138,7 @@ export class HelloAssoApi {
       responseParsed.data.pagination.continuationToken;
 
     if (nextContinuationToken && continuationToken !== nextContinuationToken) {
-      const nextItems = await this.getFormItems(
+      const nextItems = await this.getFormOrders(
         formSlug,
         from,
         to,
@@ -145,5 +148,32 @@ export class HelloAssoApi {
     }
 
     return formItems;
+  }
+
+  public async getFormInfo(
+    formSlug: string,
+  ): Promise<z.infer<typeof getFormInfoResponse>> {
+    const url = new URL(
+      `https://api.helloasso.com/v5/organizations/${this.organizationSlug}/forms/Event/${formSlug}/public`,
+    );
+
+    const response = await this.fetchJson<unknown>(url.toString(), {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const responseParsed = getFormInfoResponse.safeParse(response);
+
+    if (!responseParsed.success) {
+      throw new Error(
+        `HelloAsso API: échec parse getFormInfo — ${JSON.stringify(
+          responseParsed.error.flatten(),
+        )}`,
+      );
+    }
+
+    return responseParsed.data;
   }
 }

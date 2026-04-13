@@ -3,11 +3,9 @@ import { user } from "./auth.js";
 import { budgetCategoriesTable } from "./budget-categories.js";
 import { budgetLinesTable } from "./budget-lines.js";
 import { editionsTable } from "./editions.js";
-import { helloAssoConfigTable } from "./hello-asso-config.js";
-import { helloAssoMappingTable } from "./hello-asso-mapping.js";
 import { invoicesTable } from "./invoices.js";
+import { ordersTable } from "./orders.js";
 import { paymentsTable } from "./payments.js";
-import { productsTable } from "./products.js";
 import { salesTable } from "./sales.js";
 import { vendorsTable } from "./vendors.js";
 
@@ -29,14 +27,13 @@ export const budgetLinesRelations = relations(
       fields: [budgetLinesTable.editionId],
       references: [editionsTable.id],
     }),
-    products: many(productsTable),
+    sales: many(salesTable),
     payments: many(paymentsTable),
   }),
 );
 
 export const editionsRelations = relations(editionsTable, ({ many }) => ({
   budgetLines: many(budgetLinesTable),
-  products: many(productsTable),
   sales: many(salesTable),
   payments: many(paymentsTable),
   invoices: many(invoicesTable),
@@ -57,18 +54,6 @@ export const paymentsRelations = relations(paymentsTable, ({ one }) => ({
   }),
 }));
 
-export const productsRelations = relations(productsTable, ({ one, many }) => ({
-  budgetLine: one(budgetLinesTable, {
-    fields: [productsTable.budgetLineId],
-    references: [budgetLinesTable.id],
-  }),
-  edition: one(editionsTable, {
-    fields: [productsTable.editionId],
-    references: [editionsTable.id],
-  }),
-  sales: many(salesTable),
-}));
-
 export const invoicesRelations = relations(invoicesTable, ({ one, many }) => ({
   edition: one(editionsTable, {
     fields: [invoicesTable.editionId],
@@ -86,18 +71,26 @@ export const invoicesRelations = relations(invoicesTable, ({ one, many }) => ({
 }));
 
 export const salesRelations = relations(salesTable, ({ one }) => ({
-  product: one(productsTable, {
-    fields: [salesTable.productId],
-    references: [productsTable.id],
+  budgetLine: one(budgetLinesTable, {
+    fields: [salesTable.budgetLineId],
+    references: [budgetLinesTable.id],
   }),
+  order: one(ordersTable, {
+    fields: [salesTable.orderId],
+    references: [ordersTable.id],
+  }),
+}));
+
+export const ordersRelations = relations(ordersTable, ({ one, many }) => ({
   edition: one(editionsTable, {
-    fields: [salesTable.editionId],
+    fields: [ordersTable.editionId],
     references: [editionsTable.id],
   }),
   author: one(user, {
-    fields: [salesTable.authorId],
+    fields: [ordersTable.authorId],
     references: [user.id],
   }),
+  sales: many(salesTable),
 }));
 
 export const usersRelations = relations(user, ({ many }) => ({
@@ -109,20 +102,3 @@ export const usersRelations = relations(user, ({ many }) => ({
 export const vendorsRelations = relations(vendorsTable, ({ many }) => ({
   invoices: many(invoicesTable),
 }));
-
-export const helloAssoConfigRelations = relations(
-  helloAssoConfigTable,
-  ({ many }) => ({
-    mappings: many(helloAssoMappingTable),
-  }),
-);
-
-export const helloAssoMappingRelations = relations(
-  helloAssoMappingTable,
-  ({ one }) => ({
-    config: one(helloAssoConfigTable, {
-      fields: [helloAssoMappingTable.configId],
-      references: [helloAssoConfigTable.id],
-    }),
-  }),
-);

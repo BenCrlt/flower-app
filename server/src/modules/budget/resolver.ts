@@ -16,9 +16,13 @@ import {
   deleteBudgetLine,
   deleteBudgetLineInput,
 } from "./utils/deleteBudgetLine.js";
-import { getBudgetLines, getBudgetLinesFilter } from "./utils/getBudgetLines.js";
+import {
+  getBudgetLines,
+  getBudgetLinesFilter,
+} from "./utils/getBudgetLines.js";
 import { loadBudgetCategory } from "./utils/loadBudgetCategory.js";
 import { loadRealCost } from "./utils/loadRealData.js";
+import { loadSalesCount } from "./utils/loadSalesCount.js";
 import {
   updateBudgetCategory,
   updateBudgetCategoryInput,
@@ -57,6 +61,9 @@ export const budgetLinesResolver = resolver.of(budgetLinesTable, {
   realCost: field(z.number().int().min(0).nullable())
     .derivedFrom("id")
     .load(async (lines) => loadRealCost(lines.map((line) => line.id))),
+  salesCount: field(z.number().int().min(0).nullable())
+    .derivedFrom("id")
+    .load(async (lines) => loadSalesCount(lines.map((line) => line.id))),
 
   addBudgetLine: mutation(budgetLinesTable.$nullable())
     .input(addBudgetLineInput)
