@@ -10,7 +10,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
-import { formatDate, subYears } from "date-fns";
+import { addDays, formatDate, subYears } from "date-fns";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
 import { useGetHelloAssoConfigQuery } from "../hooks/useGetHelloAssoConfigQuery";
@@ -44,7 +44,7 @@ export const HelloAssoCard = () => {
     void synchroSales({
       helloAssoConfigId: helloAssoConfig.helloAssoConfig.id,
       from: formatDate(subYears(new Date(), 1), "yyyy-MM-dd"),
-      to: formatDate(new Date(), "yyyy-MM-dd"),
+      to: formatDate(addDays(new Date(), 1), "yyyy-MM-dd"),
     });
   };
 

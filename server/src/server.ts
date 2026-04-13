@@ -1,5 +1,8 @@
 import "dotenv/config";
 import { buildApp } from "./app.js";
+import { startCronJobs } from "./jobs/index.js";
+
+startCronJobs();
 
 const app = buildApp();
 const port = Number.parseInt(process.env.PORT ?? "", 10) || 3000;
