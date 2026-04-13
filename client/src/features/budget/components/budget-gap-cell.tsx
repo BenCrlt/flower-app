@@ -1,4 +1,4 @@
-import { LineTypeEnum } from "@/generated/graphql";
+import { LineType } from "@/generated/graphql";
 import {
   formatGapForCell,
   getGapBetweenRealAndPrevisionnal,
@@ -6,7 +6,7 @@ import {
 } from "../utils";
 
 interface Props {
-  lineType: LineTypeEnum;
+  lineType: LineType;
   realAmount: number | null;
   previsionnalAmount: number;
   inPercent?: boolean;

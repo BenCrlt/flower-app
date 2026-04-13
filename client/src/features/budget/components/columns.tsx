@@ -1,7 +1,7 @@
 import { CategoryBadge } from "@/components/CategoryBadge";
 import { RowPrice } from "@/components/Table/RowPrice";
 import { SortableHeader } from "@/components/Table/SortableHeader";
-import { BudgetCategoriesItem, LineTypeEnum } from "@/generated/graphql";
+import { BudgetCategoriesItem, LineType } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { MessageCircleCheck, MessageCircleQuestion } from "lucide-react";
 import { getGapBetweenRealAndPrevisionnal } from "../utils";
@@ -19,6 +19,8 @@ export interface BudgetTableRow {
   categoryColor: string;
   budgetCategoryId: number;
   realCost: number | null;
+  helloAssoProductId: number | null;
+  lineType: LineType;
 }
 
 interface GetBudgetLineColumnsProps {
@@ -100,7 +102,7 @@ export function getColumns({
         const actual = row.original.realCost;
         return (
           <BudgetGapCell
-            lineType={LineTypeEnum.Expense}
+            lineType={row.original.lineType}
             previsionnalAmount={estimated}
             realAmount={actual}
             inPercent={showGapInPercent}

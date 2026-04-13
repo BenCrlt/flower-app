@@ -13,6 +13,7 @@ import {
   useWatch,
 } from "react-hook-form";
 import { BudgetLineFormValues } from "../hooks/budgetLineFormResolver";
+import { BudgetTableRow } from "./columns";
 
 interface Props {
   register: UseFormRegister<BudgetLineFormValues>;
@@ -20,12 +21,7 @@ interface Props {
   errors: FieldErrors<BudgetLineFormValues>;
   allCategories?: BudgetCategoriesItem[];
   namePlaceholder?: string;
-  currentValues?: {
-    name: string;
-    description: string;
-    estimatedQuantity: number;
-    estimatedUnitPrice: number;
-  };
+  budgetLine?: BudgetTableRow;
   setValue: UseFormSetValue<BudgetLineFormValues>;
 }
 
@@ -35,6 +31,7 @@ export function BudgetLineFormFields({
   errors,
   allCategories,
   namePlaceholder,
+  budgetLine,
   setValue,
 }: Props): ReactElement {
   const estimatedQuantity = useWatch({ control, name: "estimatedQuantity" });
@@ -54,7 +51,7 @@ export function BudgetLineFormFields({
         <FieldError errors={[errors.name]} />
       </Field>
 
-      <div className="grid grid-cols-[1fr_auto_1fr] items-start gap-2">
+      <div className="flex items-center gap-2">
         <Field data-invalid={!!errors.estimatedQuantity}>
           <span className="text-sm font-medium text-foreground">Quantité</span>
           <Input
@@ -63,7 +60,7 @@ export function BudgetLineFormFields({
           />
           <FieldError errors={[errors.estimatedQuantity]} />
         </Field>
-        <span className="mt-7 text-muted-foreground">×</span>
+        <span className="text-muted-foreground mt-7">×</span>
         <Field data-invalid={!!errors.estimatedUnitPrice}>
           <span className="text-sm font-medium text-foreground">
             Prix unitaire
@@ -71,6 +68,7 @@ export function BudgetLineFormFields({
           <Input
             {...register("estimatedUnitPrice", { valueAsNumber: true })}
             aria-invalid={!!errors.estimatedUnitPrice}
+            disabled={!!budgetLine?.helloAssoProductId}
           />
           <FieldError errors={[errors.estimatedUnitPrice]} />
         </Field>

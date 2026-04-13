@@ -13,5 +13,6 @@ query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!) {
       name
       color
     }
+    helloAssoProductId
   }
 }

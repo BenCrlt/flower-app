@@ -40,6 +40,8 @@ export function BudgetTable() {
         categoryColor: item.category?.color ?? "",
         budgetCategoryId: item.category?.id ?? 0,
         realCost: getRealCostForBudgetLine(item),
+        helloAssoProductId: item.helloAssoProductId ?? null,
+        lineType: item.lineType,
       })) || [],
     [data],
   );

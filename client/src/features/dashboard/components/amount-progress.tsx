@@ -5,14 +5,14 @@ import {
   getGapBetweenRealAndPrevisionnal,
   getTextColorForGapFromLineType,
 } from "@/features/budget/utils";
-import { LineTypeEnum } from "@/generated/graphql";
+import { LineType } from "@/generated/graphql";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
 
 interface Props {
   value: number | null;
   max: number;
   title: string;
-  lineType: LineTypeEnum;
+  lineType: LineType;
 }
 
 export function AmountProgress({ value, max, title, lineType }: Props) {

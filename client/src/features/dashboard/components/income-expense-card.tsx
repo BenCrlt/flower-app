@@ -8,7 +8,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
-import { LineTypeEnum } from "@/generated/graphql";
+import { LineType } from "@/generated/graphql";
 import { AmountProgress } from "./amount-progress";
 import { EditionStats } from "./edition-dashboard";
 
@@ -58,14 +58,14 @@ export function IncomeExpenseCard({ edition, isLoading = false }: Props) {
               title="Recettes"
               value={0}
               max={edition.totalPrevisionnalIncome}
-              lineType={LineTypeEnum.Income}
+              lineType={LineType.Income}
             />
             <Separator />
             <AmountProgress
               title="Dépenses"
               value={edition.totalExpense}
               max={edition.totalPrevisionnalExpense}
-              lineType={LineTypeEnum.Expense}
+              lineType={LineType.Expense}
             />
           </>
         )}

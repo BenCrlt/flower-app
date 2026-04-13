@@ -12,20 +12,12 @@ import { BudgetCategoriesItem } from "@/generated/graphql";
 import { ReactElement } from "react";
 import { useEditBudgetLineForm } from "../hooks/useEditBudgetLineForm";
 import { BudgetLineFormFields } from "./budget-line-form-fields";
-
-interface BudgetLineData {
-  id: number;
-  name: string;
-  description: string;
-  estimatedQuantity: number;
-  estimatedUnitPrice: number;
-  budgetCategoryId: number;
-}
+import { BudgetTableRow } from "./columns";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  line: BudgetLineData;
+  line: BudgetTableRow;
   allCategories?: BudgetCategoriesItem[];
 }
 
@@ -60,7 +52,7 @@ export function EditBudgetLineSheet({
               control={control}
               errors={errors}
               allCategories={allCategories}
-              currentValues={line}
+              budgetLine={line}
               setValue={setValue}
             />
           </div>
