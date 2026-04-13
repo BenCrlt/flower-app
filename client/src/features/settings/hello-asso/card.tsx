@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
@@ -7,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
+import { Check } from "lucide-react";
 import { useGetHelloAssoConfigQuery } from "../hooks/useGetHelloAssoConfigQuery";
 import { CreateConfigDialog } from "./create-config-dialog";
 
@@ -32,9 +34,9 @@ export const HelloAssoCard = () => {
       <CardContent className="flex flex-col gap-4">
         {helloAssoConfig?.helloAssoConfig ? (
           <div className="flex flex-col gap-2 w-fit">
-            <TypographyP>
-              {helloAssoConfig.helloAssoConfig.formSlug}
-            </TypographyP>
+            <Button>
+              <Check /> Synchronisé
+            </Button>
           </div>
         ) : (
           <div className="flex flex-col gap-2 w-fit">
