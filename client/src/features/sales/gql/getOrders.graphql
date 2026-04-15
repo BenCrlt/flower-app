@@ -1,5 +1,5 @@
-query getOrders($editionId: Float!) {
-  orders(editionId: $editionId) {
+query getOrders($editionId: Float!, $from: String, $to: String) {
+  orders(editionId: $editionId, from: $from, to: $to) {
     id
     totalAmount
     executedAt
@@ -7,9 +7,25 @@ query getOrders($editionId: Float!) {
     payerLastName
     payerEmail
     helloAssoOrderId
+    authorId
     author {
       id
       username
+    }
+    sales {
+      id
+      budgetLineId
+      quantity
+      executedAt
+      budgetLine {
+        id
+        name
+        category {
+          id
+          name
+          color
+        }
+      }
     }
   }
 }

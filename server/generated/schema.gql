@@ -137,11 +137,12 @@ type Query {
   getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
   helloAssoConfig(editionId: Float!): HelloAssoConfigItem
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!
-  orders(editionId: Float!): [OrdersItem!]!
+  orders(editionId: Float!, from: String, to: String): [OrdersItem!]!
   vendors: [VendorsItem!]!
 }
 
 type SalesItem {
+  budgetLine: BudgetLinesItem
   budgetLineId: Int!
   executedAt: String!
   helloAssoSaleItemId: Int

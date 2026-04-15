@@ -7,7 +7,7 @@ import {
 import { editionsResolver } from "./modules/editions/resolver.js";
 import { helloAssoResolver } from "./modules/helloasso/resolver.js";
 import { invoiceResolver, vendorResolver } from "./modules/payment/resolver.js";
-import { orderResolver } from "./modules/sale/resolver.js";
+import { orderResolver, salesResolver } from "./modules/sale/resolver.js";
 
 export const schema = weave(
   ZodWeaver,
@@ -18,4 +18,5 @@ export const schema = weave(
   invoiceResolver,
   helloAssoResolver,
   orderResolver,
+  salesResolver,
 );
