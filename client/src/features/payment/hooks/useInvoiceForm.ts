@@ -45,7 +45,7 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
     setValue,
   } = useForm<InvoiceFormValues>({
     resolver: invoiceFormResolver,
-    mode: "onChange",
+    mode: "onSubmit",
     defaultValues: existingInvoice,
   });
 
@@ -87,6 +87,7 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
 
   function handleClose() {
     reset();
+    remove();
     setOpen(false);
   }
 
