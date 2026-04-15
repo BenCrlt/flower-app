@@ -9,6 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { formatDateRangeToLocaleString } from "@/utils/DateUtils";
 import { DateRange } from "react-day-picker";
 import { Button } from "./ui/button";
 
@@ -50,12 +51,12 @@ export function DateRangePicker({
       <PopoverTrigger asChild>
         <Button
           id="date-picker"
-          variant="ghost"
-          size="icon-xs"
+          variant="outline"
           aria-label="Sélectionner une période"
+          className="w-fit"
         >
           <CalendarIcon />
-          <span className="sr-only">Sélectionner une période</span>
+          {formatDateRangeToLocaleString(dateRange)}
         </Button>
       </PopoverTrigger>
       <PopoverContent

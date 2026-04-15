@@ -35,7 +35,7 @@ import {
 } from "date-fns";
 import { ListFilter } from "lucide-react";
 import { useMemo } from "react";
-import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface Props {
   filteredSales: GetOrdersQuery["orders"][number]["sales"];
@@ -53,7 +53,12 @@ export const SalesChart = ({
   range,
 }: Props) => {
   const totalFilteredSalesAmount = useMemo(() => {
-    return filteredSales.reduce((sum, sale) => sum + sale.quantity, 0);
+    return filteredSales.reduce(
+      (sum, sale) =>
+        sum +
+        sale.quantity * Number(sale.budgetLine?.estimatedUnitPrice ?? "0"),
+      0,
+    );
   }, [filteredSales]);
 
   const data = useMemo(() => {
@@ -180,6 +185,7 @@ export const SalesChart = ({
               axisLine={false}
               tickMargin={10}
             />
+            <YAxis tickLine={false} axisLine={false} tickMargin={20} />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Area
               type="monotone"

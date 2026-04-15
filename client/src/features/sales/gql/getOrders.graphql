@@ -20,6 +20,7 @@ query getOrders($editionId: Float!, $from: String, $to: String) {
       budgetLine {
         id
         name
+        estimatedUnitPrice
         category {
           id
           name
