@@ -10,6 +10,7 @@ export function formatTimestampToLocaleString(
   value: string,
   formatStr: string = DEFAULT_FORMAT,
 ): string {
+  console.log(value);
   const trimmed = value.trim();
   if (!trimmed) {
     return "—";
