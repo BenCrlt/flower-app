@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatTimestampToLocaleString } from "@/utils/DateUtils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { ExtraInfosCell } from "./extra-infos-cell";
 
 export interface SalesTableRow {
   id: number;
@@ -53,11 +54,8 @@ export function getColumns(): ColumnDef<SalesTableRow>[] {
       ),
     },
     {
-      header: "Acheteur",
-      accessorFn: (row) =>
-        row.payerFirstName && row.payerLastName
-          ? `${row.payerFirstName} ${row.payerLastName}`
-          : "-",
+      header: "Données complémentaires",
+      cell: ({ row }) => <ExtraInfosCell row={row.original} />,
     },
     {
       accessorKey: "totalAmount",
