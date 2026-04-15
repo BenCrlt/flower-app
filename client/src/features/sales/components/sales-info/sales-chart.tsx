@@ -128,8 +128,8 @@ export const SalesChart = ({
   } satisfies ChartConfig;
 
   return (
-    <Card>
-      <CardHeader>
+    <Card className="h-full min-h-0">
+      <CardHeader className="shrink-0">
         <CardTitle>Evolution des ventes</CardTitle>
         <CardAction>
           <DropdownMenu>
@@ -175,9 +175,16 @@ export const SalesChart = ({
           }).format(totalFilteredSalesAmount)}
         </CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="h-[280px] w-full">
-          <AreaChart accessibilityLayer data={data}>
+      <CardContent className="flex min-h-0 flex-1 flex-col justify-center pb-0">
+        <ChartContainer
+          config={chartConfig}
+          className="aspect-auto h-[280px] w-full max-w-full justify-center"
+        >
+          <AreaChart
+            accessibilityLayer
+            data={data}
+            margin={{ top: 12, right: 16, bottom: 8, left: 8 }}
+          >
             <CartesianGrid vertical={false} />
             <XAxis
               dataKey="label"
@@ -185,7 +192,12 @@ export const SalesChart = ({
               axisLine={false}
               tickMargin={10}
             />
-            <YAxis tickLine={false} axisLine={false} tickMargin={20} />
+            <YAxis
+              tickLine={false}
+              axisLine={false}
+              tickMargin={12}
+              width={48}
+            />
             <ChartTooltip content={<ChartTooltipContent />} />
             <Area
               type="monotone"
