@@ -7,7 +7,6 @@ export async function loadSales(orderIds: number[]): Promise<Sale[][]> {
     .select()
     .from(salesTable)
     .where(inArray(salesTable.orderId, orderIds))
-    .groupBy(salesTable.orderId)
     .execute()
     .then((results) =>
       results.reduce(

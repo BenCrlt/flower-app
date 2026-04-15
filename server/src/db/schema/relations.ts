@@ -4,6 +4,7 @@ import { budgetCategoriesTable } from "./budget-categories.js";
 import { budgetLinesTable } from "./budget-lines.js";
 import { editionsTable } from "./editions.js";
 import { invoicesTable } from "./invoices.js";
+import { orderOriginsTable } from "./order-origins.js";
 import { ordersTable } from "./orders.js";
 import { paymentsTable } from "./payments.js";
 import { salesTable } from "./sales.js";
@@ -91,6 +92,10 @@ export const ordersRelations = relations(ordersTable, ({ one, many }) => ({
     references: [user.id],
   }),
   sales: many(salesTable),
+  origin: one(orderOriginsTable, {
+    fields: [ordersTable.originId],
+    references: [orderOriginsTable.id],
+  }),
 }));
 
 export const usersRelations = relations(user, ({ many }) => ({
@@ -102,3 +107,10 @@ export const usersRelations = relations(user, ({ many }) => ({
 export const vendorsRelations = relations(vendorsTable, ({ many }) => ({
   invoices: many(invoicesTable),
 }));
+
+export const orderOriginsRelations = relations(
+  orderOriginsTable,
+  ({ many }) => ({
+    orders: many(ordersTable),
+  }),
+);

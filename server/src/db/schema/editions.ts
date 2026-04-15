@@ -2,9 +2,9 @@ import { drizzleSilk } from "@gqloom/drizzle";
 import { InferSelectModel, sql } from "drizzle-orm";
 import {
   boolean,
-  date,
   integer,
   pgTable,
+  timestamp,
   uniqueIndex,
   varchar,
 } from "drizzle-orm/pg-core";
@@ -15,7 +15,8 @@ export const editionsTable = drizzleSilk(
     {
       id: integer().primaryKey().generatedAlwaysAsIdentity(),
       name: varchar({ length: 255 }).notNull(),
-      startDate: date().notNull(),
+      startDate: timestamp({ withTimezone: true }).notNull(),
+      endDate: timestamp({ withTimezone: true }).notNull(),
       active: boolean().notNull(),
     },
     (table) => [

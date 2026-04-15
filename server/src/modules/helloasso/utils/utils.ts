@@ -1,40 +1,28 @@
 import { eq } from "drizzle-orm";
 import { db } from "../../../db/index.js";
-import { User, user } from "../../../db/schema/index.js";
-import { auth } from "../../../utils/auth.js";
+import { OrderOrigin, orderOriginsTable } from "../../../db/schema/index.js";
 
-const HELLO_ASSO_USERNAME = "helloasso";
+const HELLO_ASSO_ORIGIN_NAME = "HelloAsso";
 
-export async function getHelloAssoUser(): Promise<User> {
-  const helloAssoUser = await db.query.user.findFirst({
-    where: eq(user.username, HELLO_ASSO_USERNAME),
+export async function getHelloAssoOrigin(): Promise<OrderOrigin> {
+  const helloAssoOrigin = await db.query.orderOriginsTable.findFirst({
+    where: eq(orderOriginsTable.name, HELLO_ASSO_ORIGIN_NAME),
   });
 
-  if (helloAssoUser) {
-    return helloAssoUser;
+  if (helloAssoOrigin) {
+    return helloAssoOrigin;
   }
 
-  const newHelloAssoUserResponse = await auth.api.createUser({
-    body: {
-      email: `${HELLO_ASSO_USERNAME}@flower.fr`,
-      password: process.env.HELLO_ASSO_USER_PASSWORD!,
-      name: "Hello Asso",
-      role: "user",
-    },
-  });
+  const [newHelloAssoOrigin] = await db
+    .insert(orderOriginsTable)
+    .values({
+      name: HELLO_ASSO_ORIGIN_NAME,
+    })
+    .returning();
 
-  await db
-    .update(user)
-    .set({ username: HELLO_ASSO_USERNAME })
-    .where(eq(user.id, newHelloAssoUserResponse.user.id));
-
-  const helloAssoUserCreated = await db.query.user.findFirst({
-    where: eq(user.id, HELLO_ASSO_USERNAME),
-  });
-
-  if (!helloAssoUserCreated) {
-    throw new Error("[HelloAsso] getHelloAssoUser: Failed to create user");
+  if (!newHelloAssoOrigin) {
+    throw new Error("[HelloAsso] getHelloAssoOrigin: Failed to create origin");
   }
 
-  return helloAssoUserCreated;
+  return newHelloAssoOrigin;
 }

@@ -1,9 +1,17 @@
 import { field, query, resolver } from "@gqloom/core";
-import _ from "lodash";
 import { z } from "zod";
-import { ordersTable, salesTable, user } from "../../db/schema/index.js";
+import { db } from "../../db/index.js";
+import {
+  budgetLinesTable,
+  orderOriginsTable,
+  ordersTable,
+  salesTable,
+  user,
+} from "../../db/schema/index.js";
 import { loadAuthors } from "../payment/utils/loadAuthors.js";
 import { getOrders, getOrdersInput } from "./utils/getOrders.js";
+import { loadBudgetLines } from "./utils/loadBudgetLines.js";
+import { loadOrderOrigins } from "./utils/loadOrderOrigins.js";
 import { loadSales } from "./utils/loadSales.js";
 import { loadTotalAmount } from "./utils/loadTotalAmout.js";
 
@@ -24,5 +32,26 @@ export const orderResolver = resolver.of(ordersTable, {
 
   author: field(user.$nullable())
     .derivedFrom("authorId")
-    .load(async (orders) => loadAuthors(_.map(orders, "authorId"))),
+    .load(async (orders) =>
+      loadAuthors(orders.map((order) => order.authorId)),
+    ),
+  origin: field(orderOriginsTable.$nullable())
+    .derivedFrom("originId")
+    .load(async (orders) =>
+      loadOrderOrigins(orders.map((order) => order.originId)),
+    ),
+});
+
+export const salesResolver = resolver.of(salesTable, {
+  budgetLine: field(budgetLinesTable.$nullable())
+    .derivedFrom("budgetLineId")
+    .load(async (sales) =>
+      loadBudgetLines(sales.map((sale) => sale.budgetLineId)),
+    ),
+});
+
+export const orderOriginResolver = resolver.of(orderOriginsTable, {
+  orderOrigins: query(orderOriginsTable.$list()).resolve(async () => {
+    return db.query.orderOriginsTable.findMany();
+  }),
 });

@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { formatTimestampToLocaleString } from "@/utils/DateUtils";
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
+import { ExtraInfosCell } from "./extra-infos-cell";
 
 export interface SalesTableRow {
   id: number;
@@ -13,16 +14,27 @@ export interface SalesTableRow {
   payerLastName: string | null;
   payerEmail: string | null;
   helloAssoOrderId: number | null;
+  originName: string;
   authorUsername: string | null;
+  sales: {
+    id: number;
+    quantity: number;
+    budgetLineName: string;
+    estimatedUnitPrice: number;
+    categoryName: string | null;
+    categoryColor: string | null;
+  }[];
 }
 
 export function getColumns(): ColumnDef<SalesTableRow>[] {
   return [
     {
-      accessorKey: "authorUsername",
+      accessorKey: "originName",
       meta: { className: "w-px whitespace-nowrap" },
-      header: ({ column }) => <SortableHeader column={column} title="Auteur" />,
-      cell: ({ row }) => <Badge>{row.original.authorUsername}</Badge>,
+      header: ({ column }) => (
+        <SortableHeader column={column} title="Origine" />
+      ),
+      cell: ({ row }) => <Badge>{row.original.originName}</Badge>,
     },
     {
       header: ({ column }) => (
@@ -45,11 +57,17 @@ export function getColumns(): ColumnDef<SalesTableRow>[] {
       ),
     },
     {
-      header: "Acheteur",
-      accessorFn: (row) =>
-        row.payerFirstName && row.payerLastName
-          ? `${row.payerFirstName} ${row.payerLastName}`
-          : "-",
+      header: "Auteur",
+      accessorKey: "authorUsername",
+      cell: ({ row }) => (
+        <span className="font-medium">
+          {row.original.authorUsername ?? "-"}
+        </span>
+      ),
+    },
+    {
+      header: "Données complémentaires",
+      cell: ({ row }) => <ExtraInfosCell row={row.original} />,
     },
     {
       accessorKey: "totalAmount",

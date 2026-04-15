@@ -1,0 +1,6 @@
+query getOrderOrigins {
+  orderOrigins {
+    id
+    name
+  }
+}
