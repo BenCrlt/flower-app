@@ -24,7 +24,8 @@ async function main() {
 
   await db.insert(editionsTable).values({
     name: "FMF 2026",
-    startDate: "2026-06-27",
+    startDate: new Date("2026-06-27 16:00:00 +02:00"),
+    endDate: new Date("2026-06-28 12:00:00 +02:00"),
     active: true,
   });
 

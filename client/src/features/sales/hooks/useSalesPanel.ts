@@ -3,74 +3,53 @@ import { useEdition } from "@/features/edition/EditionContext";
 import { GetOrdersQuery } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { subMonths } from "date-fns";
-import _ from "lodash";
 import { useMemo, useState } from "react";
 import { getColumns, SalesTableRow } from "../components/columns";
 import { useGetOrdersQuery } from "./getOrdersQuery";
+import { useGetOrderOriginsQuery } from "./useGetOrderOrigins";
 
 interface UseSalesPanelResult {
-  authorIdsFilter: string[];
-  handleSelectAuthor: (authorId: string, checked: boolean) => void;
-  authorOptions: { id: string; name: string }[];
+  originIdsFilter: number[];
+  handleSelectOrigin: (originId: number, checked: boolean) => void;
+  originOptions: { id: number; name: string }[];
   dateRange: StrictDateRange;
   handleSelectDateRange: (dateRange: StrictDateRange) => void;
-  filteredOrders: GetOrdersQuery["orders"];
+  orders: GetOrdersQuery["orders"];
   columns: ColumnDef<SalesTableRow>[];
   rows: SalesTableRow[];
 }
 
 export function useSalesPanel(): UseSalesPanelResult {
   const { edition } = useEdition();
-  const [authorIdsFilter, setAuthorIdsFilter] = useState<string[]>([]);
+  const [originIdsFilter, setOriginIdsFilter] = useState<number[]>([]);
   const [dateRange, setDateRange] = useState<StrictDateRange>({
     from: subMonths(new Date(), 2),
     to: new Date(),
   });
+
+  const { data: orderOriginsOptions } = useGetOrderOriginsQuery();
 
   const { data } = useGetOrdersQuery({
     variables: {
       editionId: edition.id,
       from: dateRange.from ? dateRange.from.toISOString() : undefined,
       to: dateRange.to ? dateRange.to.toISOString() : undefined,
+      originIds: originIdsFilter.length ? originIdsFilter : undefined,
     },
   });
 
-  const handleSelectAuthor = (authorId: string, checked: boolean) => {
-    setAuthorIdsFilter((previous) => {
+  const handleSelectOrigin = (originId: number, checked: boolean) => {
+    setOriginIdsFilter((previous) => {
       if (checked) {
-        return [...previous, authorId];
+        return [...previous, originId];
       }
-      return previous.filter((id) => id !== authorId);
+      return previous.filter((id) => id !== originId);
     });
   };
 
-  const authorOptions = useMemo(() => {
-    return _.uniqBy(
-      data?.orders.map((order) => ({
-        id: order.authorId,
-        name: order.author?.username ?? "",
-      })),
-      "id",
-    );
-  }, [data]);
-
-  const filteredOrders = useMemo(() => {
-    return (
-      data?.orders.filter((order) => {
-        if (!authorIdsFilter.length) {
-          return true;
-        }
-        console.log(order.authorId);
-        console.log(authorIdsFilter);
-
-        return authorIdsFilter.includes(order.authorId);
-      }) || []
-    );
-  }, [authorIdsFilter, data]);
-
   const rows = useMemo<SalesTableRow[]>(
     () =>
-      filteredOrders.map((order) => ({
+      data?.orders.map((order) => ({
         id: order.id,
         totalAmount: order.totalAmount,
         executedAt: order.executedAt,
@@ -87,8 +66,9 @@ export function useSalesPanel(): UseSalesPanelResult {
           categoryName: sale.budgetLine?.category?.name ?? null,
           categoryColor: sale.budgetLine?.category?.color ?? null,
         })),
+        originName: order.origin?.name ?? "Inconnu",
       })) || [],
-    [filteredOrders],
+    [data],
   );
 
   const columns = getColumns();
@@ -98,13 +78,13 @@ export function useSalesPanel(): UseSalesPanelResult {
   };
 
   return {
-    authorIdsFilter,
-    handleSelectAuthor,
-    authorOptions,
+    originIdsFilter,
+    handleSelectOrigin,
+    originOptions: orderOriginsOptions?.orderOrigins ?? [],
     dateRange,
     handleSelectDateRange,
-    filteredOrders,
     columns,
     rows,
+    orders: data?.orders ?? [],
   };
 }

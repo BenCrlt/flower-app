@@ -7,27 +7,27 @@ import { SalesInfo } from "./sales-info";
 
 export function SalesPanel() {
   const {
-    authorIdsFilter,
-    handleSelectAuthor,
-    authorOptions,
+    originIdsFilter,
+    handleSelectOrigin,
+    originOptions,
     dateRange,
     columns,
     rows,
     handleSelectDateRange,
-    filteredOrders,
+    orders,
   } = useSalesPanel();
 
   return (
     <div className="flex flex-col gap-4">
       <TypographyH2>Ventes</TypographyH2>
       <SalesPanelActionsAndFiltersCard
-        authorIdsFilter={authorIdsFilter}
-        handleSelectAuthor={handleSelectAuthor}
-        authorOptions={authorOptions}
+        originIdsFilter={originIdsFilter}
+        handleSelectOrigin={handleSelectOrigin}
+        originOptions={originOptions}
         dateRange={dateRange}
         handleSelectDateRange={handleSelectDateRange}
       />
-      <SalesInfo filteredOrders={filteredOrders} dateRange={dateRange} />
+      <SalesInfo orders={orders} dateRange={dateRange} />
       <DataTable
         columns={columns}
         data={rows}

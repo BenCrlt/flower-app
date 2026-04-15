@@ -14,6 +14,7 @@ export interface SalesTableRow {
   payerLastName: string | null;
   payerEmail: string | null;
   helloAssoOrderId: number | null;
+  originName: string;
   authorUsername: string | null;
   sales: {
     id: number;
@@ -28,10 +29,12 @@ export interface SalesTableRow {
 export function getColumns(): ColumnDef<SalesTableRow>[] {
   return [
     {
-      accessorKey: "authorUsername",
+      accessorKey: "originName",
       meta: { className: "w-px whitespace-nowrap" },
-      header: ({ column }) => <SortableHeader column={column} title="Auteur" />,
-      cell: ({ row }) => <Badge>{row.original.authorUsername}</Badge>,
+      header: ({ column }) => (
+        <SortableHeader column={column} title="Origine" />
+      ),
+      cell: ({ row }) => <Badge>{row.original.originName}</Badge>,
     },
     {
       header: ({ column }) => (
@@ -51,6 +54,15 @@ export function getColumns(): ColumnDef<SalesTableRow>[] {
             {formatTimestampToLocaleString(row.original.executedAt, "HH:mm")}
           </span>
         </div>
+      ),
+    },
+    {
+      header: "Auteur",
+      accessorKey: "authorUsername",
+      cell: ({ row }) => (
+        <span className="font-medium">
+          {row.original.authorUsername ?? "-"}
+        </span>
       ),
     },
     {

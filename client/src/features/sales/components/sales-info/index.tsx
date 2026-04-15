@@ -5,11 +5,11 @@ import { SalesChart } from "./sales-chart";
 import { TopProductsCard } from "./top-products-card";
 
 interface Props {
-  filteredOrders: GetOrdersQuery["orders"];
+  orders: GetOrdersQuery["orders"];
   dateRange: StrictDateRange;
 }
 
-export const SalesInfo = ({ filteredOrders, dateRange }: Props) => {
+export const SalesInfo = ({ orders, dateRange }: Props) => {
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
 
   const handleSelectCategory = (categoryId: number, checked: boolean) => {
@@ -26,7 +26,7 @@ export const SalesInfo = ({ filteredOrders, dateRange }: Props) => {
       number,
       Pick<BudgetCategoriesItem, "id" | "name" | "color">
     >();
-    filteredOrders.forEach((order) =>
+    orders.forEach((order) =>
       order.sales.forEach((sale) => {
         if (!sale.budgetLine?.category) {
           return;
@@ -44,11 +44,11 @@ export const SalesInfo = ({ filteredOrders, dateRange }: Props) => {
       name,
       color,
     }));
-  }, [filteredOrders]);
+  }, [orders]);
 
   const filteredSales = useMemo(
     () =>
-      filteredOrders.flatMap((order) =>
+      orders.flatMap((order) =>
         order.sales.filter((sale) => {
           if (!selectedCategoryIds.length || !sale.budgetLine?.category?.id) {
             return true;
@@ -56,7 +56,7 @@ export const SalesInfo = ({ filteredOrders, dateRange }: Props) => {
           return selectedCategoryIds.includes(sale.budgetLine.category.id);
         }),
       ),
-    [filteredOrders, selectedCategoryIds],
+    [orders, selectedCategoryIds],
   );
 
   return (

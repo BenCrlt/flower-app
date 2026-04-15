@@ -16,17 +16,17 @@ import {
 import { ListFilter, Store } from "lucide-react";
 
 interface Props {
-  authorIdsFilter: string[];
-  handleSelectAuthor: (authorId: string, checked: boolean) => void;
-  authorOptions: { id: string; name: string }[];
+  originIdsFilter: number[];
+  handleSelectOrigin: (originId: number, checked: boolean) => void;
+  originOptions: { id: number; name: string }[];
   dateRange: StrictDateRange;
   handleSelectDateRange: (dateRange: StrictDateRange) => void;
 }
 
 export const SalesPanelActionsAndFiltersCard = ({
-  authorIdsFilter,
-  authorOptions,
-  handleSelectAuthor,
+  originIdsFilter,
+  originOptions,
+  handleSelectOrigin,
   dateRange,
   handleSelectDateRange,
 }: Props) => {
@@ -45,33 +45,33 @@ export const SalesPanelActionsAndFiltersCard = ({
               dateRange={dateRange}
               handleSelectDateRange={handleSelectDateRange}
             />
-            {authorOptions.length > 0 && (
+            {originOptions.length > 0 && (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <Button
-                    variant={authorIdsFilter.length ? "default" : "outline"}
+                    variant={originIdsFilter.length ? "default" : "outline"}
                     className={"border-dashed max-w-fit"}
                   >
                     <ListFilter />
-                    Auteur{" "}
-                    {authorIdsFilter.length
-                      ? `(${authorIdsFilter.length})`
+                    Origine{" "}
+                    {originIdsFilter.length
+                      ? `(${originIdsFilter.length})`
                       : ""}
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start" className="w-44">
                   <DropdownMenuGroup>
-                    {authorOptions.map((author) => (
+                    {originOptions.map((origin) => (
                       <DropdownMenuCheckboxItem
-                        key={author.id}
+                        key={origin.id}
                         className="capitalize"
-                        checked={authorIdsFilter.includes(author.id)}
+                        checked={originIdsFilter.includes(origin.id)}
                         onSelect={(e) => e.preventDefault()}
                         onCheckedChange={(value) =>
-                          handleSelectAuthor(author.id, value)
+                          handleSelectOrigin(origin.id, value)
                         }
                       >
-                        {author.name}
+                        {origin.name}
                       </DropdownMenuCheckboxItem>
                     ))}
                   </DropdownMenuGroup>

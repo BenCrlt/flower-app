@@ -3,6 +3,7 @@ import { InferSelectModel } from "drizzle-orm";
 import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 import { user } from "./auth.js";
 import { editionsTable } from "./editions.js";
+import { orderOriginsTable } from "./order-origins.js";
 
 export const ordersTable = drizzleSilk(
   pgTable("orders", {
@@ -11,13 +12,14 @@ export const ordersTable = drizzleSilk(
     editionId: integer()
       .notNull()
       .references(() => editionsTable.id),
-    authorId: text()
-      .references(() => user.id)
-      .notNull(),
+    authorId: text().references(() => user.id),
     payerFirstName: text(),
     payerLastName: text(),
     payerEmail: text(),
     helloAssoOrderId: integer().unique(),
+    originId: integer()
+      .references(() => orderOriginsTable.id)
+      .notNull(),
   }),
 );
 
