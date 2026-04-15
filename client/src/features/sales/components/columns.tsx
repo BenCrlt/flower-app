@@ -14,6 +14,14 @@ export interface SalesTableRow {
   payerEmail: string | null;
   helloAssoOrderId: number | null;
   authorUsername: string | null;
+  sales: {
+    id: number;
+    quantity: number;
+    budgetLineName: string;
+    estimatedUnitPrice: number;
+    categoryName: string | null;
+    categoryColor: string | null;
+  }[];
 }
 
 export function getColumns(): ColumnDef<SalesTableRow>[] {

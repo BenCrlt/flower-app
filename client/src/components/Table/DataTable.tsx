@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { cn } from "@/lib/utils";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import {
   ColumnDef,
   ColumnFiltersState,
@@ -31,6 +32,10 @@ interface DataTableProps<TData, TValue> {
   pageSize?: number;
   actions?: (table: TableInstance<TData>) => React.ReactNode;
   onRowClick?: (row: TData) => void;
+  getRowId?: (row: TData) => string;
+  isRowExpandable?: (row: TData) => boolean;
+  renderExpandedRow?: (row: TData) => React.ReactNode;
+  expandOnRowClick?: boolean;
 }
 
 export function DataTable<TData, TValue>({
@@ -39,15 +44,23 @@ export function DataTable<TData, TValue>({
   pageSize = DEFAULT_PAGE_SIZE,
   actions,
   onRowClick,
+  getRowId,
+  isRowExpandable,
+  renderExpandedRow,
+  expandOnRowClick = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const [globalFilter, setGlobalFilter] = useState<any>([]);
+  const [expandedRowIds, setExpandedRowIds] = useState<Record<string, boolean>>(
+    {},
+  );
 
   const table = useReactTable({
     data,
     columns,
+    getRowId,
     initialState: {
       pagination: {
         pageSize,
@@ -67,6 +80,15 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const hasExpandableRows = Boolean(renderExpandedRow);
+  const tableColSpan = columns.length + (hasExpandableRows ? 1 : 0);
+  const handleToggleExpandedRow = (rowId: string) => {
+    setExpandedRowIds((previous) => ({
+      ...previous,
+      [rowId]: !previous[rowId],
+    }));
+  };
+
   return (
     <div>
       {actions && <div className="mb-4">{actions(table)}</div>}
@@ -75,6 +97,7 @@ export function DataTable<TData, TValue>({
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
+                {hasExpandableRows && <TableHead className="w-10" />}
                 {headerGroup.headers.map((header) => (
                   <TableHead
                     key={header.id}
@@ -97,33 +120,84 @@ export function DataTable<TData, TValue>({
           </TableHeader>
           <TableBody>
             {table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                  onClick={() => onRowClick?.(row.original)}
-                  className={onRowClick ? "cursor-pointer" : undefined}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell
-                      key={cell.id}
-                      className={cn(
-                        "border-r last:border-r-0",
-                        (cell.column.columnDef.meta as { className?: string })
-                          ?.className,
-                      )}
+              table.getRowModel().rows.map((row) => {
+                const rowId = row.id;
+                const rowCanExpand = hasExpandableRows
+                  ? isRowExpandable
+                    ? isRowExpandable(row.original)
+                    : true
+                  : false;
+                const isExpanded = !!expandedRowIds[rowId];
+
+                return (
+                  <React.Fragment key={rowId}>
+                    <TableRow
+                      data-state={row.getIsSelected() && "selected"}
+                      onClick={() => {
+                        if (expandOnRowClick && rowCanExpand) {
+                          handleToggleExpandedRow(rowId);
+                        }
+                        onRowClick?.(row.original);
+                      }}
+                      className={
+                        onRowClick || (expandOnRowClick && rowCanExpand)
+                          ? "cursor-pointer"
+                          : undefined
+                      }
                     >
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
+                      {hasExpandableRows && (
+                        <TableCell className="w-10">
+                          {rowCanExpand ? (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              className="size-7"
+                              onClick={(event) => {
+                                event.stopPropagation();
+                                handleToggleExpandedRow(rowId);
+                              }}
+                              aria-label={
+                                isExpanded
+                                  ? "Masquer les détails"
+                                  : "Afficher les détails"
+                              }
+                            >
+                              {isExpanded ? (
+                                <ChevronDown className="size-4" />
+                              ) : (
+                                <ChevronRight className="size-4" />
+                              )}
+                            </Button>
+                          ) : null}
+                        </TableCell>
                       )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+                      {row.getVisibleCells().map((cell) => (
+                        <TableCell
+                          key={cell.id}
+                          className={cn(
+                            "border-r last:border-r-0",
+                            (cell.column.columnDef.meta as { className?: string })
+                              ?.className,
+                          )}
+                        >
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                    {hasExpandableRows && isExpanded && rowCanExpand && (
+                      <TableRow>
+                        <TableCell colSpan={tableColSpan} className="bg-muted/20">
+                          {renderExpandedRow?.(row.original)}
+                        </TableCell>
+                      </TableRow>
+                    )}
+                  </React.Fragment>
+                );
+              })
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-15 text-left">
+                <TableCell colSpan={tableColSpan} className="h-15 text-left">
                   Pas de résultats.
                 </TableCell>
               </TableRow>

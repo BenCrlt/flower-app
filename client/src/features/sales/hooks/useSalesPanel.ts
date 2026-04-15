@@ -79,6 +79,14 @@ export function useSalesPanel(): UseSalesPanelResult {
         payerEmail: order.payerEmail ?? null,
         helloAssoOrderId: order.helloAssoOrderId ?? null,
         authorUsername: order.author?.username ?? null,
+        sales: order.sales.map((sale) => ({
+          id: sale.id,
+          quantity: sale.quantity,
+          budgetLineName: sale.budgetLine?.name ?? "Article inconnu",
+          estimatedUnitPrice: Number(sale.budgetLine?.estimatedUnitPrice ?? 0),
+          categoryName: sale.budgetLine?.category?.name ?? null,
+          categoryColor: sale.budgetLine?.category?.color ?? null,
+        })),
       })) || [],
     [filteredOrders],
   );
