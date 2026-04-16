@@ -4,6 +4,7 @@ import { db } from "../../../db/index.js";
 import {
   budgetCategoriesTable,
   budgetLinesTable,
+  invoicesTable,
   LineType,
   paymentsTable,
   salesTable,
@@ -79,7 +80,13 @@ const getTotalExpenseStatsByCategoryId = async (
       budgetLinesTable,
       eq(paymentsTable.budgetLineId, budgetLinesTable.id),
     )
-    .where(eq(paymentsTable.editionId, editionId))
+    .innerJoin(invoicesTable, eq(paymentsTable.invoiceId, invoicesTable.id))
+    .where(
+      and(
+        eq(paymentsTable.editionId, editionId),
+        eq(invoicesTable.status, "PAID"),
+      ),
+    )
     .groupBy(budgetLinesTable.budgetCategoryId);
 
   return totalEstimatedStats.reduce(

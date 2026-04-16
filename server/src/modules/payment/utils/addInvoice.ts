@@ -42,17 +42,15 @@ export async function addInvoice({
     return null;
   }
 
-  if (invoice.status === "PAID") {
-    await db.insert(paymentsTable).values(
-      payments.map((payment) => ({
-        invoiceId: invoice.id,
-        quantity: payment.quantity,
-        unitPrice: payment.unitPrice.toString(),
-        budgetLineId: payment.budgetLineId,
-        editionId: input.editionId,
-      })),
-    );
-  }
+  await db.insert(paymentsTable).values(
+    payments.map((payment) => ({
+      invoiceId: invoice.id,
+      quantity: payment.quantity,
+      unitPrice: payment.unitPrice.toString(),
+      budgetLineId: payment.budgetLineId,
+      editionId: input.editionId,
+    })),
+  );
 
   return invoice;
 }

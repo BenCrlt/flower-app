@@ -1,4 +1,4 @@
-import { and, eq, inArray, ne, sql } from "drizzle-orm";
+import { and, eq, inArray, sql } from "drizzle-orm";
 import { db } from "../../../db/index.js";
 import { invoicesTable, paymentsTable } from "../../../db/schema/index.js";
 
@@ -12,7 +12,7 @@ export async function getTotalExpense(editionIds: number[]): Promise<number[]> {
     .where(
       and(
         inArray(invoicesTable.editionId, editionIds),
-        ne(invoicesTable.status, "CANCELLED"),
+        eq(invoicesTable.status, "PAID"),
       ),
     )
     .innerJoin(paymentsTable, eq(paymentsTable.invoiceId, invoicesTable.id))
