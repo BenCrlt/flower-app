@@ -47,10 +47,7 @@ export async function updateInvoice({
     .set({
       ...input,
       totalAmount: totalAmount ? totalAmount.toString() : undefined,
-      executedAt:
-        invoiceBeforeUpdate.status !== input.status && input.status === "PAID"
-          ? new Date()
-          : undefined,
+      executedAt: getExecutedAt(invoiceBeforeUpdate.status, input.status),
     })
     .where(eq(invoicesTable.id, id))
     .returning();
@@ -66,17 +63,29 @@ export async function updateInvoice({
       .where(inArray(paymentsTable.id, existingPaymentIds));
   }
 
-  if (invoiceUpdated.status === "PAID") {
-    await db.insert(paymentsTable).values(
-      payments.map((payment) => ({
-        invoiceId: id,
-        quantity: payment.quantity,
-        unitPrice: payment.unitPrice.toString(),
-        budgetLineId: payment.budgetLineId,
-        editionId: input.editionId,
-      })),
-    );
-  }
+  await db.insert(paymentsTable).values(
+    payments.map((payment) => ({
+      invoiceId: id,
+      quantity: payment.quantity,
+      unitPrice: payment.unitPrice.toString(),
+      budgetLineId: payment.budgetLineId,
+      editionId: input.editionId,
+    })),
+  );
 
   return invoiceUpdated;
 }
+
+const getExecutedAt = (
+  oldStatus: z.infer<typeof invoiceStatusSchema>,
+  newStatus?: z.infer<typeof invoiceStatusSchema>,
+) => {
+  if (!newStatus || oldStatus === newStatus) {
+    return undefined;
+  }
+  if (oldStatus !== newStatus && newStatus === "PAID") {
+    return new Date();
+  }
+
+  return null;
+};

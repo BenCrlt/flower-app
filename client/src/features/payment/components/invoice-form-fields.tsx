@@ -113,7 +113,7 @@ export function InvoiceFormFields({
                 <SelectValue placeholder="Sélectionnez un statut..." />
               </SelectTrigger>
               <SelectContent>
-                {[InvoiceStatus.Paid].map((status) => (
+                {Object.values(InvoiceStatus).map((status) => (
                   <SelectItem key={status} value={status}>
                     <InvoiceStatusBadge status={status} />
                   </SelectItem>

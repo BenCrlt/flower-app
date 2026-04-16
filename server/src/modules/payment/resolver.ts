@@ -1,7 +1,11 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
 import _ from "lodash";
-import { invoicesTable, paymentsTable, vendorsTable } from "../../db/schema/index.js";
 import { user } from "../../db/schema/auth.js";
+import {
+  invoicesTable,
+  paymentsTable,
+  vendorsTable,
+} from "../../db/schema/index.js";
 import { addInvoice, addInvoiceInput } from "./utils/addInvoice.js";
 import {
   addOrUpdateVendor,
