@@ -1,4 +1,4 @@
-import { field, query, resolver } from "@gqloom/core";
+import { field, mutation, query, resolver } from "@gqloom/core";
 import { z } from "zod";
 import { db } from "../../db/index.js";
 import {
@@ -9,6 +9,14 @@ import {
   user,
 } from "../../db/schema/index.js";
 import { loadAuthors } from "../payment/utils/loadAuthors.js";
+import {
+  addOrUpdateOrderOrigin,
+  addOrUpdateOrderOriginInput,
+} from "./utils/addOrUpdateOrderOrigin.js";
+import {
+  deleteOrderOrigin,
+  deleteOrderOriginInput,
+} from "./utils/deleteOrderOrigin.js";
 import { getOrders, getOrdersInput } from "./utils/getOrders.js";
 import { loadBudgetLines } from "./utils/loadBudgetLines.js";
 import { loadOrderOrigins } from "./utils/loadOrderOrigins.js";
@@ -32,9 +40,7 @@ export const orderResolver = resolver.of(ordersTable, {
 
   author: field(user.$nullable())
     .derivedFrom("authorId")
-    .load(async (orders) =>
-      loadAuthors(orders.map((order) => order.authorId)),
-    ),
+    .load(async (orders) => loadAuthors(orders.map((order) => order.authorId))),
   origin: field(orderOriginsTable.$nullable())
     .derivedFrom("originId")
     .load(async (orders) =>
@@ -54,4 +60,12 @@ export const orderOriginResolver = resolver.of(orderOriginsTable, {
   orderOrigins: query(orderOriginsTable.$list()).resolve(async () => {
     return db.query.orderOriginsTable.findMany();
   }),
+
+  addOrUpdateOrderOrigin: mutation(orderOriginsTable.$nullable())
+    .input(addOrUpdateOrderOriginInput)
+    .resolve(addOrUpdateOrderOrigin),
+
+  deleteOrderOrigin: mutation(orderOriginsTable.$nullable())
+    .input(deleteOrderOriginInput)
+    .resolve(deleteOrderOrigin),
 });

@@ -117,11 +117,13 @@ export type Mutation = {
   addEdition?: Maybe<EditionsItem>;
   addHelloAssoConfig?: Maybe<HelloAssoConfigItem>;
   addInvoice?: Maybe<InvoicesItem>;
+  addOrUpdateOrderOrigin?: Maybe<OrderOriginsItem>;
   addOrUpdateVendor?: Maybe<VendorsItem>;
   deleteBudgetCategory?: Maybe<BudgetCategoriesItem>;
   deleteBudgetLine?: Maybe<BudgetLinesItem>;
   deleteEdition?: Maybe<EditionsItem>;
   deleteInvoice?: Maybe<InvoicesItem>;
+  deleteOrderOrigin?: Maybe<OrderOriginsItem>;
   deleteVendor?: Maybe<VendorsItem>;
   synchroSales: Array<SalesItem>;
   updateBudgetCategory?: Maybe<BudgetCategoriesItem>;
@@ -177,6 +179,12 @@ export type MutationAddInvoiceArgs = {
 };
 
 
+export type MutationAddOrUpdateOrderOriginArgs = {
+  id?: InputMaybe<Scalars['Float']['input']>;
+  name: Scalars['String']['input'];
+};
+
+
 export type MutationAddOrUpdateVendorArgs = {
   address?: InputMaybe<Scalars['String']['input']>;
   description?: InputMaybe<Scalars['String']['input']>;
@@ -203,6 +211,11 @@ export type MutationDeleteEditionArgs = {
 
 
 export type MutationDeleteInvoiceArgs = {
+  id: Scalars['Float']['input'];
+};
+
+
+export type MutationDeleteOrderOriginArgs = {
   id: Scalars['Float']['input'];
 };
 
