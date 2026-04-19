@@ -39,8 +39,8 @@ export function InvoicesTableFiltersAndActions({ table }: Props): ReactElement {
   };
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center">
         <Input
           placeholder="Rechercher..."
           value={value}
@@ -48,13 +48,13 @@ export function InvoicesTableFiltersAndActions({ table }: Props): ReactElement {
             const value = event.target.value;
             table.setGlobalFilter(value);
           }}
-          className="w-80"
+          className="w-full md:w-80"
         />
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button
               variant={statusFiltered.length ? "default" : "outline"}
-              className={"border-dashed"}
+              className={"w-full border-dashed md:w-auto"}
             >
               <ListFilter />
               Status {statusFiltered.length ? `(${statusFiltered.length})` : ""}
@@ -77,7 +77,9 @@ export function InvoicesTableFiltersAndActions({ table }: Props): ReactElement {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      <AddInvoiceSheet />
+      <div className="flex w-full flex-col md:w-auto [&_button]:w-full md:[&_button]:w-auto">
+        <AddInvoiceSheet />
+      </div>
     </div>
   );
 }

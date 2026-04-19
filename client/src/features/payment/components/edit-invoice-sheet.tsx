@@ -53,7 +53,7 @@ export function EditInvoiceSheet({
       open={open}
       onOpenChange={(o) => (o ? onOpenChange(true) : handleClose())}
     >
-      <SheetContent className="sm:max-w-xl">
+      <SheetContent className="md:max-w-xl">
         <SheetHeader>
           <SheetTitle>{invoice.vendorName}</SheetTitle>
           <SheetDescription>

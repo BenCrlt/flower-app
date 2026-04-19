@@ -43,8 +43,8 @@ export function BudgetTableFiltersAndActions({
   };
 
   return (
-    <div className="flex justify-between">
-      <div className="flex items-center gap-2">
+    <div className="flex flex-col gap-3 lg:flex-row lg:justify-between">
+      <div className="flex flex-col gap-2 md:flex-row md:items-center">
         <Input
           placeholder="Rechercher..."
           value={value}
@@ -52,14 +52,14 @@ export function BudgetTableFiltersAndActions({
             const value = event.target.value;
             table.setGlobalFilter(value);
           }}
-          className="w-80"
+          className="w-full md:w-80"
         />
         {data?.budgetCategories.length && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 variant={categories.length ? "default" : "outline"}
-                className={"border-dashed"}
+                className={"w-full border-dashed md:w-auto"}
               >
                 <ListFilter />
                 Catégories {categories.length ? `(${categories.length})` : ""}
@@ -87,12 +87,13 @@ export function BudgetTableFiltersAndActions({
           </DropdownMenu>
         )}
       </div>
-      <div className="flex items-center gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
         <Tabs
+          className="w-full sm:w-auto"
           defaultValue={LineTypeEnum.Income}
           onValueChange={(value) => onChangeLineType(value as LineTypeEnum)}
         >
-          <TabsList>
+          <TabsList className="grid w-full grid-cols-2 sm:inline-flex sm:w-auto">
             <TabsTrigger value={LineTypeEnum.Income}>
               Recettes
               <PiggyBank />
@@ -103,10 +104,12 @@ export function BudgetTableFiltersAndActions({
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <AddBudgetLineSheet
-          lineType={lineType}
-          allCategories={data?.budgetCategories || []}
-        />
+        <div className="flex w-full flex-col sm:w-auto [&_button]:w-full sm:[&_button]:w-auto">
+          <AddBudgetLineSheet
+            lineType={lineType}
+            allCategories={data?.budgetCategories || []}
+          />
+        </div>
       </div>
     </div>
   );

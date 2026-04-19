@@ -32,15 +32,15 @@ export const SalesPanelActionsAndFiltersCard = ({
 }: Props) => {
   return (
     <Card>
-      <CardContent className="flex items-center justify-between">
-        <div className="flex flex-col gap-3">
+      <CardContent className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+        <div className="flex min-w-0 flex-1 flex-col gap-3">
           <div className="flex flex-col gap-1">
             <CardTitle>Filtres</CardTitle>
             <CardDescription>
               Filtrez les commandes par auteur et période.
             </CardDescription>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center">
             <DateRangePicker
               dateRange={dateRange}
               handleSelectDateRange={handleSelectDateRange}
@@ -50,7 +50,9 @@ export const SalesPanelActionsAndFiltersCard = ({
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant={originIdsFilter.length ? "default" : "outline"}
-                    className={"border-dashed max-w-fit"}
+                    className={
+                      "w-full border-dashed sm:w-auto sm:max-w-fit"
+                    }
                   >
                     <ListFilter />
                     Origine{" "}
@@ -80,7 +82,11 @@ export const SalesPanelActionsAndFiltersCard = ({
             )}
           </div>
         </div>
-        <Button variant="outline" className="border-dashed" size="lg">
+        <Button
+          variant="outline"
+          className="w-full shrink-0 border-dashed md:w-auto"
+          size="lg"
+        >
           <Store />
           Ouvrir la caisse
         </Button>

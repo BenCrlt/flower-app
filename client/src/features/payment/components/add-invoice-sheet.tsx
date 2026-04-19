@@ -50,7 +50,7 @@ export function AddInvoiceSheet(): ReactElement {
           Ajouter <CirclePlus />
         </Button>
       </SheetTrigger>
-      <SheetContent className="sm:max-w-xl">
+      <SheetContent className="md:max-w-xl">
         <SheetHeader>
           <SheetTitle>Nouvelle facture</SheetTitle>
           <SheetDescription>

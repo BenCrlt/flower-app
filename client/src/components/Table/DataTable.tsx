@@ -30,6 +30,8 @@ interface DataTableProps<TData, TValue> {
   data: TData[];
   /** Nombre de lignes par page (pagination client TanStack Table). */
   pageSize?: number;
+  /** Classes sur `<table>` (ex. `table-fixed` pour largeurs stables + ellipsis). */
+  tableClassName?: string;
   actions?: (table: TableInstance<TData>) => React.ReactNode;
   onRowClick?: (row: TData) => void;
   getRowId?: (row: TData) => string;
@@ -42,6 +44,7 @@ export function DataTable<TData, TValue>({
   columns,
   data,
   pageSize = DEFAULT_PAGE_SIZE,
+  tableClassName,
   actions,
   onRowClick,
   getRowId,
@@ -92,8 +95,8 @@ export function DataTable<TData, TValue>({
   return (
     <div>
       {actions && <div className="mb-4">{actions(table)}</div>}
-      <div className="overflow-hidden rounded-md border bg-card">
-        <Table>
+      <div className="w-full min-w-0 overflow-x-auto rounded-md border bg-card">
+        <Table className={tableClassName}>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
               <TableRow key={headerGroup.id}>
