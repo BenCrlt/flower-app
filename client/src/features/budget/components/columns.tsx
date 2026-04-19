@@ -40,11 +40,18 @@ export function getColumns({
     {
       header: ({ column }) => <SortableHeader column={column} title="Nom" />,
       accessorKey: "name",
-      meta: { className: "w-px whitespace-nowrap" },
+      meta: {
+        className: "min-w-0 w-[24%] max-w-[24%] align-top",
+      },
+      cell: ({ row }) => (
+        <span className="block truncate" title={row.original.name}>
+          {row.original.name}
+        </span>
+      ),
     },
     {
       id: "estimatedCost",
-      meta: { className: "w-px whitespace-nowrap" },
+      meta: { className: "min-w-0 w-[10%] whitespace-nowrap text-right" },
       header: ({ column }) => (
         <SortableHeader
           column={column}
@@ -67,7 +74,7 @@ export function getColumns({
     },
     {
       id: "actualCost",
-      meta: { className: "w-px whitespace-nowrap" },
+      meta: { className: "min-w-0 w-[10%] whitespace-nowrap text-right" },
       header: ({ column }) => (
         <SortableHeader
           column={column}
@@ -83,7 +90,7 @@ export function getColumns({
     },
     {
       id: "gap",
-      meta: { className: "w-px whitespace-nowrap" },
+      meta: { className: "min-w-0 w-[10%] whitespace-nowrap text-right" },
       header: ({ column }) => (
         <GapCellHeader
           column={column}
@@ -113,7 +120,7 @@ export function getColumns({
     {
       header: "Description",
       accessorKey: "description",
-      meta: { className: "max-w-48" },
+      meta: { className: "min-w-0 w-[18%] max-w-[18%] align-top" },
       cell: ({ getValue }) => (
         <span className="block truncate" title={getValue<string>()}>
           {getValue<string>()}
@@ -121,7 +128,7 @@ export function getColumns({
       ),
     },
     {
-      meta: { className: "w-px whitespace-nowrap" },
+      meta: { className: "min-w-0 w-[11%] max-w-[11%] align-top" },
       header: ({ column }) => (
         <SortableHeader column={column} title="Catégorie" />
       ),
@@ -131,15 +138,21 @@ export function getColumns({
         return filterValue.includes(row.getValue(columnId));
       },
       cell: ({ row }) => (
-        <CategoryBadge
-          name={row.original.categoryName}
-          color={row.original.categoryColor}
-        />
+        <div className="min-w-0 max-w-full" title={row.original.categoryName}>
+          <CategoryBadge
+            name={row.original.categoryName}
+            color={row.original.categoryColor}
+            className="box-border w-full min-w-0 max-w-full truncate"
+          />
+        </div>
       ),
     },
     {
       id: "actions",
-      meta: { className: "w-px whitespace-nowrap" },
+      meta: {
+        className:
+          "w-[7%] min-w-[3rem] whitespace-nowrap text-right align-top",
+      },
       cell: ({ row }) => (
         <BudgetLineActionsCell
           row={row}

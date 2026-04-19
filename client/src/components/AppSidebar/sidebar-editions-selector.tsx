@@ -12,19 +12,33 @@ import {
 } from "@/components/ui/sidebar";
 import { useEdition } from "@/features/edition/EditionContext";
 import { CalendarDays, ChevronsUpDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 import { SidebarEditionItem } from "./sidebar-edition-item";
 
-export function SidebarEditionSelector() {
+type DropdownSide = "top" | "right" | "bottom" | "left";
+
+interface SidebarEditionSelectorProps {
+  /** Position du menu (préférer `bottom` sur mobile). */
+  dropdownContentSide?: DropdownSide;
+  className?: string;
+  triggerClassName?: string;
+}
+
+export function SidebarEditionSelector({
+  dropdownContentSide = "right",
+  className,
+  triggerClassName,
+}: SidebarEditionSelectorProps) {
   const { edition, handleSetEdition, editions } = useEdition();
 
   return (
-    <SidebarMenu>
+    <SidebarMenu className={className}>
       <SidebarMenuItem>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <SidebarMenuButton
               size="lg"
-              className="flex justify-between"
+              className={cn("flex justify-between", triggerClassName)}
               aria-label="Changer d’édition"
             >
               <div className="flex items-center gap-3">
@@ -43,10 +57,10 @@ export function SidebarEditionSelector() {
             </SidebarMenuButton>
           </DropdownMenuTrigger>
           <DropdownMenuContent
-            side="right"
+            side={dropdownContentSide}
             align="start"
             sideOffset={8}
-            className="min-w-48"
+            className="max-h-[min(70vh,24rem)] min-w-48 overflow-y-auto"
           >
             <DropdownMenuLabel className="text-xs font-medium text-muted-foreground">
               Editions

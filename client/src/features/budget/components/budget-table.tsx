@@ -56,9 +56,10 @@ export function BudgetTable() {
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full min-w-0 flex-col gap-4">
       <TypographyH2>Budget prévisionnel</TypographyH2>
       <DataTable
+        tableClassName="table-fixed w-full"
         columns={columns}
         data={rows}
         onRowClick={(row) => setSelectedRow(row)}
