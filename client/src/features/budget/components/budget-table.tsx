@@ -2,6 +2,7 @@ import { DataTable } from "@/components/Table/DataTable";
 import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
 import { LineTypeEnum } from "@/generated/graphql";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { useMemo, useState } from "react";
 import { useDeleteBudgetLineMutation } from "../hooks/useDeleteBudgetLineMutation";
 import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategoriesQuery";
@@ -12,6 +13,7 @@ import { BudgetTableRow, getColumns } from "./columns";
 import { EditBudgetLineSheet } from "./edit-budget-line-sheet";
 
 export function BudgetTable() {
+  const isMobile = useIsMobile();
   const { edition } = useEdition();
   const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Income);
   const [selectedRow, setSelectedRow] = useState<BudgetTableRow | null>(null);
@@ -53,12 +55,14 @@ export function BudgetTable() {
     allCategories: categoriesData?.budgetCategories,
     showGapInPercent,
     onToggleGapInPercent: () => setShowGapInPercent((prev) => !prev),
+    isMobile,
   });
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex w-full min-w-0 flex-col gap-4">
       <TypographyH2>Budget prévisionnel</TypographyH2>
       <DataTable
+        tableClassName={isMobile ? "table-fixed w-full" : undefined}
         columns={columns}
         data={rows}
         onRowClick={(row) => setSelectedRow(row)}
