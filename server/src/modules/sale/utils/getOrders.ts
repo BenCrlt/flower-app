@@ -1,4 +1,4 @@
-import { and, eq, gte, inArray, lt } from "drizzle-orm";
+import { and, desc, eq, gte, inArray, lt } from "drizzle-orm";
 import { z } from "zod";
 import { ordersTable } from "../../../db/schema/orders.js";
 import { db } from "../../../index.js";
@@ -23,5 +23,6 @@ export function getOrders({
       to ? lt(ordersTable.executedAt, new Date(to)) : undefined,
       originIds?.length ? inArray(ordersTable.originId, originIds) : undefined,
     ),
+    orderBy: [desc(ordersTable.executedAt)],
   });
 }

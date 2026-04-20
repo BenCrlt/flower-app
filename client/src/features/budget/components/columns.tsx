@@ -28,6 +28,7 @@ interface GetBudgetLineColumnsProps {
   allCategories?: BudgetCategoriesItem[];
   showGapInPercent: boolean;
   onToggleGapInPercent: () => void;
+  isMobile: boolean;
 }
 
 export function getColumns({
@@ -35,23 +36,68 @@ export function getColumns({
   allCategories,
   showGapInPercent,
   onToggleGapInPercent,
+  isMobile,
 }: GetBudgetLineColumnsProps): ColumnDef<BudgetTableRow>[] {
+  if (isMobile) {
+    return [
+      {
+        header: ({ column }) => <SortableHeader column={column} title="Nom" />,
+        accessorKey: "name",
+        cell: ({ row }) => (
+          <span className="block truncate" title={row.original.name}>
+            {row.original.name}
+          </span>
+        ),
+      },
+      {
+        id: "estimatedCost",
+        header: ({ column }) => (
+          <SortableHeader
+            column={column}
+            title={
+              <span className="flex items-center gap-1">
+                Coût <MessageCircleQuestion className="h-4 w-4" />
+              </span>
+            }
+            className="justify-end"
+          />
+        ),
+        accessorFn: (row) => row.estimatedUnitPrice * row.estimatedQuantity,
+        cell: ({ row }) => (
+          <RowPrice
+            amount={
+              row.original.estimatedUnitPrice * row.original.estimatedQuantity
+            }
+          />
+        ),
+      },
+      {
+        id: "actualCost",
+        meta: { className: "w-fit" },
+        header: ({ column }) => (
+          <SortableHeader
+            column={column}
+            title={
+              <span className="flex items-center gap-1">
+                Coût <MessageCircleCheck className="h-4 w-4" />
+              </span>
+            }
+            className="justify-end"
+          />
+        ),
+        cell: ({ row }) => <RowPrice amount={row.original.realCost} />,
+      },
+    ];
+  }
   return [
     {
       header: ({ column }) => <SortableHeader column={column} title="Nom" />,
       accessorKey: "name",
-      meta: {
-        className: "min-w-0 w-[24%] max-w-[24%] align-top",
-      },
-      cell: ({ row }) => (
-        <span className="block truncate" title={row.original.name}>
-          {row.original.name}
-        </span>
-      ),
+      meta: { className: "w-px whitespace-nowrap" },
     },
     {
       id: "estimatedCost",
-      meta: { className: "min-w-0 w-[10%] whitespace-nowrap text-right" },
+      meta: { className: "w-px whitespace-nowrap" },
       header: ({ column }) => (
         <SortableHeader
           column={column}
@@ -74,7 +120,7 @@ export function getColumns({
     },
     {
       id: "actualCost",
-      meta: { className: "min-w-0 w-[10%] whitespace-nowrap text-right" },
+      meta: { className: "w-px whitespace-nowrap" },
       header: ({ column }) => (
         <SortableHeader
           column={column}
@@ -90,7 +136,7 @@ export function getColumns({
     },
     {
       id: "gap",
-      meta: { className: "min-w-0 w-[10%] whitespace-nowrap text-right" },
+      meta: { className: "w-px whitespace-nowrap" },
       header: ({ column }) => (
         <GapCellHeader
           column={column}
@@ -120,7 +166,7 @@ export function getColumns({
     {
       header: "Description",
       accessorKey: "description",
-      meta: { className: "min-w-0 w-[18%] max-w-[18%] align-top" },
+      meta: { className: "max-w-48" },
       cell: ({ getValue }) => (
         <span className="block truncate" title={getValue<string>()}>
           {getValue<string>()}
@@ -128,7 +174,7 @@ export function getColumns({
       ),
     },
     {
-      meta: { className: "min-w-0 w-[11%] max-w-[11%] align-top" },
+      meta: { className: "w-px whitespace-nowrap" },
       header: ({ column }) => (
         <SortableHeader column={column} title="Catégorie" />
       ),
@@ -138,21 +184,15 @@ export function getColumns({
         return filterValue.includes(row.getValue(columnId));
       },
       cell: ({ row }) => (
-        <div className="min-w-0 max-w-full" title={row.original.categoryName}>
-          <CategoryBadge
-            name={row.original.categoryName}
-            color={row.original.categoryColor}
-            className="box-border w-full min-w-0 max-w-full truncate"
-          />
-        </div>
+        <CategoryBadge
+          name={row.original.categoryName}
+          color={row.original.categoryColor}
+        />
       ),
     },
     {
       id: "actions",
-      meta: {
-        className:
-          "w-[7%] min-w-[3rem] whitespace-nowrap text-right align-top",
-      },
+      meta: { className: "w-px whitespace-nowrap" },
       cell: ({ row }) => (
         <BudgetLineActionsCell
           row={row}

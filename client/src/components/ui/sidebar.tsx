@@ -30,6 +30,7 @@ const SIDEBAR_COOKIE_MAX_AGE = 60 * 60 * 24 * 7
 const SIDEBAR_WIDTH = "16rem"
 const SIDEBAR_WIDTH_ICON = "3rem"
 const SIDEBAR_KEYBOARD_SHORTCUT = "b"
+const SIDEBAR_AUTO_COLLAPSE_BREAKPOINT = 1200
 
 type SidebarContextProps = {
   state: "expanded" | "collapsed"
@@ -107,6 +108,21 @@ function SidebarProvider({
     window.addEventListener("keydown", handleKeyDown)
     return () => window.removeEventListener("keydown", handleKeyDown)
   }, [toggleSidebar])
+
+  // Auto-collapse on narrow desktop widths to keep content usable.
+  React.useEffect(() => {
+    if (isMobile) return
+
+    const handleDesktopResize = () => {
+      if (window.innerWidth < SIDEBAR_AUTO_COLLAPSE_BREAKPOINT) {
+        setOpen((previousOpen) => (previousOpen ? false : previousOpen))
+      }
+    }
+
+    handleDesktopResize()
+    window.addEventListener("resize", handleDesktopResize)
+    return () => window.removeEventListener("resize", handleDesktopResize)
+  }, [isMobile, setOpen])
 
   // We add a state so that we can do data-state="expanded" or "collapsed".
   // This makes it easier to style the sidebar with Tailwind classes.
