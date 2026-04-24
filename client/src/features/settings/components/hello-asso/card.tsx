@@ -13,8 +13,8 @@ import { useEdition } from "@/features/edition/EditionContext";
 import { addDays, formatDate, subYears } from "date-fns";
 import { Check } from "lucide-react";
 import { toast } from "sonner";
-import { useGetHelloAssoConfigQuery } from "../hooks/useGetHelloAssoConfigQuery";
-import { useSynchroSalesMutation } from "../hooks/useSynchroSalesMutation";
+import { useGetHelloAssoConfigQuery } from "../../hooks/useGetHelloAssoConfigQuery";
+import { useSynchroSalesMutation } from "../../hooks/useSynchroSalesMutation";
 import { CreateConfigDialog } from "./create-config-dialog";
 
 export const HelloAssoCard = () => {
