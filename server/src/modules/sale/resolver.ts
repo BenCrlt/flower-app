@@ -1,6 +1,5 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
 import { z } from "zod";
-import { db } from "../../db/index.js";
 import {
   budgetLinesTable,
   orderOriginsTable,
@@ -9,7 +8,6 @@ import {
   user,
 } from "../../db/schema/index.js";
 import { loadAuthors } from "../payment/utils/loadAuthors.js";
-import { isOrderOriginDeletable } from "../utils.js";
 import {
   addOrUpdateOrderOrigin,
   addOrUpdateOrderOriginInput,
@@ -18,6 +16,10 @@ import {
   deleteOrderOrigin,
   deleteOrderOriginInput,
 } from "./utils/deleteOrderOrigin.js";
+import {
+  getOrderOrigins,
+  getOrderOriginsInput,
+} from "./utils/getOrderOrigins.js";
 import { getOrders, getOrdersInput } from "./utils/getOrders.js";
 import { loadBudgetLines } from "./utils/loadBudgetLines.js";
 import { loadOrderOrigins } from "./utils/loadOrderOrigins.js";
@@ -58,13 +60,9 @@ export const salesResolver = resolver.of(salesTable, {
 });
 
 export const orderOriginResolver = resolver.of(orderOriginsTable, {
-  orderOrigins: query(orderOriginsTable.$list()).resolve(async () => {
-    return db.query.orderOriginsTable.findMany();
-  }),
-
-  isDeletable: field(z.boolean())
-    .derivedFrom("name")
-    .resolve((orderOrigin) => isOrderOriginDeletable(orderOrigin)),
+  orderOrigins: query(orderOriginsTable.$list())
+    .input(getOrderOriginsInput)
+    .resolve(getOrderOrigins),
 
   addOrUpdateOrderOrigin: mutation(orderOriginsTable.$nullable())
     .input(addOrUpdateOrderOriginInput)

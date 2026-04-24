@@ -110,7 +110,7 @@ type Mutation {
 
 type OrderOriginsItem {
   id: Int!
-  isDeletable: Boolean!
+  isPhysical: Boolean!
   name: String!
 }
 
@@ -147,7 +147,7 @@ type Query {
   getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
   helloAssoConfig(editionId: Float!): HelloAssoConfigItem
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!
-  orderOrigins: [OrderOriginsItem!]!
+  orderOrigins(onlyPhysical: Boolean): [OrderOriginsItem!]!
   orders(editionId: Float!, from: String, originIds: [Float!], to: String): [OrdersItem!]!
   vendors: [VendorsItem!]!
 }

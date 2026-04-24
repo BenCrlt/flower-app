@@ -24,7 +24,7 @@ export async function addOrUpdateOrderOrigin({
 
   const [newOrderOrigin] = await db
     .insert(orderOriginsTable)
-    .values({ name })
+    .values({ name, isPhysical: true })
     .returning();
 
   return newOrderOrigin ?? null;

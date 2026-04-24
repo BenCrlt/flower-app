@@ -13,7 +13,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ListFilter, Store } from "lucide-react";
+import { ListFilter } from "lucide-react";
+import { SelectOrderOriginsDialog } from "./select-order-origins-dialog";
 
 interface Props {
   originIdsFilter: number[];
@@ -50,9 +51,7 @@ export const SalesPanelActionsAndFiltersCard = ({
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant={originIdsFilter.length ? "default" : "outline"}
-                    className={
-                      "w-full border-dashed sm:w-auto sm:max-w-fit"
-                    }
+                    className={"w-full border-dashed sm:w-auto sm:max-w-fit"}
                   >
                     <ListFilter />
                     Origine{" "}
@@ -82,14 +81,7 @@ export const SalesPanelActionsAndFiltersCard = ({
             )}
           </div>
         </div>
-        <Button
-          variant="outline"
-          className="w-full shrink-0 border-dashed md:w-auto"
-          size="lg"
-        >
-          <Store />
-          Ouvrir la caisse
-        </Button>
+        <SelectOrderOriginsDialog />
       </CardContent>
     </Card>
   );
