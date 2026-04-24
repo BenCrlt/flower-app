@@ -1,11 +1,13 @@
+import { GetOrderOriginQuery } from "@/generated/graphql";
 import { useState } from "react";
+import { useGetOrderOriginQuery } from "./useGetOrderOriginQuery";
 
 const CASH_REGISTER_ORIGIN_ID_KEY = "cash-register-origin-id";
 
 interface UseCashRegisterReturn {
-  selectedOriginId: number | null;
   handleSelectOrigin: (originId: number) => void;
   openSelectOriginDialog: boolean;
+  orderOrigin: GetOrderOriginQuery["orderOrigin"];
 }
 
 export const useCashRegister = (): UseCashRegisterReturn => {
@@ -21,6 +23,11 @@ export const useCashRegister = (): UseCashRegisterReturn => {
     },
   );
 
+  const { data: orderOriginData } = useGetOrderOriginQuery({
+    variables: { id: selectedOriginId ?? 0 },
+    enabled: selectedOriginId !== null,
+  });
+
   const openSelectOriginDialog = selectedOriginId === null;
 
   const handleSelectOrigin = (originId: number) => {
@@ -29,8 +36,8 @@ export const useCashRegister = (): UseCashRegisterReturn => {
   };
 
   return {
-    selectedOriginId,
     handleSelectOrigin,
     openSelectOriginDialog,
+    orderOrigin: orderOriginData?.orderOrigin,
   };
 };

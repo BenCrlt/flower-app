@@ -1,4 +1,5 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import {
   budgetLinesTable,
@@ -7,6 +8,7 @@ import {
   salesTable,
   user,
 } from "../../db/schema/index.js";
+import { db } from "../../index.js";
 import { loadAuthors } from "../payment/utils/loadAuthors.js";
 import {
   addOrUpdateOrderOrigin,
@@ -60,6 +62,13 @@ export const salesResolver = resolver.of(salesTable, {
 });
 
 export const orderOriginResolver = resolver.of(orderOriginsTable, {
+  orderOrigin: query(orderOriginsTable.$nullable())
+    .input(z.object({ id: z.number().min(1) }))
+    .resolve(async ({ id }) =>
+      db.query.orderOriginsTable.findFirst({
+        where: eq(orderOriginsTable.id, id),
+      }),
+    ),
   orderOrigins: query(orderOriginsTable.$list())
     .input(getOrderOriginsInput)
     .resolve(getOrderOrigins),

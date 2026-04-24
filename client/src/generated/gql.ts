@@ -20,6 +20,7 @@ type Documents = {
     "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n  }\n}": typeof types.GetBudgetCategoriesDocument,
     "query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!) {\n  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    realCost\n    salesCount\n    lineType\n    category {\n      id\n      name\n      color\n    }\n    helloAssoProductId\n  }\n}": typeof types.GetBudgetLinesDocument,
     "mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n  ) {\n    id\n    name\n  }\n}": typeof types.UpdateBudgetLineDocument,
+    "query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n  }\n}": typeof types.GetOrderOriginDocument,
     "query getBudgetStatsByCategories($editionId: Float!, $lineType: LineTypeEnum!) {\n  getBudgetStatsByCategories(editionId: $editionId, lineType: $lineType) {\n    categoryName\n    totalEstimated\n    total\n  }\n}": typeof types.GetBudgetStatsByCategoriesDocument,
     "query getEditionStats($editionId: Float!) {\n  edition(id: $editionId) {\n    id\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": typeof types.GetEditionStatsDocument,
     "query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n  }\n}": typeof types.GetEditionsDocument,
@@ -44,6 +45,7 @@ const documents: Documents = {
     "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n  }\n}": types.GetBudgetCategoriesDocument,
     "query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!) {\n  budgetLines(editionId: $editionId, budgetLineType: $budgetLineType) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    realCost\n    salesCount\n    lineType\n    category {\n      id\n      name\n      color\n    }\n    helloAssoProductId\n  }\n}": types.GetBudgetLinesDocument,
     "mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n  ) {\n    id\n    name\n  }\n}": types.UpdateBudgetLineDocument,
+    "query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n  }\n}": types.GetOrderOriginDocument,
     "query getBudgetStatsByCategories($editionId: Float!, $lineType: LineTypeEnum!) {\n  getBudgetStatsByCategories(editionId: $editionId, lineType: $lineType) {\n    categoryName\n    totalEstimated\n    total\n  }\n}": types.GetBudgetStatsByCategoriesDocument,
     "query getEditionStats($editionId: Float!) {\n  edition(id: $editionId) {\n    id\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": types.GetEditionStatsDocument,
     "query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n  }\n}": types.GetEditionsDocument,
@@ -100,6 +102,10 @@ export function graphql(source: "query getBudgetLines($editionId: Float!, $budge
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n  ) {\n    id\n    name\n  }\n}"): (typeof documents)["mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n  ) {\n    id\n    name\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n  }\n}"): (typeof documents)["query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
