@@ -29,9 +29,11 @@ type Documents = {
     "query getInvoices($editionId: Float!, $status: InvoiceStatus) {\n  invoices(editionId: $editionId, status: $status) {\n    id\n    name\n    vendorId\n    vendor {\n      id\n      name\n    }\n    totalAmount\n    note\n    author {\n      id\n    }\n    executedAt\n    status\n    payments {\n      id\n      budgetLineId\n      quantity\n      unitPrice\n    }\n  }\n}": typeof types.GetInvoicesDocument,
     "query getVendors {\n  vendors {\n    id\n    name\n  }\n}": typeof types.GetVendorsDocument,
     "mutation updateInvoice($id: Float!, $name: String, $authorId: String, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    name: $name\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": typeof types.UpdateInvoiceDocument,
-    "query getOrderOrigins {\n  orderOrigins {\n    id\n    name\n  }\n}": typeof types.GetOrderOriginsDocument,
+    "query getOrderOrigins {\n  orderOrigins {\n    id\n    name\n    isDeletable\n  }\n}": typeof types.GetOrderOriginsDocument,
     "query getOrders($editionId: Float!, $from: String, $to: String, $originIds: [Float!]) {\n  orders(editionId: $editionId, from: $from, to: $to, originIds: $originIds) {\n    id\n    totalAmount\n    executedAt\n    payerFirstName\n    payerLastName\n    payerEmail\n    helloAssoOrderId\n    authorId\n    originId\n    origin {\n      id\n      name\n    }\n    author {\n      id\n      username\n    }\n    sales {\n      id\n      budgetLineId\n      quantity\n      executedAt\n      budgetLine {\n        id\n        name\n        estimatedUnitPrice\n        category {\n          id\n          name\n          color\n        }\n      }\n    }\n  }\n}": typeof types.GetOrdersDocument,
     "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}": typeof types.AddHelloAssoConfigDocument,
+    "mutation addOrUpdateOrderOrigin($id: Float, $name: String!) {\n  addOrUpdateOrderOrigin(id: $id, name: $name) {\n    id\n    name\n  }\n}": typeof types.AddOrUpdateOrderOriginDocument,
+    "mutation deleteOrderOrigin($id: Float!) {\n  deleteOrderOrigin(id: $id) {\n    id\n    name\n  }\n}": typeof types.DeleteOrderOriginDocument,
     "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}": typeof types.GetHelloAssoConfigDocument,
     "mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}": typeof types.SynchroSalesDocument,
 };
@@ -51,9 +53,11 @@ const documents: Documents = {
     "query getInvoices($editionId: Float!, $status: InvoiceStatus) {\n  invoices(editionId: $editionId, status: $status) {\n    id\n    name\n    vendorId\n    vendor {\n      id\n      name\n    }\n    totalAmount\n    note\n    author {\n      id\n    }\n    executedAt\n    status\n    payments {\n      id\n      budgetLineId\n      quantity\n      unitPrice\n    }\n  }\n}": types.GetInvoicesDocument,
     "query getVendors {\n  vendors {\n    id\n    name\n  }\n}": types.GetVendorsDocument,
     "mutation updateInvoice($id: Float!, $name: String, $authorId: String, $editionId: Float!, $note: String, $payments: [UpdateInvoicePaymentsInput!], $status: InvoiceStatus, $totalAmount: Float, $vendorId: Float) {\n  updateInvoice(\n    id: $id\n    name: $name\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": types.UpdateInvoiceDocument,
-    "query getOrderOrigins {\n  orderOrigins {\n    id\n    name\n  }\n}": types.GetOrderOriginsDocument,
+    "query getOrderOrigins {\n  orderOrigins {\n    id\n    name\n    isDeletable\n  }\n}": types.GetOrderOriginsDocument,
     "query getOrders($editionId: Float!, $from: String, $to: String, $originIds: [Float!]) {\n  orders(editionId: $editionId, from: $from, to: $to, originIds: $originIds) {\n    id\n    totalAmount\n    executedAt\n    payerFirstName\n    payerLastName\n    payerEmail\n    helloAssoOrderId\n    authorId\n    originId\n    origin {\n      id\n      name\n    }\n    author {\n      id\n      username\n    }\n    sales {\n      id\n      budgetLineId\n      quantity\n      executedAt\n      budgetLine {\n        id\n        name\n        estimatedUnitPrice\n        category {\n          id\n          name\n          color\n        }\n      }\n    }\n  }\n}": types.GetOrdersDocument,
     "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}": types.AddHelloAssoConfigDocument,
+    "mutation addOrUpdateOrderOrigin($id: Float, $name: String!) {\n  addOrUpdateOrderOrigin(id: $id, name: $name) {\n    id\n    name\n  }\n}": types.AddOrUpdateOrderOriginDocument,
+    "mutation deleteOrderOrigin($id: Float!) {\n  deleteOrderOrigin(id: $id) {\n    id\n    name\n  }\n}": types.DeleteOrderOriginDocument,
     "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}": types.GetHelloAssoConfigDocument,
     "mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}": types.SynchroSalesDocument,
 };
@@ -135,7 +139,7 @@ export function graphql(source: "mutation updateInvoice($id: Float!, $name: Stri
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query getOrderOrigins {\n  orderOrigins {\n    id\n    name\n  }\n}"): (typeof documents)["query getOrderOrigins {\n  orderOrigins {\n    id\n    name\n  }\n}"];
+export function graphql(source: "query getOrderOrigins {\n  orderOrigins {\n    id\n    name\n    isDeletable\n  }\n}"): (typeof documents)["query getOrderOrigins {\n  orderOrigins {\n    id\n    name\n    isDeletable\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -144,6 +148,14 @@ export function graphql(source: "query getOrders($editionId: Float!, $from: Stri
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}"): (typeof documents)["mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation addOrUpdateOrderOrigin($id: Float, $name: String!) {\n  addOrUpdateOrderOrigin(id: $id, name: $name) {\n    id\n    name\n  }\n}"): (typeof documents)["mutation addOrUpdateOrderOrigin($id: Float, $name: String!) {\n  addOrUpdateOrderOrigin(id: $id, name: $name) {\n    id\n    name\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation deleteOrderOrigin($id: Float!) {\n  deleteOrderOrigin(id: $id) {\n    id\n    name\n  }\n}"): (typeof documents)["mutation deleteOrderOrigin($id: Float!) {\n  deleteOrderOrigin(id: $id) {\n    id\n    name\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

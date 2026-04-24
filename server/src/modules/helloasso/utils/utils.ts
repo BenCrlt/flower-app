@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "../../../db/index.js";
 import { OrderOrigin, orderOriginsTable } from "../../../db/schema/index.js";
 
-const HELLO_ASSO_ORIGIN_NAME = "HelloAsso";
+export const HELLO_ASSO_ORIGIN_NAME = "HelloAsso";
 
 export async function getHelloAssoOrigin(): Promise<OrderOrigin> {
   const helloAssoOrigin = await db.query.orderOriginsTable.findFirst({

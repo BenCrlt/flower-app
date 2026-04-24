@@ -2,5 +2,6 @@ query getOrderOrigins {
   orderOrigins {
     id
     name
+    isDeletable
   }
 }

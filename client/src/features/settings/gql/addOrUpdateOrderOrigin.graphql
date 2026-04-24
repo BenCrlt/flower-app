@@ -1,0 +1,6 @@
+mutation addOrUpdateOrderOrigin($id: Float, $name: String!) {
+  addOrUpdateOrderOrigin(id: $id, name: $name) {
+    id
+    name
+  }
+}

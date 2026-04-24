@@ -23,7 +23,7 @@ import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Controller, useForm, useWatch } from "react-hook-form";
 import { toast } from "sonner";
-import { useAddHelloAssoConfigMutation } from "../hooks/useAddHelloAssoConfigMutation";
+import { useAddHelloAssoConfigMutation } from "../../hooks/useAddHelloAssoConfigMutation";
 
 interface CreateConfigFormValues {
   formSlug: string;

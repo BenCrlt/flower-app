@@ -1,0 +1,6 @@
+mutation deleteOrderOrigin($id: Float!) {
+  deleteOrderOrigin(id: $id) {
+    id
+    name
+  }
+}
