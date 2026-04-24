@@ -13,6 +13,7 @@ import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as SalesRouteImport } from './routes/sales'
 import { Route as InvoicesRouteImport } from './routes/invoices'
 import { Route as DashboardRouteImport } from './routes/dashboard'
+import { Route as CashRegisterRouteImport } from './routes/cash-register'
 import { Route as BudgetTableRouteImport } from './routes/budget-table'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthSignInRouteImport } from './routes/auth/sign-in'
@@ -37,6 +38,11 @@ const DashboardRoute = DashboardRouteImport.update({
   path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CashRegisterRoute = CashRegisterRouteImport.update({
+  id: '/cash-register',
+  path: '/cash-register',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const BudgetTableRoute = BudgetTableRouteImport.update({
   id: '/budget-table',
   path: '/budget-table',
@@ -56,6 +62,7 @@ const AuthSignInRoute = AuthSignInRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/budget-table': typeof BudgetTableRoute
+  '/cash-register': typeof CashRegisterRoute
   '/dashboard': typeof DashboardRoute
   '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
@@ -65,6 +72,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/budget-table': typeof BudgetTableRoute
+  '/cash-register': typeof CashRegisterRoute
   '/dashboard': typeof DashboardRoute
   '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
@@ -75,6 +83,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/budget-table': typeof BudgetTableRoute
+  '/cash-register': typeof CashRegisterRoute
   '/dashboard': typeof DashboardRoute
   '/invoices': typeof InvoicesRoute
   '/sales': typeof SalesRoute
@@ -86,6 +95,7 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/budget-table'
+    | '/cash-register'
     | '/dashboard'
     | '/invoices'
     | '/sales'
@@ -95,6 +105,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/budget-table'
+    | '/cash-register'
     | '/dashboard'
     | '/invoices'
     | '/sales'
@@ -104,6 +115,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/budget-table'
+    | '/cash-register'
     | '/dashboard'
     | '/invoices'
     | '/sales'
@@ -114,6 +126,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   BudgetTableRoute: typeof BudgetTableRoute
+  CashRegisterRoute: typeof CashRegisterRoute
   DashboardRoute: typeof DashboardRoute
   InvoicesRoute: typeof InvoicesRoute
   SalesRoute: typeof SalesRoute
@@ -151,6 +164,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/cash-register': {
+      id: '/cash-register'
+      path: '/cash-register'
+      fullPath: '/cash-register'
+      preLoaderRoute: typeof CashRegisterRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/budget-table': {
       id: '/budget-table'
       path: '/budget-table'
@@ -178,6 +198,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   BudgetTableRoute: BudgetTableRoute,
+  CashRegisterRoute: CashRegisterRoute,
   DashboardRoute: DashboardRoute,
   InvoicesRoute: InvoicesRoute,
   SalesRoute: SalesRoute,

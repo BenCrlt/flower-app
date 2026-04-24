@@ -13,8 +13,8 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { ListFilter } from "lucide-react";
-import { SelectOrderOriginsDialog } from "./select-order-origins-dialog";
+import { Link } from "@tanstack/react-router";
+import { ListFilter, Store } from "lucide-react";
 
 interface Props {
   originIdsFilter: number[];
@@ -81,7 +81,16 @@ export const SalesPanelActionsAndFiltersCard = ({
             )}
           </div>
         </div>
-        <SelectOrderOriginsDialog />
+        <Button
+          asChild
+          variant="outline"
+          className="w-full shrink-0 border-dashed md:w-auto"
+        >
+          <Link to="/cash-register">
+            Ouvrir la caisse
+            <Store />
+          </Link>
+        </Button>
       </CardContent>
     </Card>
   );
