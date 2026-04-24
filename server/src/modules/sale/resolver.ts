@@ -9,6 +9,7 @@ import {
   user,
 } from "../../db/schema/index.js";
 import { loadAuthors } from "../payment/utils/loadAuthors.js";
+import { isOrderOriginDeletable } from "../utils.js";
 import {
   addOrUpdateOrderOrigin,
   addOrUpdateOrderOriginInput,
@@ -60,6 +61,10 @@ export const orderOriginResolver = resolver.of(orderOriginsTable, {
   orderOrigins: query(orderOriginsTable.$list()).resolve(async () => {
     return db.query.orderOriginsTable.findMany();
   }),
+
+  isDeletable: field(z.boolean())
+    .derivedFrom("name")
+    .resolve((orderOrigin) => isOrderOriginDeletable(orderOrigin)),
 
   addOrUpdateOrderOrigin: mutation(orderOriginsTable.$nullable())
     .input(addOrUpdateOrderOriginInput)

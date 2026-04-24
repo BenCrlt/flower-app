@@ -110,6 +110,7 @@ type Mutation {
 
 type OrderOriginsItem {
   id: Int!
+  isDeletable: Boolean!
   name: String!
 }
 
