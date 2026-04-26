@@ -10,9 +10,11 @@ export const OrderOriginBar = () => {
       <div className="flex items-center gap-2">
         <Store className="size-4 text-muted-foreground" />
         <span className="text-muted-foreground">Point de vente</span>
-        <Badge variant="outline" className="text-sm">
-          {orderOrigin?.name ?? "Sélectionnez un point de vente"}
-        </Badge>
+        {orderOrigin && (
+          <Badge variant="outline" className="text-sm">
+            {orderOrigin?.name}
+          </Badge>
+        )}
       </div>
       <Button
         variant="ghost"
