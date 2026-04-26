@@ -9,5 +9,12 @@ export function registerAuthorizationHook(app: FastifyInstance): void {
     if (!session) {
       return reply.status(401).send({ error: "Unauthorized" });
     }
+    request.authSession = session;
   });
+}
+
+declare module "fastify" {
+  interface FastifyRequest {
+    authSession?: Awaited<ReturnType<typeof auth.api.getSession>>;
+  }
 }

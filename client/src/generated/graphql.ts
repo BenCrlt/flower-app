@@ -131,6 +131,7 @@ export type Mutation = {
   updateEdition?: Maybe<EditionsItem>;
   updateHelloAssoConfig?: Maybe<HelloAssoConfigItem>;
   updateInvoice?: Maybe<InvoicesItem>;
+  validateOrder?: Maybe<OrdersItem>;
 };
 
 
@@ -277,6 +278,13 @@ export type MutationUpdateInvoiceArgs = {
   vendorId?: InputMaybe<Scalars['Float']['input']>;
 };
 
+
+export type MutationValidateOrderArgs = {
+  editionId: Scalars['Float']['input'];
+  originId: Scalars['Float']['input'];
+  sales: Array<ValidateOrderSalesInput>;
+};
+
 export type OrderOriginsItem = {
   __typename?: 'OrderOriginsItem';
   id: Scalars['Int']['output'];
@@ -405,6 +413,11 @@ export type UserItem = {
   role?: Maybe<Scalars['String']['output']>;
   updatedAt: Scalars['String']['output'];
   username?: Maybe<Scalars['String']['output']>;
+};
+
+export type ValidateOrderSalesInput = {
+  budgetLineId: Scalars['Float']['input'];
+  quantity: Scalars['Float']['input'];
 };
 
 export type VendorsItem = {

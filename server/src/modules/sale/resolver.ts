@@ -9,6 +9,7 @@ import {
   user,
 } from "../../db/schema/index.js";
 import { db } from "../../index.js";
+import { resolveWithContext } from "../graphql/context.js";
 import { loadAuthors } from "../payment/utils/loadAuthors.js";
 import {
   addOrUpdateOrderOrigin,
@@ -27,6 +28,7 @@ import { loadBudgetLines } from "./utils/loadBudgetLines.js";
 import { loadOrderOrigins } from "./utils/loadOrderOrigins.js";
 import { loadSales } from "./utils/loadSales.js";
 import { loadTotalAmount } from "./utils/loadTotalAmout.js";
+import { validateOrder, validateOrderInput } from "./utils/validateOrder.js";
 
 export const orderResolver = resolver.of(ordersTable, {
   orders: query(ordersTable.$list()).input(getOrdersInput).resolve(getOrders),
@@ -51,6 +53,10 @@ export const orderResolver = resolver.of(ordersTable, {
     .load(async (orders) =>
       loadOrderOrigins(orders.map((order) => order.originId)),
     ),
+
+  validateOrder: mutation(ordersTable.$nullable())
+    .input(validateOrderInput)
+    .resolve(resolveWithContext(validateOrder)),
 });
 
 export const salesResolver = resolver.of(salesTable, {
