@@ -2,6 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
+import { ShoppingBag } from "lucide-react";
 import { CartProduct } from "../../CashRegisterContext";
 
 interface Props {
@@ -53,6 +54,7 @@ export const CartPanelDesktop = ({
           </span>
         </div>
         <Button className="w-full" size="lg" disabled={!cartItems.length}>
+          <ShoppingBag />
           Passer au paiement
         </Button>
       </div>

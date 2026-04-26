@@ -19,7 +19,11 @@ interface Props {
   totalPrice: number;
 }
 
-export const CartPanelMobile = ({ cartItems, totalQuantity, totalPrice }: Props) => {
+export const CartPanelMobile = ({
+  cartItems,
+  totalQuantity,
+  totalPrice,
+}: Props) => {
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 backdrop-blur lg:hidden">
       <Sheet>
@@ -33,9 +37,8 @@ export const CartPanelMobile = ({ cartItems, totalQuantity, totalPrice }: Props)
             </span>
           </div>
           <SheetTrigger asChild>
-            <Button variant="outline">Voir le détail</Button>
+            <Button variant="outline">Payer</Button>
           </SheetTrigger>
-          <Button disabled={!cartItems.length}>Payer</Button>
         </div>
         <SheetContent side="bottom" className="max-h-[85vh] rounded-t-xl pb-4">
           <SheetHeader>
@@ -56,7 +59,9 @@ export const CartPanelMobile = ({ cartItems, totalQuantity, totalPrice }: Props)
                   className="flex items-center justify-between gap-3 rounded-md border p-3"
                 >
                   <div className="min-w-0">
-                    <p className="line-clamp-2 text-sm font-medium">{item.name}</p>
+                    <p className="line-clamp-2 text-sm font-medium">
+                      {item.name}
+                    </p>
                     <p className="text-xs text-muted-foreground">
                       {formatPriceToEuros(item.unitPrice)} / unite
                     </p>
