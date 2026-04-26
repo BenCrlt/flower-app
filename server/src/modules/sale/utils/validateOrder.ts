@@ -7,6 +7,7 @@ import { AppGraphQLContext } from "../../graphql/context.js";
 export const validateOrderInput = z.object({
   editionId: z.number(),
   originId: z.number(),
+  paymentMethod: z.enum(["cash", "card"]),
   sales: z.array(
     z.object({
       budgetLineId: z.number(),
@@ -18,7 +19,7 @@ export const validateOrderInput = z.object({
 export type ValidateOrderInput = z.infer<typeof validateOrderInput>;
 
 export async function validateOrder(
-  input: ValidateOrderInput,
+  { editionId, originId, paymentMethod, sales }: ValidateOrderInput,
   context: AppGraphQLContext,
 ): Promise<Order | null> {
   const authorId = context.authSession.user.id;
@@ -27,9 +28,10 @@ export async function validateOrder(
     const [insertedOrder] = await tx
       .insert(ordersTable)
       .values({
-        editionId: input.editionId,
-        originId: input.originId,
+        editionId,
+        originId,
         authorId,
+        paymentMethod,
       })
       .returning();
 
@@ -37,7 +39,7 @@ export async function validateOrder(
       return null;
     }
 
-    const salesToCreate = input.sales.map((sale) => ({
+    const salesToCreate = sales.map((sale) => ({
       budgetLineId: sale.budgetLineId,
       quantity: sale.quantity,
       orderId: insertedOrder.id,

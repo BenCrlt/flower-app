@@ -106,7 +106,7 @@ type Mutation {
   updateEdition(endDate: String, id: Float!, name: String, startDate: String): EditionsItem
   updateHelloAssoConfig(formSlug: String!, id: Float!): HelloAssoConfigItem
   updateInvoice(authorId: String, editionId: Float!, id: Float!, name: String, note: String, payments: [UpdateInvoicePaymentsInput!], status: InvoiceStatus, totalAmount: Float, vendorId: Float): InvoicesItem
-  validateOrder(editionId: Float!, originId: Float!, sales: [ValidateOrderSalesInput!]!): OrdersItem
+  validateOrder(editionId: Float!, originId: Float!, paymentMethod: ValidateOrderPaymentMethodInput!, sales: [ValidateOrderSalesInput!]!): OrdersItem
 }
 
 type OrderOriginsItem {
@@ -127,6 +127,7 @@ type OrdersItem {
   payerEmail: String
   payerFirstName: String
   payerLastName: String
+  paymentMethod: String!
   sales: [SalesItem!]!
   totalAmount: Float!
 }
@@ -185,6 +186,11 @@ type UserItem {
   role: String
   updatedAt: String!
   username: String
+}
+
+enum ValidateOrderPaymentMethodInput {
+  card
+  cash
 }
 
 input ValidateOrderSalesInput {

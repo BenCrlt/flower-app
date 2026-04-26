@@ -282,6 +282,7 @@ export type MutationUpdateInvoiceArgs = {
 export type MutationValidateOrderArgs = {
   editionId: Scalars['Float']['input'];
   originId: Scalars['Float']['input'];
+  paymentMethod: ValidateOrderPaymentMethodInput;
   sales: Array<ValidateOrderSalesInput>;
 };
 
@@ -305,6 +306,7 @@ export type OrdersItem = {
   payerEmail?: Maybe<Scalars['String']['output']>;
   payerFirstName?: Maybe<Scalars['String']['output']>;
   payerLastName?: Maybe<Scalars['String']['output']>;
+  paymentMethod: Scalars['String']['output'];
   sales: Array<SalesItem>;
   totalAmount: Scalars['Float']['output'];
 };
@@ -414,6 +416,11 @@ export type UserItem = {
   updatedAt: Scalars['String']['output'];
   username?: Maybe<Scalars['String']['output']>;
 };
+
+export enum ValidateOrderPaymentMethodInput {
+  Card = 'card',
+  Cash = 'cash'
+}
 
 export type ValidateOrderSalesInput = {
   budgetLineId: Scalars['Float']['input'];
