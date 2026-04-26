@@ -97,6 +97,7 @@ export const CashRegisterContextProvider = ({
     variables: {
       editionId: edition.id,
       budgetLineType: LineTypeEnum.Income,
+      excludeHelloAsso: true,
     },
     onComplete: ({ budgetLines }) => {
       const storedCartItems = getStoredCartItems();
