@@ -2,7 +2,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Trash } from "lucide-react";
 import { CartProduct } from "../../CashRegisterContext";
 
 interface Props {
@@ -10,6 +10,7 @@ interface Props {
   totalQuantity: number;
   totalPrice: number;
   onProceedToPayment: () => void;
+  onCancelOrder: () => void;
 }
 
 export const CartPanelDesktop = ({
@@ -17,6 +18,7 @@ export const CartPanelDesktop = ({
   totalQuantity,
   totalPrice,
   onProceedToPayment,
+  onCancelOrder,
 }: Props) => {
   return (
     <Card className="hidden h-full min-h-0 pb-4 lg:flex lg:flex-col">
@@ -63,6 +65,15 @@ export const CartPanelDesktop = ({
         >
           <ShoppingBag />
           Passer au paiement
+        </Button>
+        <Button
+          variant="destructive"
+          className="w-full"
+          size="lg"
+          onClick={onCancelOrder}
+        >
+          <Trash />
+          Annuler la commande
         </Button>
       </div>
     </Card>

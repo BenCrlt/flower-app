@@ -2,6 +2,7 @@ import {
   BudgetCategoriesItem,
   BudgetLinesItem,
   GetOrderOriginQuery,
+  ValidateOrderPaymentMethodInput,
 } from "@/generated/graphql";
 import { createContext } from "react";
 
@@ -22,6 +23,8 @@ export interface CashRegisterContextValue {
   onSelectCategory: (category: BudgetCategoriesItem) => void;
   allCategoriesInProducts: BudgetCategoriesItem[];
   selectedCategories: BudgetCategoriesItem[];
+  onValidateOrder: (paymentMethod: ValidateOrderPaymentMethodInput) => void;
+  onCancelOrder: () => void;
 }
 
 export const CashRegisterContext =

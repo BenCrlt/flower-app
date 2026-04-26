@@ -6,12 +6,13 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { ValidateOrderPaymentMethodInput } from "@/generated/graphql";
 import { Banknote, CreditCard } from "lucide-react";
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSelectMethod?: (method: "card" | "cash") => void;
+  onSelectMethod?: (method: ValidateOrderPaymentMethodInput) => void;
 }
 
 export const PaymentMethodDialog = ({
@@ -19,7 +20,7 @@ export const PaymentMethodDialog = ({
   onOpenChange,
   onSelectMethod,
 }: Props) => {
-  const handleSelectMethod = (method: "card" | "cash") => {
+  const handleSelectMethod = (method: ValidateOrderPaymentMethodInput) => {
     onSelectMethod?.(method);
     onOpenChange(false);
   };
@@ -37,7 +38,9 @@ export const PaymentMethodDialog = ({
           <Button
             variant="outline"
             className="h-20 flex-col gap-2"
-            onClick={() => handleSelectMethod("card")}
+            onClick={() =>
+              handleSelectMethod(ValidateOrderPaymentMethodInput.Card)
+            }
           >
             <CreditCard />
             Carte
@@ -45,7 +48,9 @@ export const PaymentMethodDialog = ({
           <Button
             variant="outline"
             className="h-20 flex-col gap-2"
-            onClick={() => handleSelectMethod("cash")}
+            onClick={() =>
+              handleSelectMethod(ValidateOrderPaymentMethodInput.Cash)
+            }
           >
             <Banknote />
             Espece

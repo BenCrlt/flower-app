@@ -10,7 +10,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Trash } from "lucide-react";
 import { useState } from "react";
 import { CartProduct } from "../../CashRegisterContext";
 
@@ -19,6 +19,7 @@ interface Props {
   totalQuantity: number;
   totalPrice: number;
   onProceedToPayment: () => void;
+  onCancelOrder: () => void;
 }
 
 export const CartPanelMobile = ({
@@ -26,6 +27,7 @@ export const CartPanelMobile = ({
   totalQuantity,
   totalPrice,
   onProceedToPayment,
+  onCancelOrder,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -44,6 +46,10 @@ export const CartPanelMobile = ({
           <SheetTrigger asChild>
             <Button variant="outline">Payer</Button>
           </SheetTrigger>
+          <Button variant="destructive" onClick={onCancelOrder}>
+            <Trash />
+            Annuler
+          </Button>
         </div>
         <SheetContent side="bottom" className="max-h-[85vh] rounded-t-xl pb-4">
           <SheetHeader>
@@ -98,6 +104,17 @@ export const CartPanelMobile = ({
             >
               <ShoppingBag />
               Passer au paiement
+            </Button>
+            <Button
+              variant="destructive"
+              size="lg"
+              onClick={() => {
+                setIsOpen(false);
+                onCancelOrder();
+              }}
+            >
+              <Trash />
+              Annuler la commande
             </Button>
           </SheetFooter>
         </SheetContent>
