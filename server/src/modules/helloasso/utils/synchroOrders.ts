@@ -75,6 +75,7 @@ export async function synchroOrders({
       payerLastName: order.payer?.lastName ?? null,
       payerEmail: order.payer?.email ?? null,
       originId: origin.id,
+      paymentMethod: "card",
     }));
 
     if (ordersToCreate.length > 0) {

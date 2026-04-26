@@ -1,0 +1,7 @@
+query getOrderOrigin($id: Float!) {
+  orderOrigin(id: $id) {
+    id
+    name
+    isPhysical
+  }
+}

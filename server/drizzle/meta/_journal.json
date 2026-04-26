@@ -148,6 +148,20 @@
       "when": 1776287039414,
       "tag": "0020_add-order-origins",
       "breakpoints": true
+    },
+    {
+      "idx": 21,
+      "version": "7",
+      "when": 1777043529082,
+      "tag": "0021_add-isPhysical-order-origin",
+      "breakpoints": true
+    },
+    {
+      "idx": 22,
+      "version": "7",
+      "when": 1777228413302,
+      "tag": "0022_add-payment-method-order",
+      "breakpoints": true
     }
   ]
 }

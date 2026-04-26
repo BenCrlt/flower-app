@@ -1,6 +1,12 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { InferSelectModel } from "drizzle-orm";
-import { integer, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import {
+  integer,
+  pgTable,
+  text,
+  timestamp,
+  varchar,
+} from "drizzle-orm/pg-core";
 import { user } from "./auth.js";
 import { editionsTable } from "./editions.js";
 import { orderOriginsTable } from "./order-origins.js";
@@ -20,6 +26,7 @@ export const ordersTable = drizzleSilk(
     originId: integer()
       .references(() => orderOriginsTable.id)
       .notNull(),
+    paymentMethod: varchar({ length: 4 }).notNull(),
   }),
 );
 

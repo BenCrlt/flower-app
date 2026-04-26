@@ -1,6 +1,6 @@
 import { field, mutation, query, resolver } from "@gqloom/core";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { db } from "../../db/index.js";
 import {
   budgetLinesTable,
   orderOriginsTable,
@@ -8,8 +8,9 @@ import {
   salesTable,
   user,
 } from "../../db/schema/index.js";
+import { db } from "../../index.js";
+import { resolveWithContext } from "../graphql/context.js";
 import { loadAuthors } from "../payment/utils/loadAuthors.js";
-import { isOrderOriginDeletable } from "../utils.js";
 import {
   addOrUpdateOrderOrigin,
   addOrUpdateOrderOriginInput,
@@ -18,11 +19,16 @@ import {
   deleteOrderOrigin,
   deleteOrderOriginInput,
 } from "./utils/deleteOrderOrigin.js";
+import {
+  getOrderOrigins,
+  getOrderOriginsInput,
+} from "./utils/getOrderOrigins.js";
 import { getOrders, getOrdersInput } from "./utils/getOrders.js";
 import { loadBudgetLines } from "./utils/loadBudgetLines.js";
 import { loadOrderOrigins } from "./utils/loadOrderOrigins.js";
 import { loadSales } from "./utils/loadSales.js";
 import { loadTotalAmount } from "./utils/loadTotalAmout.js";
+import { validateOrder, validateOrderInput } from "./utils/validateOrder.js";
 
 export const orderResolver = resolver.of(ordersTable, {
   orders: query(ordersTable.$list()).input(getOrdersInput).resolve(getOrders),
@@ -47,6 +53,10 @@ export const orderResolver = resolver.of(ordersTable, {
     .load(async (orders) =>
       loadOrderOrigins(orders.map((order) => order.originId)),
     ),
+
+  validateOrder: mutation(ordersTable.$nullable())
+    .input(validateOrderInput)
+    .resolve(resolveWithContext(validateOrder)),
 });
 
 export const salesResolver = resolver.of(salesTable, {
@@ -58,13 +68,16 @@ export const salesResolver = resolver.of(salesTable, {
 });
 
 export const orderOriginResolver = resolver.of(orderOriginsTable, {
-  orderOrigins: query(orderOriginsTable.$list()).resolve(async () => {
-    return db.query.orderOriginsTable.findMany();
-  }),
-
-  isDeletable: field(z.boolean())
-    .derivedFrom("name")
-    .resolve((orderOrigin) => isOrderOriginDeletable(orderOrigin)),
+  orderOrigin: query(orderOriginsTable.$nullable())
+    .input(z.object({ id: z.number().min(1) }))
+    .resolve(async ({ id }) =>
+      db.query.orderOriginsTable.findFirst({
+        where: eq(orderOriginsTable.id, id),
+      }),
+    ),
+  orderOrigins: query(orderOriginsTable.$list())
+    .input(getOrderOriginsInput)
+    .resolve(getOrderOrigins),
 
   addOrUpdateOrderOrigin: mutation(orderOriginsTable.$nullable())
     .input(addOrUpdateOrderOriginInput)

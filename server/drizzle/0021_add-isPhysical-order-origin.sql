@@ -1,0 +1,1 @@
+ALTER TABLE "order_origins" ADD COLUMN "isPhysical" boolean DEFAULT false NOT NULL;

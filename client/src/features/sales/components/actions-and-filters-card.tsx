@@ -13,6 +13,7 @@ import {
   DropdownMenuGroup,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "@tanstack/react-router";
 import { ListFilter, Store } from "lucide-react";
 
 interface Props {
@@ -50,9 +51,7 @@ export const SalesPanelActionsAndFiltersCard = ({
                 <DropdownMenuTrigger asChild>
                   <Button
                     variant={originIdsFilter.length ? "default" : "outline"}
-                    className={
-                      "w-full border-dashed sm:w-auto sm:max-w-fit"
-                    }
+                    className={"w-full border-dashed sm:w-auto sm:max-w-fit"}
                   >
                     <ListFilter />
                     Origine{" "}
@@ -83,12 +82,14 @@ export const SalesPanelActionsAndFiltersCard = ({
           </div>
         </div>
         <Button
+          asChild
           variant="outline"
           className="w-full shrink-0 border-dashed md:w-auto"
-          size="lg"
         >
-          <Store />
-          Ouvrir la caisse
+          <Link to="/cash-register">
+            Ouvrir la caisse
+            <Store />
+          </Link>
         </Button>
       </CardContent>
     </Card>

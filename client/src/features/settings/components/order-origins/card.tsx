@@ -9,7 +9,7 @@ import {
 import { Spinner } from "@/components/ui/spinner";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useGetOrderOriginsQuery } from "@/features/sales/hooks/useGetOrderOrigins";
-import { Plus, Pencil, Store, Trash2 } from "lucide-react";
+import { Pencil, Plus, Store, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { useAddOrUpdateOrderOriginMutation } from "../../hooks/useAddOrUpdateOrderOriginMutation";
@@ -18,7 +18,7 @@ import { DeleteOrderOriginDialog } from "./delete-order-origin-dialog";
 import { UpsertOrderOriginDialog } from "./upsert-order-origin-dialog";
 
 export const OrderOriginsCard = () => {
-  const { data: orderOriginsData, isLoading } = useGetOrderOriginsQuery();
+  const { data: orderOriginsData, isLoading } = useGetOrderOriginsQuery({});
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [editingOrigin, setEditingOrigin] = useState<{
@@ -110,9 +110,7 @@ export const OrderOriginsCard = () => {
             <TypographyH3>Points de ventes</TypographyH3>
           </CardTitle>
           <CardDescription>
-            <TypographyP>
-              Ajouter ou supprimer des points de ventes
-            </TypographyP>
+            <TypographyP>Ajouter ou supprimer des points de ventes</TypographyP>
           </CardDescription>
         </div>
         <Button
@@ -158,7 +156,7 @@ export const OrderOriginsCard = () => {
                 >
                   <Pencil className="size-4" />
                 </Button>
-                {origin.isDeletable && (
+                {origin.isPhysical && (
                   <Button
                     variant="ghost"
                     size="icon"

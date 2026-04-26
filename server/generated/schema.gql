@@ -106,11 +106,12 @@ type Mutation {
   updateEdition(endDate: String, id: Float!, name: String, startDate: String): EditionsItem
   updateHelloAssoConfig(formSlug: String!, id: Float!): HelloAssoConfigItem
   updateInvoice(authorId: String, editionId: Float!, id: Float!, name: String, note: String, payments: [UpdateInvoicePaymentsInput!], status: InvoiceStatus, totalAmount: Float, vendorId: Float): InvoicesItem
+  validateOrder(editionId: Float!, originId: Float!, paymentMethod: ValidateOrderPaymentMethodInput!, sales: [ValidateOrderSalesInput!]!): OrdersItem
 }
 
 type OrderOriginsItem {
   id: Int!
-  isDeletable: Boolean!
+  isPhysical: Boolean!
   name: String!
 }
 
@@ -126,6 +127,7 @@ type OrdersItem {
   payerEmail: String
   payerFirstName: String
   payerLastName: String
+  paymentMethod: String!
   sales: [SalesItem!]!
   totalAmount: Float!
 }
@@ -147,7 +149,8 @@ type Query {
   getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
   helloAssoConfig(editionId: Float!): HelloAssoConfigItem
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!
-  orderOrigins: [OrderOriginsItem!]!
+  orderOrigin(id: Float!): OrderOriginsItem
+  orderOrigins(onlyPhysical: Boolean): [OrderOriginsItem!]!
   orders(editionId: Float!, from: String, originIds: [Float!], to: String): [OrdersItem!]!
   vendors: [VendorsItem!]!
 }
@@ -183,6 +186,16 @@ type UserItem {
   role: String
   updatedAt: String!
   username: String
+}
+
+enum ValidateOrderPaymentMethodInput {
+  card
+  cash
+}
+
+input ValidateOrderSalesInput {
+  budgetLineId: Float!
+  quantity: Float!
 }
 
 type VendorsItem {

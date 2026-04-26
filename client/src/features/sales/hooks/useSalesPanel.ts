@@ -27,7 +27,7 @@ export function useSalesPanel(): UseSalesPanelResult {
     to: new Date(),
   });
 
-  const { data: orderOriginsOptions } = useGetOrderOriginsQuery();
+  const { data: orderOriginsOptions } = useGetOrderOriginsQuery({});
 
   const { data } = useGetOrdersQuery({
     variables: {

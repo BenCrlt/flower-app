@@ -1,0 +1,15 @@
+mutation validateOrder(
+  $editionId: Float!
+  $originId: Float!
+  $paymentMethod: ValidateOrderPaymentMethodInput!
+  $sales: [ValidateOrderSalesInput!]!
+) {
+  validateOrder(
+    editionId: $editionId
+    originId: $originId
+    paymentMethod: $paymentMethod
+    sales: $sales
+  ) {
+    id
+  }
+}
