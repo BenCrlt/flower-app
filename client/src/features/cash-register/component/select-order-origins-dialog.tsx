@@ -7,19 +7,16 @@ import {
 } from "@/components/ui/dialog";
 import { Store } from "lucide-react";
 import { useGetOrderOriginsQuery } from "../../sales/hooks/useGetOrderOrigins";
+import { useCashRegister } from "../hooks/useCashRegister";
 
-interface Props {
-  open: boolean;
-  onSelectOrigin: (originId: number) => void;
-}
-
-export const SelectOrderOriginsDialog = ({ open, onSelectOrigin }: Props) => {
+export const SelectOrderOriginsDialog = () => {
+  const { handleSelectOrigin, openSelectOriginDialog } = useCashRegister();
   const { data: orderOrigins } = useGetOrderOriginsQuery({
     variables: { onlyPhysical: true },
   });
 
   return (
-    <Dialog open={open}>
+    <Dialog open={openSelectOriginDialog}>
       <DialogContent showCloseButton={false}>
         <DialogHeader>
           <DialogTitle>Sélectionnez un point de vente</DialogTitle>
@@ -29,7 +26,7 @@ export const SelectOrderOriginsDialog = ({ open, onSelectOrigin }: Props) => {
             <Card
               key={origin.id}
               className="aspect-square cursor-pointer p-3 transition-colors hover:bg-muted/50"
-              onClick={() => onSelectOrigin(origin.id)}
+              onClick={() => handleSelectOrigin(origin.id)}
             >
               <div className="flex h-full flex-col items-center justify-center gap-2">
                 <Store className="size-8 text-muted-foreground" />

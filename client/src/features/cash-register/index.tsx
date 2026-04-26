@@ -4,31 +4,17 @@ import { SelectOrderOriginsDialog } from "./component/select-order-origins-dialo
 import { useCashRegister } from "./hooks/useCashRegister";
 
 export const CashRegister = () => {
-  const {
-    orderOrigin,
-    handleSelectOrigin,
-    openSelectOriginDialog,
-    onAddProductToCart,
-    onRemoveProductToCart,
-    cartProducts,
-  } = useCashRegister();
+  const { orderOrigin } = useCashRegister();
 
   return (
-    <div>
+    <div className="flex flex-col gap-6">
       <TypographyH2>
-        {orderOrigin?.name ?? "Sélectionnez un point de vente"}
+        Point de vente : {orderOrigin?.name ?? "Sélectionnez un point de vente"}
       </TypographyH2>
       <div>
-        <ProductsList
-          cartProducts={cartProducts}
-          onAddProductToCart={onAddProductToCart}
-          onRemoveProductToCart={onRemoveProductToCart}
-        />
+        <ProductsList />
       </div>
-      <SelectOrderOriginsDialog
-        open={openSelectOriginDialog}
-        onSelectOrigin={handleSelectOrigin}
-      />
+      <SelectOrderOriginsDialog />
     </div>
   );
 };

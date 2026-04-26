@@ -2,19 +2,15 @@ import { CategoryBadge } from "@/components/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
 import { Minus, Plus } from "lucide-react";
-import { CartProduct } from "../../hooks/useCashRegister";
+import { CartProduct } from "../../CashRegisterContext";
+import { useCashRegister } from "../../hooks/useCashRegister";
 
 interface Props {
   product: CartProduct;
-  onAddProductToCart: (productId: number) => void;
-  onRemoveProductToCart: (productId: number) => void;
 }
 
-export const ProductItem = ({
-  onAddProductToCart,
-  onRemoveProductToCart,
-  product,
-}: Props) => {
+export const ProductItem = ({ product }: Props) => {
+  const { onAddProductToCart, onRemoveProductToCart } = useCashRegister();
   return (
     <Card
       key={product.id}
@@ -31,10 +27,12 @@ export const ProductItem = ({
             color={product.category.color}
           />
         </div>
-        <div className="flex gap-4 self-center align-middle text-center">
+        <div
+          className="flex gap-4 self-center align-middle text-center"
+          onClick={(e) => e.stopPropagation()}
+        >
           <Button
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() => {
               onRemoveProductToCart(product.id);
             }}
             disabled={!product.quantity}
@@ -44,8 +42,7 @@ export const ProductItem = ({
           </Button>
           <span className="text-2xl">{product.quantity}</span>
           <Button
-            onClick={(e) => {
-              e.stopPropagation();
+            onClick={() => {
               onAddProductToCart(product.id);
             }}
             size="icon-sm"

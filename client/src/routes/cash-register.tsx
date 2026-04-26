@@ -1,4 +1,5 @@
 import { CashRegister } from "@/features/cash-register";
+import { CashRegisterContextProvider } from "@/features/cash-register/component/cash-register-context-provider";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/cash-register")({
@@ -6,5 +7,9 @@ export const Route = createFileRoute("/cash-register")({
 });
 
 function RouteComponent() {
-  return <CashRegister />;
+  return (
+    <CashRegisterContextProvider>
+      <CashRegister />
+    </CashRegisterContextProvider>
+  );
 }
