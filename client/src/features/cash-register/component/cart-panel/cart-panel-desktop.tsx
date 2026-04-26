@@ -9,12 +9,14 @@ interface Props {
   cartItems: CartProduct[];
   totalQuantity: number;
   totalPrice: number;
+  onProceedToPayment: () => void;
 }
 
 export const CartPanelDesktop = ({
   cartItems,
   totalQuantity,
   totalPrice,
+  onProceedToPayment,
 }: Props) => {
   return (
     <Card className="hidden h-full min-h-0 pb-4 lg:flex lg:flex-col">
@@ -53,7 +55,12 @@ export const CartPanelDesktop = ({
             {formatPriceToEuros(totalPrice)}
           </span>
         </div>
-        <Button className="w-full" size="lg" disabled={!cartItems.length}>
+        <Button
+          className="w-full"
+          size="lg"
+          disabled={!cartItems.length}
+          onClick={onProceedToPayment}
+        >
           <ShoppingBag />
           Passer au paiement
         </Button>

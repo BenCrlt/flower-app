@@ -11,22 +11,27 @@ import {
 } from "@/components/ui/sheet";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
 import { ShoppingBag } from "lucide-react";
+import { useState } from "react";
 import { CartProduct } from "../../CashRegisterContext";
 
 interface Props {
   cartItems: CartProduct[];
   totalQuantity: number;
   totalPrice: number;
+  onProceedToPayment: () => void;
 }
 
 export const CartPanelMobile = ({
   cartItems,
   totalQuantity,
   totalPrice,
+  onProceedToPayment,
 }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
+
   return (
     <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 backdrop-blur lg:hidden">
-      <Sheet>
+      <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <div className="mx-auto flex max-w-5xl items-center gap-3">
           <div className="flex min-w-0 flex-1 flex-col">
             <span className="text-xs text-muted-foreground">
@@ -83,7 +88,14 @@ export const CartPanelMobile = ({
                 {formatPriceToEuros(totalPrice)}
               </span>
             </div>
-            <Button size="lg" disabled={!cartItems.length}>
+            <Button
+              size="lg"
+              disabled={!cartItems.length}
+              onClick={() => {
+                setIsOpen(false);
+                onProceedToPayment();
+              }}
+            >
               <ShoppingBag />
               Passer au paiement
             </Button>
