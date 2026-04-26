@@ -26,9 +26,8 @@ export const CashRegisterContextProvider = ({
 }) => {
   const { edition } = useEdition();
   const cartStorageKey = `${CASH_REGISTER_CART_KEY_PREFIX}-${edition.id}`;
-  const [selectedCategories, setSelectedCategories] = useState<
-    BudgetCategoriesItem[]
-  >([]);
+  const [selectedCategory, setSelectedCategory] =
+    useState<BudgetCategoriesItem | null>(null);
 
   const [selectedOriginId, setSelectedOriginId] = useState<number | null>(
     () => {
@@ -55,10 +54,7 @@ export const CashRegisterContextProvider = ({
 
   const cartProductsToDisplay = cartProducts.filter(
     (product) =>
-      !selectedCategories.length ||
-      selectedCategories.some(
-        (category) => category.id === product.category.id,
-      ),
+      !selectedCategory || selectedCategory.id === product.category.id,
   );
 
   const { data: orderOriginData } = useGetOrderOriginQuery({
@@ -136,7 +132,7 @@ export const CashRegisterContextProvider = ({
         category: product.category!,
       })),
     );
-    setSelectedCategories([]);
+    setSelectedCategory(null);
     localStorage.setItem(cartStorageKey, JSON.stringify([]));
   }
 
@@ -186,13 +182,8 @@ export const CashRegisterContextProvider = ({
     }
   };
 
-  const onSelectCategory = (category: BudgetCategoriesItem) => {
-    setSelectedCategories((previous) => {
-      if (previous.includes(category)) {
-        return previous.filter((value) => value.id !== category.id);
-      }
-      return [...previous, category];
-    });
+  const onSelectCategory = (category: BudgetCategoriesItem | null) => {
+    setSelectedCategory(category);
   };
 
   const onValidateOrder = (paymentMethod: ValidateOrderPaymentMethodInput) => {
@@ -223,7 +214,7 @@ export const CashRegisterContextProvider = ({
           handleCart(productId, "decrement"),
         allCategoriesInProducts,
         onSelectCategory,
-        selectedCategories,
+        selectedCategory,
         onValidateOrder,
         onCancelOrder: clearCart,
       }}

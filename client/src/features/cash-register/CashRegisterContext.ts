@@ -20,9 +20,9 @@ export interface CashRegisterContextValue {
   cartProducts: CartProduct[];
   onAddProductToCart: (productId: number) => void;
   onRemoveProductToCart: (productId: number) => void;
-  onSelectCategory: (category: BudgetCategoriesItem) => void;
+  onSelectCategory: (category: BudgetCategoriesItem | null) => void;
   allCategoriesInProducts: BudgetCategoriesItem[];
-  selectedCategories: BudgetCategoriesItem[];
+  selectedCategory: BudgetCategoriesItem | null;
   onValidateOrder: (paymentMethod: ValidateOrderPaymentMethodInput) => void;
   onCancelOrder: () => void;
 }
