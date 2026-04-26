@@ -1,4 +1,5 @@
 import { Badge } from "@/components/ui/badge";
+import { motion } from "framer-motion";
 import { useCashRegister } from "../../hooks/useCashRegister";
 
 export const CategoriesFilter = () => {
@@ -7,29 +8,49 @@ export const CategoriesFilter = () => {
 
   return (
     <div className="flex gap-2">
-      <Badge
-        variant={selectedCategory ? "secondary" : "default"}
-        className="cursor-pointer text-md"
-        onClick={() => onSelectCategory(null)}
+      <motion.div
+        whileHover={{ y: -2, scale: 1.04 }}
+        whileTap={{ scale: 0.92 }}
+        animate={{
+          y: selectedCategory ? 0 : -1,
+          scale: selectedCategory ? 1 : 1.05,
+        }}
+        transition={{ type: "spring", stiffness: 560, damping: 26 }}
       >
-        Toutes
-      </Badge>
-      {allCategoriesInProducts.map((category) => (
         <Badge
-          key={category.id}
-          style={{
-            backgroundColor:
-              selectedCategory?.id === category.id ? category.color : undefined,
-            borderColor:
-              selectedCategory?.id === category.id ? category.color : undefined,
-            color: selectedCategory?.id === category.id ? "#fff" : undefined,
-          }}
-          onClick={() => onSelectCategory(category)}
-          className="cursor-pointer text-md"
-          variant="secondary"
+          variant={selectedCategory ? "secondary" : "default"}
+          className="cursor-pointer text-md transition-colors duration-150"
+          onClick={() => onSelectCategory(null)}
         >
-          {category.name}
+          Toutes
         </Badge>
+      </motion.div>
+      {allCategoriesInProducts.map((category) => (
+        <motion.div
+          key={category.id}
+          whileHover={{ y: -2, scale: 1.04 }}
+          whileTap={{ scale: 0.92 }}
+          animate={{
+            y: selectedCategory?.id === category.id ? -1 : 0,
+            scale: selectedCategory?.id === category.id ? 1.05 : 1,
+          }}
+          transition={{ type: "spring", stiffness: 560, damping: 26 }}
+        >
+          <Badge
+            style={{
+              backgroundColor:
+                selectedCategory?.id === category.id ? category.color : undefined,
+              borderColor:
+                selectedCategory?.id === category.id ? category.color : undefined,
+              color: selectedCategory?.id === category.id ? "#fff" : undefined,
+            }}
+            onClick={() => onSelectCategory(category)}
+            className="cursor-pointer text-md transition-colors duration-150"
+            variant="secondary"
+          >
+            {category.name}
+          </Badge>
+        </motion.div>
       ))}
     </div>
   );
