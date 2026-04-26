@@ -12,7 +12,7 @@ export interface CartProduct extends Pick<BudgetLinesItem, "id" | "name"> {
 }
 
 export interface CashRegisterContextValue {
-  handleSelectOrigin: (originId: number) => void;
+  handleSelectOrigin: (originId: number | null) => void;
   openSelectOriginDialog: boolean;
   orderOrigin: GetOrderOriginQuery["orderOrigin"];
   allCartProducts: CartProduct[];

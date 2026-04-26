@@ -94,9 +94,14 @@ export const CashRegisterContextProvider = ({
 
   const openSelectOriginDialog = selectedOriginId === null;
 
-  const handleSelectOrigin = (originId: number) => {
+  const handleSelectOrigin = (originId: number | null) => {
     setSelectedOriginId(originId);
-    localStorage.setItem(CASH_REGISTER_ORIGIN_ID_KEY, originId.toString());
+
+    if (originId) {
+      localStorage.setItem(CASH_REGISTER_ORIGIN_ID_KEY, originId.toString());
+    } else {
+      localStorage.removeItem(CASH_REGISTER_ORIGIN_ID_KEY);
+    }
   };
 
   const onSelectCategory = (category: BudgetCategoriesItem) => {
