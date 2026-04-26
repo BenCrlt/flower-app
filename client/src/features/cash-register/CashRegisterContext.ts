@@ -7,6 +7,7 @@ import { createContext } from "react";
 
 export interface CartProduct extends Pick<BudgetLinesItem, "id" | "name"> {
   quantity: number;
+  unitPrice: number;
   category: BudgetCategoriesItem;
 }
 
@@ -14,6 +15,7 @@ export interface CashRegisterContextValue {
   handleSelectOrigin: (originId: number) => void;
   openSelectOriginDialog: boolean;
   orderOrigin: GetOrderOriginQuery["orderOrigin"];
+  allCartProducts: CartProduct[];
   cartProducts: CartProduct[];
   onAddProductToCart: (productId: number) => void;
   onRemoveProductToCart: (productId: number) => void;

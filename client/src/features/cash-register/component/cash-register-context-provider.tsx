@@ -64,6 +64,7 @@ export const CashRegisterContextProvider = ({
           id: product.id,
           name: product.name,
           quantity: 0,
+          unitPrice: Number(product.estimatedUnitPrice) || 0,
           category: product.category!,
         })),
       );
@@ -113,6 +114,7 @@ export const CashRegisterContextProvider = ({
         handleSelectOrigin,
         openSelectOriginDialog,
         orderOrigin: orderOriginData?.orderOrigin,
+        allCartProducts: cartProducts,
         cartProducts: cartProductsToDisplay,
         onAddProductToCart: (productId: number) =>
           handleCart(productId, "increment"),
