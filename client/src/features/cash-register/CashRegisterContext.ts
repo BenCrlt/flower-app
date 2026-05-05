@@ -24,6 +24,7 @@ export interface CashRegisterContextValue {
   allCategoriesInProducts: BudgetCategoriesItem[];
   selectedCategory: BudgetCategoriesItem | null;
   onValidateOrder: (paymentMethod: ValidateOrderPaymentMethodInput) => void;
+  onStartCardPayment: (amount: number) => boolean;
   onCancelOrder: () => void;
 }
 

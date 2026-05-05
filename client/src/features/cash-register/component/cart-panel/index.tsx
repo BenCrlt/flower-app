@@ -7,7 +7,7 @@ import { CartPanelMobile } from "./cart-panel-mobile";
 import { PaymentMethodDialog } from "./payment-method-dialog";
 
 export const CartPanel = () => {
-  const { allCartProducts, onValidateOrder, onCancelOrder } = useCashRegister();
+  const { allCartProducts, onCancelOrder } = useCashRegister();
   const [openPaymentMethodDialog, setOpenPaymentMethodDialog] = useState(false);
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState(false);
 
@@ -45,8 +45,8 @@ export const CartPanel = () => {
       />
       <PaymentMethodDialog
         open={openPaymentMethodDialog}
+        totalPrice={totalPrice}
         onOpenChange={setOpenPaymentMethodDialog}
-        onSelectMethod={onValidateOrder}
       />
       <CancelOrderDialog
         open={openCancelOrderDialog}
