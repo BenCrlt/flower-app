@@ -8,20 +8,33 @@ import {
 } from "@/components/ui/dialog";
 import { ValidateOrderPaymentMethodInput } from "@/generated/graphql";
 import { Banknote, CreditCard } from "lucide-react";
+import { useCashRegister } from "../../hooks/useCashRegister";
 
 interface Props {
   open: boolean;
+  totalPrice: number;
   onOpenChange: (open: boolean) => void;
-  onSelectMethod?: (method: ValidateOrderPaymentMethodInput) => void;
 }
 
 export const PaymentMethodDialog = ({
   open,
+  totalPrice,
   onOpenChange,
-  onSelectMethod,
 }: Props) => {
+  const { onStartCardPayment, onValidateOrder } = useCashRegister();
+
   const handleSelectMethod = (method: ValidateOrderPaymentMethodInput) => {
-    onSelectMethod?.(method);
+    if (method === ValidateOrderPaymentMethodInput.Card) {
+      const hasStartedPayment = onStartCardPayment(totalPrice);
+      if (!hasStartedPayment) {
+        return;
+      }
+
+      onOpenChange(false);
+      return;
+    }
+
+    onValidateOrder(method);
     onOpenChange(false);
   };
 

@@ -9,6 +9,7 @@ import { ReactNode, useState } from "react";
 import { toast } from "sonner";
 import { CartProduct, CashRegisterContext } from "../CashRegisterContext";
 import { useGetOrderOriginQuery } from "../hooks/useGetOrderOriginQuery";
+import { useSumUp } from "../hooks/useSumUp";
 import { useValidateOrderMutation } from "../hooks/useValidateOrderMutation";
 
 const CASH_REGISTER_ORIGIN_ID_KEY = "cash-register-origin-id";
@@ -200,6 +201,10 @@ export const CashRegisterContextProvider = ({
       sales,
     });
   };
+  const { startCardPayment } = useSumUp({
+    onValidateCardPayment: () =>
+      onValidateOrder(ValidateOrderPaymentMethodInput.Card),
+  });
 
   return (
     <CashRegisterContext.Provider
@@ -217,6 +222,7 @@ export const CashRegisterContextProvider = ({
         onSelectCategory,
         selectedCategory,
         onValidateOrder,
+        onStartCardPayment: startCardPayment,
         onCancelOrder: clearCart,
       }}
     >
