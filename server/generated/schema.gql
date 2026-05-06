@@ -152,6 +152,7 @@ type Query {
   orderOrigin(id: Float!): OrderOriginsItem
   orderOrigins(onlyPhysical: Boolean): [OrderOriginsItem!]!
   orders(editionId: Float!, from: String, originIds: [Float!], to: String): [OrdersItem!]!
+  sumUpConfig: SumUpConfig!
   vendors: [VendorsItem!]!
 }
 
@@ -163,6 +164,12 @@ type SalesItem {
   id: Int!
   orderId: Int!
   quantity: Float!
+}
+
+type SumUpConfig {
+  affiliateKey: String!
+  appId: String!
+  callbackUrl: String!
 }
 
 input UpdateInvoicePaymentsInput {

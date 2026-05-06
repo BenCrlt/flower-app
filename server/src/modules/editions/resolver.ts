@@ -10,6 +10,7 @@ import {
   getBudgetStatsByCategories,
   statsByCategoryOutput,
 } from "./utils/getBudgetStatsByCategories.js";
+import { getSumUpConfig, SumUpConfig } from "./utils/getSumUpConfig.js";
 import { getTotalEstimatedForEditions } from "./utils/getTotalEstimatedForEditions.js";
 import { getTotalExpense } from "./utils/getTotalExpense.js";
 import { loadTotalIncome } from "./utils/getTotalncome.js";
@@ -71,4 +72,6 @@ export const editionsResolver = resolver.of(editionsTable, {
   deleteEdition: mutation(editionsTable.$nullable())
     .input(deleteEditionInput)
     .resolve(deleteEdition),
+
+  sumUpConfig: query(SumUpConfig).resolve(getSumUpConfig),
 });

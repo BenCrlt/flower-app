@@ -21,6 +21,7 @@ type Documents = {
     "query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!, $excludeHelloAsso: Boolean) {\n  budgetLines(\n    editionId: $editionId\n    budgetLineType: $budgetLineType\n    excludeHelloAsso: $excludeHelloAsso\n  ) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    realCost\n    salesCount\n    lineType\n    category {\n      id\n      name\n      color\n    }\n    helloAssoProductId\n  }\n}": typeof types.GetBudgetLinesDocument,
     "mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n  ) {\n    id\n    name\n  }\n}": typeof types.UpdateBudgetLineDocument,
     "query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n  }\n}": typeof types.GetOrderOriginDocument,
+    "query getSumUpConfig {\n  sumUpConfig {\n    affiliateKey\n    appId\n    callbackUrl\n  }\n}": typeof types.GetSumUpConfigDocument,
     "mutation validateOrder($editionId: Float!, $originId: Float!, $paymentMethod: ValidateOrderPaymentMethodInput!, $sales: [ValidateOrderSalesInput!]!) {\n  validateOrder(\n    editionId: $editionId\n    originId: $originId\n    paymentMethod: $paymentMethod\n    sales: $sales\n  ) {\n    id\n  }\n}": typeof types.ValidateOrderDocument,
     "query getBudgetStatsByCategories($editionId: Float!, $lineType: LineTypeEnum!) {\n  getBudgetStatsByCategories(editionId: $editionId, lineType: $lineType) {\n    categoryName\n    totalEstimated\n    total\n  }\n}": typeof types.GetBudgetStatsByCategoriesDocument,
     "query getEditionStats($editionId: Float!) {\n  edition(id: $editionId) {\n    id\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": typeof types.GetEditionStatsDocument,
@@ -47,6 +48,7 @@ const documents: Documents = {
     "query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!, $excludeHelloAsso: Boolean) {\n  budgetLines(\n    editionId: $editionId\n    budgetLineType: $budgetLineType\n    excludeHelloAsso: $excludeHelloAsso\n  ) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    realCost\n    salesCount\n    lineType\n    category {\n      id\n      name\n      color\n    }\n    helloAssoProductId\n  }\n}": types.GetBudgetLinesDocument,
     "mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n  ) {\n    id\n    name\n  }\n}": types.UpdateBudgetLineDocument,
     "query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n  }\n}": types.GetOrderOriginDocument,
+    "query getSumUpConfig {\n  sumUpConfig {\n    affiliateKey\n    appId\n    callbackUrl\n  }\n}": types.GetSumUpConfigDocument,
     "mutation validateOrder($editionId: Float!, $originId: Float!, $paymentMethod: ValidateOrderPaymentMethodInput!, $sales: [ValidateOrderSalesInput!]!) {\n  validateOrder(\n    editionId: $editionId\n    originId: $originId\n    paymentMethod: $paymentMethod\n    sales: $sales\n  ) {\n    id\n  }\n}": types.ValidateOrderDocument,
     "query getBudgetStatsByCategories($editionId: Float!, $lineType: LineTypeEnum!) {\n  getBudgetStatsByCategories(editionId: $editionId, lineType: $lineType) {\n    categoryName\n    totalEstimated\n    total\n  }\n}": types.GetBudgetStatsByCategoriesDocument,
     "query getEditionStats($editionId: Float!) {\n  edition(id: $editionId) {\n    id\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": types.GetEditionStatsDocument,
@@ -108,6 +110,10 @@ export function graphql(source: "mutation updateBudgetLine($id: Float!, $name: S
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n  }\n}"): (typeof documents)["query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query getSumUpConfig {\n  sumUpConfig {\n    affiliateKey\n    appId\n    callbackUrl\n  }\n}"): (typeof documents)["query getSumUpConfig {\n  sumUpConfig {\n    affiliateKey\n    appId\n    callbackUrl\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

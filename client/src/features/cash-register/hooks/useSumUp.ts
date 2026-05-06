@@ -1,6 +1,7 @@
 import { openPaymentSwitchLink } from "@/lib/payment-switch";
 import { useEffect, useRef } from "react";
 import { toast } from "sonner";
+import { useSumUpQuery } from "./useSumUpQuery";
 
 export const PENDING_CARD_PAYMENT_KEY = "cash-register-pending-card-payment";
 
@@ -10,6 +11,8 @@ interface UseSumUpParams {
 
 export const useSumUp = ({ onValidateCardPayment }: UseSumUpParams) => {
   const hasHandledPaymentCallbackRef = useRef(false);
+
+  const { data: sumUpConfigData } = useSumUpQuery();
 
   const startCardPayment = (amount: number) => {
     try {
@@ -21,6 +24,7 @@ export const useSumUp = ({ onValidateCardPayment }: UseSumUpParams) => {
       openPaymentSwitchLink({
         amount,
         foreignTxId,
+        config: sumUpConfigData?.sumUpConfig ?? null,
       });
       return true;
     } catch (error) {
