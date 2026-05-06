@@ -36,11 +36,6 @@ jobs:
           push: true
           build-args: |
             VITE_API_URL=${{ vars.VITE_API_URL }}
-            VITE_SUMUP_AFFILIATE_KEY=${{ secrets.VITE_SUMUP_AFFILIATE_KEY }}
-            VITE_SUMUP_APP_ID=${{ vars.VITE_SUMUP_APP_ID }}
-            VITE_SUMUP_CALLBACK_URL=${{ vars.VITE_SUMUP_CALLBACK_URL }}
-            VITE_SUMUP_CALLBACK_SUCCESS_URL=${{ vars.VITE_SUMUP_CALLBACK_SUCCESS_URL }}
-            VITE_SUMUP_CALLBACK_FAIL_URL=${{ vars.VITE_SUMUP_CALLBACK_FAIL_URL }}
           # Ceci tag l'image avec "latest" et le hash du commit
           tags: |
             ghcr.io/${{ env.IMAGE_NAME }}:latest
