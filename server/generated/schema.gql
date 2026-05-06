@@ -169,7 +169,6 @@ type SalesItem {
 type SumUpConfig {
   affiliateKey: String!
   appId: String!
-  callbackUrl: String!
 }
 
 input UpdateInvoicePaymentsInput {

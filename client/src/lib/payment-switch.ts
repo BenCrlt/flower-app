@@ -20,6 +20,9 @@ const getPlatform = () => {
   return "other";
 };
 
+const getCashRegisterCallbackUrl = () =>
+  new URL("/cash-register", window.location.origin).toString();
+
 export const openPaymentSwitchLink = ({
   amount,
   title = "Paiement caisse",
@@ -46,23 +49,15 @@ export const openPaymentSwitchLink = ({
     if (!config.appId) {
       throw new Error("App ID est manquante pour Android.");
     }
-    if (!config.callbackUrl) {
-      throw new Error("Callback URL est manquante pour Android.");
-    }
+    const callbackUrl = getCashRegisterCallbackUrl();
     url.searchParams.set("app-id", config.appId);
-    url.searchParams.set("callback", config.callbackUrl);
+    url.searchParams.set("callback", callbackUrl);
     url.searchParams.set("total", amount.toFixed(2));
   }
 
   if (platform === "ios") {
-    const callbackSuccess = config.callbackUrl ?? "";
-    const callbackFail = config.callbackUrl ?? "";
-
-    if (!callbackSuccess || !callbackFail) {
-      throw new Error(
-        "Callback success et callback fail sont manquants pour iOS.",
-      );
-    }
+    const callbackSuccess = getCashRegisterCallbackUrl();
+    const callbackFail = callbackSuccess;
 
     url.searchParams.set("amount", amount.toFixed(2));
     url.searchParams.set("callbacksuccess", callbackSuccess);
