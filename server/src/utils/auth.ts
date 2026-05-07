@@ -6,7 +6,7 @@ import { FastifyRequest } from "fastify";
 import { db } from "../db/index.js";
 
 export const auth = betterAuth({
-  baseURL: process.env.BETTER_AUTH_URL ?? "http://127.0.0.1:3000",
+  baseURL: process.env.BETTER_AUTH_URL ?? "http://localhost:3000",
   database: drizzleAdapter(db, {
     provider: "pg",
   }),
