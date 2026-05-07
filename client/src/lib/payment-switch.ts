@@ -40,28 +40,26 @@ export const openPaymentSwitchLink = ({
     throw new Error("Affiliate key est manquante.");
   }
 
+  const callbackUrl = getCashRegisterCallbackUrl();
+
   url.searchParams.set("affiliate-key", config.affiliateKey);
   url.searchParams.set("currency", "EUR");
   url.searchParams.set("title", title);
   url.searchParams.set("foreign-tx-id", foreignTxId);
+  url.searchParams.set("skip-screen-success", "true");
 
   if (platform === "android") {
     if (!config.appId) {
       throw new Error("App ID est manquante pour Android.");
     }
-    const callbackUrl = getCashRegisterCallbackUrl();
-    url.searchParams.set("app-id", config.appId);
     url.searchParams.set("callback", callbackUrl);
     url.searchParams.set("total", amount.toFixed(2));
   }
 
   if (platform === "ios") {
-    const callbackSuccess = getCashRegisterCallbackUrl();
-    const callbackFail = callbackSuccess;
-
     url.searchParams.set("amount", amount.toFixed(2));
-    url.searchParams.set("callbacksuccess", callbackSuccess);
-    url.searchParams.set("callbackfail", callbackFail);
+    url.searchParams.set("callbacksuccess", callbackUrl);
+    url.searchParams.set("callbackfail", callbackUrl);
   }
 
   window.location.href = url.toString();
