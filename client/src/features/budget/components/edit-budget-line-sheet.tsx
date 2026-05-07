@@ -57,9 +57,7 @@ export function EditBudgetLineSheet({
             />
           </div>
           <SheetFooter>
-            <Button type="submit" disabled={Object.keys(errors).length > 0}>
-              Enregistrer
-            </Button>
+            <Button type="submit">Enregistrer</Button>
             <SheetClose asChild>
               <Button variant="outline" onClick={handleClose}>
                 Annuler
