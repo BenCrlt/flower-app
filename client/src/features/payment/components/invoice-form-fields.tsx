@@ -1,3 +1,4 @@
+import { AddBudgetLineDialog } from "@/components/add-budget-line-dialog";
 import { AddVendorDialog } from "@/components/add-vendor-dialog";
 import { PopoverCommand } from "@/components/PopoverCommand";
 import { Button } from "@/components/ui/button";
@@ -52,6 +53,10 @@ export function InvoiceFormFields({
   setValue,
 }: Props): ReactElement {
   const [openAddVendorDialog, setOpenAddVendorDialog] = useState(false);
+  const [selectedPaymentIndex, setSelectedPaymentIndex] = useState<number | null>(
+    null,
+  );
+
   return (
     <>
       {/* Nom */}
@@ -151,21 +156,29 @@ export function InvoiceFormFields({
                 name={`payments.${index}.budgetLineId`}
                 control={control}
                 render={({ field: f }) => (
-                  <Select
-                    value={f.value ? f.value.toString() : ""}
-                    onValueChange={(val) => f.onChange(Number(val))}
-                  >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Sélectionner un article..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {budgetLines.map((line) => (
-                        <SelectItem key={line.id} value={line.id.toString()}>
-                          {line.name}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
+                  <PopoverCommand
+                    items={budgetLines.map((line) => ({
+                      label: line.name,
+                      value: line.id,
+                    }))}
+                    selectedValue={f.value}
+                    setSelectedValue={(value) => f.onChange(Number(value))}
+                    inputPlaceholder="Sélectionner un article..."
+                    commandInputPlaceholder="Rechercher un article..."
+                    title="Articles"
+                    emptyMessage="Pas d'article trouvé."
+                    className="w-full"
+                    contentClassName="w-[--radix-popover-trigger-width]"
+                    actions={[
+                      <CommandItem
+                        key="add-budget-line"
+                        onSelect={() => setSelectedPaymentIndex(index)}
+                      >
+                        <Plus className="h-4 w-4" />
+                        Créer un nouvel article
+                      </CommandItem>,
+                    ]}
+                  />
                 )}
               />
             </Field>
@@ -215,6 +228,21 @@ export function InvoiceFormFields({
           Ajouter un article
         </Button>
       </div>
+      <AddBudgetLineDialog
+        open={selectedPaymentIndex !== null}
+        setOpen={(open) => {
+          if (!open) {
+            setSelectedPaymentIndex(null);
+          }
+        }}
+        onAdded={(budgetLineId) => {
+          if (selectedPaymentIndex === null) return;
+          setValue(
+            `payments.${selectedPaymentIndex}.budgetLineId`,
+            budgetLineId,
+          );
+        }}
+      />
 
       {/* Total */}
       <p className="text-sm text-muted-foreground">

@@ -4,6 +4,7 @@ import { useEdition } from "@/features/edition/EditionContext";
 import { LineTypeEnum } from "@/generated/graphql";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useMemo, useState } from "react";
+import { toast } from "sonner";
 import { useDeleteBudgetLineMutation } from "../hooks/useDeleteBudgetLineMutation";
 import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategoriesQuery";
 import { useGetBudgetLinesQuery } from "../hooks/useGetBudgetLinesQuery";
@@ -28,7 +29,16 @@ export function BudgetTable() {
 
   const { data: categoriesData } = useGetBudgetCategoriesQuery();
 
-  const { mutate: deleteBudgetLine } = useDeleteBudgetLineMutation();
+  const { mutate: deleteBudgetLine } = useDeleteBudgetLineMutation({
+    onSuccess: () => {
+      toast.success("Ligne budgétaire supprimée avec succès");
+    },
+    onError: (error) => {
+      toast.error("Erreur lors de la suppression de la ligne budgétaire", {
+        description: error.message,
+      });
+    },
+  });
 
   const rows = useMemo<BudgetTableRow[]>(
     () =>

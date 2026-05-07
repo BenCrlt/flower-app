@@ -61,9 +61,7 @@ export function AddBudgetLineSheet({
             />
           </div>
           <SheetFooter>
-            <Button type="submit" disabled={Object.keys(errors).length > 0}>
-              Ajouter
-            </Button>
+            <Button type="submit">Ajouter</Button>
             <SheetClose asChild>
               <Button variant="outline" onClick={handleClose}>
                 Annuler

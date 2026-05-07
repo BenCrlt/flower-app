@@ -43,6 +43,8 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
     watch,
     formState: { errors },
     setValue,
+    setError,
+    clearErrors,
   } = useForm<InvoiceFormValues>({
     resolver: invoiceFormResolver,
     mode: "onSubmit",
@@ -62,7 +64,43 @@ export function useInvoiceForm({ setOpen, existingInvoice }: Props): {
     0,
   );
 
+  const getPaymentsErrorMessage = (
+    values: InvoiceFormValues,
+  ): string | null => {
+    if (!values.payments || values.payments.length === 0) {
+      return "Au moins une ligne est requise.";
+    }
+
+    for (const payment of values.payments) {
+      const budgetLineId = Number(payment.budgetLineId);
+      const quantity = Number(payment.quantity);
+      const unitPrice = Number(payment.unitPrice);
+
+      if (!Number.isFinite(budgetLineId) || budgetLineId <= 0) {
+        return "Chaque ligne doit avoir un article.";
+      }
+      if (!Number.isFinite(quantity) || quantity <= 0) {
+        return "La quantité doit être supérieure à 0.";
+      }
+      if (!Number.isFinite(unitPrice) || unitPrice < 0) {
+        return "Le prix unitaire doit être positif.";
+      }
+    }
+
+    return null;
+  };
+
   function onSubmit(data: InvoiceFormValues) {
+    const paymentsErrorMessage = getPaymentsErrorMessage(data);
+    if (paymentsErrorMessage) {
+      setError("payments", {
+        type: "manual",
+        message: paymentsErrorMessage,
+      });
+      return;
+    }
+    clearErrors("payments");
+
     const invoiceId = data.id;
     if (existingInvoice && invoiceId) {
       void updateInvoice({
