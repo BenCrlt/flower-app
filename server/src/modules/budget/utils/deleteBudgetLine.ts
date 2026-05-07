@@ -5,7 +5,7 @@ import {
   BudgetLine,
   budgetLinesTable,
 } from "../../../db/schema/budget-lines.js";
-import { salesTable } from "../../../db/schema/index.js";
+import { paymentsTable, salesTable } from "../../../db/schema/index.js";
 
 export const deleteBudgetLineInput = z.object({
   id: z.number().min(1),
@@ -19,7 +19,15 @@ export const deleteBudgetLine = async ({
   });
 
   if (salesLinkedToBudgetLine?.length) {
-    throw new Error("Budget line has sales linked to it");
+    throw new Error("Des ventes sont liées à cette ligne budgétaire");
+  }
+
+  const paymentsLinkedToBudgetLine = await db.query.paymentsTable.findMany({
+    where: eq(paymentsTable.budgetLineId, id),
+  });
+
+  if (paymentsLinkedToBudgetLine?.length) {
+    throw new Error("Des paiements sont liés à cette ligne budgétaire");
   }
 
   return db

@@ -5,7 +5,13 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { gqlFetch } from "../../../lib/gqlFetch";
 
-export function useDeleteBudgetLineMutation() {
+export function useDeleteBudgetLineMutation({
+  onSuccess,
+  onError,
+}: {
+  onSuccess?: () => void;
+  onError?: (error: Error) => void;
+}) {
   const queryClient = useQueryClient();
   return useMutation({
     mutationKey: ["deleteBudgetLine"],
@@ -16,6 +22,10 @@ export function useDeleteBudgetLineMutation() {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["budgetLines"] });
+      onSuccess?.();
+    },
+    onError: (error) => {
+      onError?.(error);
     },
   });
 }
