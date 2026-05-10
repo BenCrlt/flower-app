@@ -25,6 +25,7 @@ import {
 } from "./utils/getOrderOrigins.js";
 import { getOrders, getOrdersInput } from "./utils/getOrders.js";
 import { loadBudgetLines } from "./utils/loadBudgetLines.js";
+import { loadBudgetLinesFromOrderOrigin } from "./utils/loadBudgetLinesFromOrderOrigin.js";
 import { loadOrderOrigins } from "./utils/loadOrderOrigins.js";
 import { loadSales } from "./utils/loadSales.js";
 import { loadTotalAmount } from "./utils/loadTotalAmout.js";
@@ -86,4 +87,12 @@ export const orderOriginResolver = resolver.of(orderOriginsTable, {
   deleteOrderOrigin: mutation(orderOriginsTable.$nullable())
     .input(deleteOrderOriginInput)
     .resolve(deleteOrderOrigin),
+
+  budgetLines: field(budgetLinesTable.$list())
+    .derivedFrom("id")
+    .load(async (orderOrigins) =>
+      loadBudgetLinesFromOrderOrigin(
+        orderOrigins.map((orderOrigin) => orderOrigin.id),
+      ),
+    ),
 });
