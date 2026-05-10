@@ -1,7 +1,6 @@
 import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -37,16 +36,21 @@ const SLICE_FILLS = [
   "var(--chart-5)",
 ] as const;
 
+type BudgetValuesView = "actual" | "forecast";
+
 type CategorySlice = {
   name: string;
   value: number;
   fill: string;
   percentOfTotal: number;
+  actualTotal: number;
+  forecastTotal: number;
 };
 
 export function BudgetByCategoriesChart() {
   const { edition } = useEdition();
   const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Expense);
+  const [valuesView, setValuesView] = useState<BudgetValuesView>("actual");
   const { data: budgetStatsByCategories, isPending } =
     useGetBudgetStatsByCategoriesQuery({
       variables: {
@@ -58,16 +62,32 @@ export function BudgetByCategoriesChart() {
   const categorySlices: CategorySlice[] = useMemo(() => {
     const rows = budgetStatsByCategories?.getBudgetStatsByCategories ?? [];
     const positive = rows
-      .filter((r) => r.total > 0)
-      .sort((a, b) => b.total - a.total);
-    const sum = positive.reduce((acc, r) => acc + r.total, 0);
+      .filter((r) =>
+        valuesView === "actual" ? r.total > 0 : r.totalEstimated > 0,
+      )
+      .sort((a, b) => {
+        const av = valuesView === "actual" ? a.total : a.totalEstimated;
+        const bv = valuesView === "actual" ? b.total : b.totalEstimated;
+        return bv - av;
+      });
+    const sum = positive.reduce(
+      (acc, r) =>
+        acc + (valuesView === "actual" ? r.total : r.totalEstimated),
+      0,
+    );
     return positive.map((r, i) => ({
       name: r.categoryName,
-      value: r.total,
+      value: valuesView === "actual" ? r.total : r.totalEstimated,
       fill: SLICE_FILLS[i % SLICE_FILLS.length],
-      percentOfTotal: sum > 0 ? (r.total / sum) * 100 : 0,
+      percentOfTotal:
+        sum > 0
+          ? ((valuesView === "actual" ? r.total : r.totalEstimated) / sum) *
+            100
+          : 0,
+      actualTotal: r.total,
+      forecastTotal: r.totalEstimated,
     }));
-  }, [budgetStatsByCategories]);
+  }, [budgetStatsByCategories, valuesView]);
 
   const chartConfig = useMemo(() => {
     const cfg: ChartConfig = {};
@@ -83,14 +103,22 @@ export function BudgetByCategoriesChart() {
       : `${upperFirst(getBudgetLineTypeString(LineTypeEnum.Income))} par catégorie`;
 
   const emptyMessage =
-    lineType === LineTypeEnum.Expense
-      ? "Aucune dépense réalisée par catégorie pour le moment."
-      : "Aucune recette réalisée par catégorie pour le moment.";
+    valuesView === "actual"
+      ? lineType === LineTypeEnum.Expense
+        ? "Aucune dépense réalisée par catégorie pour le moment."
+        : "Aucune recette réalisée par catégorie pour le moment."
+      : lineType === LineTypeEnum.Expense
+        ? "Aucune dépense prévisionnelle par catégorie pour le moment."
+        : "Aucune recette prévisionnelle par catégorie pour le moment.";
 
   const description =
-    lineType === LineTypeEnum.Expense
-      ? "Répartition des dépenses réelles par catégorie."
-      : "Répartition des recettes réelles par catégorie.";
+    valuesView === "actual"
+      ? lineType === LineTypeEnum.Expense
+        ? "Répartition des dépenses réelles par catégorie."
+        : "Répartition des recettes réelles par catégorie."
+      : lineType === LineTypeEnum.Expense
+        ? "Répartition du prévisionnel dépenses par catégorie (quantités × prix unitaire prévus)."
+        : "Répartition du prévisionnel recettes par catégorie (quantités × prix unitaire prévus).";
 
   const detailLink =
     lineType === LineTypeEnum.Expense
@@ -99,44 +127,89 @@ export function BudgetByCategoriesChart() {
 
   return (
     <Card className="flex flex-col">
-      <CardHeader className="flex flex-col gap-4 space-y-0 @container/card">
-        <div className="flex flex-col gap-1 min-w-0">
+      <CardHeader className="@container/card flex flex-col gap-4 space-y-0">
+        <div className="min-w-0 space-y-2">
           <CardTitle>
             <TypographyH3 className="leading-snug">{tabTitle}</TypographyH3>
           </CardTitle>
-          <CardDescription className="flex flex-col gap-2">
+          <CardDescription>
             <TypographyP>{description}</TypographyP>
-            <Button variant="link" className="h-auto w-fit justify-start gap-1 p-0 text-sm" asChild>
-              <Link to={detailLink.to}>
-                {detailLink.label}
-                <ArrowUpRight className="size-3.5 opacity-80" aria-hidden />
-              </Link>
-            </Button>
           </CardDescription>
         </div>
-        <CardAction className="self-stretch sm:self-end w-full sm:w-auto">
-          <Tabs
-            value={lineType}
-            onValueChange={(value) => setLineType(value as LineTypeEnum)}
-          >
-            <TabsList className="flex w-full flex-wrap gap-1 h-auto p-1 sm:w-auto">
-              <TabsTrigger
-                className="grow sm:grow-0 gap-1.5"
-                value={LineTypeEnum.Income}
+
+        <div className="bg-muted/40 border-border/80 rounded-xl border p-4">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between lg:gap-6">
+            <div className="grid min-w-0 gap-5 sm:grid-cols-2 lg:flex lg:flex-1 lg:gap-10">
+              <div className="flex min-w-0 flex-col gap-2">
+                <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+                  Type de budget
+                </span>
+                <Tabs
+                  value={lineType}
+                  onValueChange={(value) =>
+                    setLineType(value as LineTypeEnum)
+                  }
+                >
+                  <TabsList className="flex h-auto w-full flex-wrap gap-1 p-1 sm:w-fit">
+                    <TabsTrigger
+                      className="grow gap-1.5 sm:grow-0"
+                      value={LineTypeEnum.Income}
+                    >
+                      Recettes
+                      <PiggyBank className="size-3.5 opacity-70" aria-hidden />
+                    </TabsTrigger>
+                    <TabsTrigger
+                      className="grow gap-1.5 sm:grow-0"
+                      value={LineTypeEnum.Expense}
+                    >
+                      Dépenses
+                      <Coins className="size-3.5 opacity-70" aria-hidden />
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+              <div className="flex min-w-0 flex-col gap-2">
+                <span className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
+                  Données affichées
+                </span>
+                <Tabs
+                  value={valuesView}
+                  onValueChange={(value) =>
+                    setValuesView(value as BudgetValuesView)
+                  }
+                >
+                  <TabsList className="flex h-auto w-full flex-wrap gap-1 p-1 sm:w-fit">
+                    <TabsTrigger
+                      className="grow gap-1.5 sm:grow-0"
+                      value="actual"
+                    >
+                      Réalisé
+                    </TabsTrigger>
+                    <TabsTrigger
+                      className="grow gap-1.5 sm:grow-0"
+                      value="forecast"
+                    >
+                      Prévisionnel
+                    </TabsTrigger>
+                  </TabsList>
+                </Tabs>
+              </div>
+            </div>
+            <div className="border-border/60 flex border-t pt-4 lg:border-t-0 lg:border-l lg:pt-0 lg:pl-6">
+              <Button
+                variant="outline"
+                size="sm"
+                className="w-full gap-1.5 lg:w-auto"
+                asChild
               >
-                Recettes
-                <PiggyBank className="size-3.5 opacity-70" aria-hidden />
-              </TabsTrigger>
-              <TabsTrigger
-                className="grow sm:grow-0 gap-1.5"
-                value={LineTypeEnum.Expense}
-              >
-                Dépenses
-                <Coins className="size-3.5 opacity-70" aria-hidden />
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </CardAction>
+                <Link to={detailLink.to}>
+                  {detailLink.label}
+                  <ArrowUpRight className="size-3.5 opacity-80" aria-hidden />
+                </Link>
+              </Button>
+            </div>
+          </div>
+        </div>
       </CardHeader>
       <CardContent>
         {isPending ? (
@@ -166,9 +239,19 @@ export function BudgetByCategoriesChart() {
                       <div className="border-border/50 bg-background grid gap-1 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl">
                         <span className="font-medium">{row.name}</span>
                         <span className="text-muted-foreground tabular-nums">
-                          {formatPriceToEuros(row.value)} ·{" "}
+                          {valuesView === "actual" ? "Réalisé" : "Prévisionnel"}
+                          : {formatPriceToEuros(row.value)} ·{" "}
                           {row.percentOfTotal.toFixed(1)}&nbsp;% du total
                         </span>
+                        {(valuesView === "actual"
+                          ? row.forecastTotal > 0
+                          : row.actualTotal > 0) ? (
+                          <span className="text-muted-foreground tabular-nums border-border/60 border-t pt-1">
+                            {valuesView === "actual"
+                              ? `Prévu : ${formatPriceToEuros(row.forecastTotal)}`
+                              : `Réalisé : ${formatPriceToEuros(row.actualTotal)}`}
+                          </span>
+                        ) : null}
                       </div>
                     );
                   }}
@@ -194,7 +277,10 @@ export function BudgetByCategoriesChart() {
                 />
               </PieChart>
             </ChartContainer>
-            <CategoryRecapList slices={categorySlices} />
+            <CategoryRecapList
+              slices={categorySlices}
+              valuesView={valuesView}
+            />
           </div>
         )}
       </CardContent>
@@ -202,7 +288,13 @@ export function BudgetByCategoriesChart() {
   );
 }
 
-function CategoryRecapList({ slices }: { slices: CategorySlice[] }) {
+function CategoryRecapList({
+  slices,
+  valuesView,
+}: {
+  slices: CategorySlice[];
+  valuesView: BudgetValuesView;
+}) {
   return (
     <div className="min-w-0 flex-1 flex flex-col gap-2">
       <TypographyP className="text-muted-foreground text-xs font-medium uppercase tracking-wide">
@@ -222,11 +314,25 @@ function CategoryRecapList({ slices }: { slices: CategorySlice[] }) {
               />
               <span className="font-medium text-sm truncate">{row.name}</span>
             </div>
-            <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0 sm:shrink-0 sm:tabular-nums">
-              <span className="text-sm">{formatPriceToEuros(row.value)}</span>
-              <span className="text-muted-foreground text-xs">
-                {row.percentOfTotal.toFixed(1)}&nbsp;% du total
-              </span>
+            <div className="flex flex-col gap-0.5 sm:items-end sm:shrink-0 sm:tabular-nums">
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-0">
+                <span className="text-sm">
+                  {formatPriceToEuros(row.value)}
+                </span>
+                <span className="text-muted-foreground text-xs">
+                  {row.percentOfTotal.toFixed(1)}&nbsp;% du total
+                </span>
+              </div>
+              {valuesView === "actual" && row.forecastTotal > 0 ? (
+                <span className="text-muted-foreground text-xs">
+                  Prévu {formatPriceToEuros(row.forecastTotal)}
+                </span>
+              ) : null}
+              {valuesView === "forecast" && row.actualTotal > 0 ? (
+                <span className="text-muted-foreground text-xs">
+                  Réalisé {formatPriceToEuros(row.actualTotal)}
+                </span>
+              ) : null}
             </div>
           </li>
         ))}
