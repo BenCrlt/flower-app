@@ -39,6 +39,7 @@ type Documents = {
     "mutation deleteOrderOrigin($id: Float!) {\n  deleteOrderOrigin(id: $id) {\n    id\n    name\n  }\n}": typeof types.DeleteOrderOriginDocument,
     "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}": typeof types.GetHelloAssoConfigDocument,
     "mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}": typeof types.SynchroSalesDocument,
+    "mutation updateEdition($id: Float!, $name: String, $startDate: String, $endDate: String, $openingBalance: Float) {\n  updateEdition(\n    id: $id\n    name: $name\n    startDate: $startDate\n    endDate: $endDate\n    openingBalance: $openingBalance\n  ) {\n    id\n    name\n    startDate\n    endDate\n    openingBalance\n  }\n}": typeof types.UpdateEditionDocument,
 };
 const documents: Documents = {
     "mutation AddBudgetCategory($name: String!, $color: String!) {\n  addBudgetCategory(name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}": types.AddBudgetCategoryDocument,
@@ -66,6 +67,7 @@ const documents: Documents = {
     "mutation deleteOrderOrigin($id: Float!) {\n  deleteOrderOrigin(id: $id) {\n    id\n    name\n  }\n}": types.DeleteOrderOriginDocument,
     "query getHelloAssoConfig($editionId: Float!) {\n  helloAssoConfig(editionId: $editionId) {\n    id\n    formSlug\n  }\n}": types.GetHelloAssoConfigDocument,
     "mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}": types.SynchroSalesDocument,
+    "mutation updateEdition($id: Float!, $name: String, $startDate: String, $endDate: String, $openingBalance: Float) {\n  updateEdition(\n    id: $id\n    name: $name\n    startDate: $startDate\n    endDate: $endDate\n    openingBalance: $openingBalance\n  ) {\n    id\n    name\n    startDate\n    endDate\n    openingBalance\n  }\n}": types.UpdateEditionDocument,
 };
 
 /**
@@ -182,6 +184,10 @@ export function graphql(source: "query getHelloAssoConfig($editionId: Float!) {\
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}"): (typeof documents)["mutation synchroSales($helloAssoConfigId: Float!, $from: String!, $to: String!) {\n  synchroSales(helloAssoConfigId: $helloAssoConfigId, from: $from, to: $to) {\n    id\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation updateEdition($id: Float!, $name: String, $startDate: String, $endDate: String, $openingBalance: Float) {\n  updateEdition(\n    id: $id\n    name: $name\n    startDate: $startDate\n    endDate: $endDate\n    openingBalance: $openingBalance\n  ) {\n    id\n    name\n    startDate\n    endDate\n    openingBalance\n  }\n}"): (typeof documents)["mutation updateEdition($id: Float!, $name: String, $startDate: String, $endDate: String, $openingBalance: Float) {\n  updateEdition(\n    id: $id\n    name: $name\n    startDate: $startDate\n    endDate: $endDate\n    openingBalance: $openingBalance\n  ) {\n    id\n    name\n    startDate\n    endDate\n    openingBalance\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};
