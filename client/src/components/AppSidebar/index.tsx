@@ -10,13 +10,14 @@ import {
 } from "@/components/ui/sidebar";
 import { useEdition } from "@/features/edition/EditionContext";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { useEffect } from "react";
 import {
   ChartNoAxesCombined,
   Coins,
-  CreditCard,
   LayoutDashboard,
+  ReceiptEuro,
+  Store,
 } from "lucide-react";
+import { useEffect } from "react";
 import { AppSidebarMobile } from "./app-sidebar-mobile";
 import { AppSidebarFooter } from "./footer";
 import { AppSidebarHeader } from "./header";
@@ -44,8 +45,9 @@ export function AppSidebar() {
     ? [
         { to: "/dashboard", icon: LayoutDashboard, label: "Dashboard" },
         { to: "/budget-table", icon: ChartNoAxesCombined, label: "Budget" },
-        { to: "/invoices", icon: CreditCard, label: "Factures" },
+        { to: "/invoices", icon: ReceiptEuro, label: "Factures" },
         { to: "/sales", icon: Coins, label: "Ventes" },
+        { to: "/cash-register", icon: Store, label: "Caisse" },
       ]
     : [];
 

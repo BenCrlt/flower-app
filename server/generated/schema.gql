@@ -92,7 +92,7 @@ type Mutation {
   addEdition(active: Boolean, endDate: String!, name: String!, startDate: String!): EditionsItem
   addHelloAssoConfig(budgetCategoryId: Float, editionId: Float!, enableSynchro: Boolean, formSlug: String!): HelloAssoConfigItem
   addInvoice(authorId: String!, editionId: Float!, name: String!, note: String, payments: [AddInvoicePaymentsInput!]!, status: InvoiceStatus!, totalAmount: Float!, vendorId: Float!): InvoicesItem
-  addOrUpdateOrderOrigin(id: Float, name: String!): OrderOriginsItem
+  addOrUpdateOrderOrigin(budgetLineIds: [Float!], id: Float, name: String!): OrderOriginsItem
   addOrUpdateVendor(address: String, description: String, email: String, id: Float, name: String!, phone: String): VendorsItem
   deleteBudgetCategory(id: Float!): BudgetCategoriesItem
   deleteBudgetLine(id: Float!): BudgetLinesItem
@@ -110,6 +110,7 @@ type Mutation {
 }
 
 type OrderOriginsItem {
+  budgetLines: [BudgetLinesItem!]!
   id: Int!
   isPhysical: Boolean!
   name: String!

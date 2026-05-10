@@ -1,4 +1,4 @@
-import { and, eq, isNull } from "drizzle-orm";
+import { and, asc, eq, isNull } from "drizzle-orm";
 import z from "zod";
 import { db } from "../../../db/index.js";
 import { BudgetLine, budgetLinesTable } from "../../../db/schema/index.js";
@@ -25,5 +25,6 @@ export const getBudgetLines = async ({
         ? isNull(budgetLinesTable.helloAssoProductId)
         : undefined,
     ),
+    orderBy: [asc(budgetLinesTable.name)],
   });
 };

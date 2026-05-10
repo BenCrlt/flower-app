@@ -9,11 +9,13 @@ import { gqlFetch } from "../../../lib/gqlFetch";
 interface UseGetBudgetLinesQueryProps {
   onComplete?: (response: GetBudgetLinesQuery) => void;
   variables: GetBudgetLinesQueryVariables;
+  enabled?: boolean;
 }
 
 export function useGetBudgetLinesQuery({
   onComplete,
   variables,
+  enabled,
 }: UseGetBudgetLinesQueryProps) {
   return useQuery({
     queryKey: ["budgetLines", variables],
@@ -23,5 +25,6 @@ export function useGetBudgetLinesQuery({
         variables,
         onComplete,
       }),
+    enabled,
   });
 }

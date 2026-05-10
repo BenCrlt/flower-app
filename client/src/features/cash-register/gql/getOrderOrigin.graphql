@@ -3,5 +3,15 @@ query getOrderOrigin($id: Float!) {
     id
     name
     isPhysical
+    budgetLines {
+      id
+      name
+      estimatedUnitPrice
+      category {
+        id
+        name
+        color
+      }
+    }
   }
 }

@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/card";
 import { Spinner } from "@/components/ui/spinner";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
+import { useEdition } from "@/features/edition/EditionContext";
 import { useGetOrderOriginsQuery } from "@/features/sales/hooks/useGetOrderOrigins";
 import { Pencil, Plus, Store, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -18,6 +19,7 @@ import { DeleteOrderOriginDialog } from "./delete-order-origin-dialog";
 import { UpsertOrderOriginDialog } from "./upsert-order-origin-dialog";
 
 export const OrderOriginsCard = () => {
+  const { edition } = useEdition();
   const { data: orderOriginsData, isLoading } = useGetOrderOriginsQuery({});
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
@@ -87,10 +89,17 @@ export const OrderOriginsCard = () => {
     setIsDeleteOpen(true);
   };
 
-  const onSubmit = ({ name }: { name: string }) => {
+  const onSubmit = ({
+    name,
+    budgetLineIds,
+  }: {
+    name: string;
+    budgetLineIds: number[];
+  }) => {
     addOrUpdateOrderOrigin({
       id: editingOrigin?.id,
       name: name.trim(),
+      budgetLineIds,
     });
   };
 
@@ -174,6 +183,7 @@ export const OrderOriginsCard = () => {
 
       <UpsertOrderOriginDialog
         open={isFormOpen}
+        editionId={edition.id}
         editingOrigin={editingOrigin}
         isPending={isUpsertPending}
         onOpenChange={(open) => {

@@ -1,8 +1,6 @@
-import { useGetBudgetLinesQuery } from "@/features/budget/hooks/useGetBudgetLinesQuery";
 import { useEdition } from "@/features/edition/EditionContext";
 import {
   BudgetCategoriesItem,
-  LineTypeEnum,
   ValidateOrderPaymentMethodInput,
 } from "@/generated/graphql";
 import { ReactNode, useState } from "react";
@@ -61,6 +59,29 @@ export const CashRegisterContextProvider = ({
   const { data: orderOriginData } = useGetOrderOriginQuery({
     variables: { id: selectedOriginId ?? 0 },
     enabled: selectedOriginId !== null,
+    onComplete: ({ orderOrigin }) => {
+      const storedCartItems = getStoredCartItems();
+      const storedQuantitiesByProductId = new Map<number, number>();
+
+      if (!storedCartItems.length) {
+        localStorage.setItem(cartStorageKey, JSON.stringify([]));
+      }
+
+      storedCartItems.forEach(({ productId, quantity }) => {
+        storedQuantitiesByProductId.set(productId, quantity);
+      });
+
+      const budgetLines = orderOrigin?.budgetLines ?? [];
+      setCartProducts(
+        budgetLines.map((product) => ({
+          id: product.id,
+          name: product.name,
+          quantity: storedQuantitiesByProductId.get(product.id) ?? 0,
+          unitPrice: Number(product.estimatedUnitPrice) || 0,
+          category: product.category!,
+        })),
+      );
+    },
   });
 
   const getStoredCartItems = (): StoredCartItem[] => {
@@ -94,39 +115,9 @@ export const CashRegisterContextProvider = ({
     localStorage.setItem(cartStorageKey, JSON.stringify(serializableCart));
   };
 
-  const { data: budgetLinesData } = useGetBudgetLinesQuery({
-    variables: {
-      editionId: edition.id,
-      budgetLineType: LineTypeEnum.Income,
-      excludeHelloAsso: true,
-    },
-    onComplete: ({ budgetLines }) => {
-      const storedCartItems = getStoredCartItems();
-      const storedQuantitiesByProductId = new Map<number, number>();
-
-      if (!storedCartItems.length) {
-        localStorage.setItem(cartStorageKey, JSON.stringify([]));
-      }
-
-      storedCartItems.forEach(({ productId, quantity }) => {
-        storedQuantitiesByProductId.set(productId, quantity);
-      });
-
-      setCartProducts(
-        budgetLines.map((product) => ({
-          id: product.id,
-          name: product.name,
-          quantity: storedQuantitiesByProductId.get(product.id) ?? 0,
-          unitPrice: Number(product.estimatedUnitPrice) || 0,
-          category: product.category!,
-        })),
-      );
-    },
-  });
-
   function clearCart() {
     setCartProducts(
-      (budgetLinesData?.budgetLines ?? []).map((product) => ({
+      (orderOriginData?.orderOrigin?.budgetLines ?? []).map((product) => ({
         id: product.id,
         name: product.name,
         quantity: 0,
