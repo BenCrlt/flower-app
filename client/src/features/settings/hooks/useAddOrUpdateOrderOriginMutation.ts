@@ -23,8 +23,13 @@ export function useAddOrUpdateOrderOriginMutation({
         document: AddOrUpdateOrderOriginDocument,
         variables,
       }),
-    onSuccess: (data) => {
+    onSuccess: (data, variables) => {
       queryClient.invalidateQueries({ queryKey: ["orderOrigins"] });
+      if (variables.id != null) {
+        queryClient.invalidateQueries({
+          queryKey: ["orderOrigin", variables.id],
+        });
+      }
       onSuccess?.(data);
     },
     onError: (error) => {

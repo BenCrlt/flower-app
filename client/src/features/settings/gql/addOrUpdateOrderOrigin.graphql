@@ -1,5 +1,9 @@
-mutation addOrUpdateOrderOrigin($id: Float, $name: String!) {
-  addOrUpdateOrderOrigin(id: $id, name: $name) {
+mutation addOrUpdateOrderOrigin(
+  $id: Float
+  $name: String!
+  $budgetLineIds: [Float!]
+) {
+  addOrUpdateOrderOrigin(id: $id, name: $name, budgetLineIds: $budgetLineIds) {
     id
     name
   }
