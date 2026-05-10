@@ -1,16 +1,14 @@
 FROM node:25-alpine AS base
 
-ENV PNPM_HOME="/pnpm"
-ENV PATH="$PNPM_HOME:$PATH"
-
-# Install pnpm globally.
-RUN npm install -g pnpm
+# node:25-alpine n’expose pas `corepack` ; on épingle la même version que `packageManager`.
+RUN npm install -g pnpm@10.11.0
 
 # Dependencies stage.
 FROM base AS deps
 WORKDIR /app
 COPY package.json pnpm-lock.yaml ./
-RUN --mount=type=cache,id=pnpm,target=/pnpm/store pnpm install --frozen-lockfile
+RUN --mount=type=cache,id=pnpm,target=/pnpm/store \
+    pnpm install --frozen-lockfile --store-dir=/pnpm/store
 
 COPY tsconfig.json tsconfig.app.json tsconfig.node.json ./
 COPY vite.config.ts ./
