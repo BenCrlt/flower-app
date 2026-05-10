@@ -1,0 +1,1 @@
+ALTER TABLE "editions" ADD COLUMN "openingBalance" integer DEFAULT 0 NOT NULL;

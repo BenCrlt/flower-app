@@ -8,6 +8,7 @@ export const updateEditionInput = z.object({
   name: z.string().min(2).max(100).optional(),
   startDate: z.string().datetime().optional(),
   endDate: z.string().datetime().optional(),
+  openingBalance: z.number().min(0).optional(),
 });
 
 export const updateEdition = async (

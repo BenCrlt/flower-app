@@ -17,6 +17,7 @@ export type EditionBaseInfo = {
   active: boolean;
   startDate: string;
   endDate: string;
+  openingBalance: number;
 };
 
 export interface EditionContextValue {

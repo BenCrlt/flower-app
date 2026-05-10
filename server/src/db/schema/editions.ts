@@ -18,6 +18,7 @@ export const editionsTable = drizzleSilk(
       startDate: timestamp({ withTimezone: true }).notNull(),
       endDate: timestamp({ withTimezone: true }).notNull(),
       active: boolean().notNull(),
+      openingBalance: integer().notNull().default(0),
     },
     (table) => [
       uniqueIndex("editions_active_unique")

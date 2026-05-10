@@ -25,7 +25,7 @@ type Documents = {
     "mutation validateOrder($editionId: Float!, $originId: Float!, $paymentMethod: ValidateOrderPaymentMethodInput!, $sales: [ValidateOrderSalesInput!]!) {\n  validateOrder(\n    editionId: $editionId\n    originId: $originId\n    paymentMethod: $paymentMethod\n    sales: $sales\n  ) {\n    id\n  }\n}": typeof types.ValidateOrderDocument,
     "query getBudgetStatsByCategories($editionId: Float!, $lineType: LineTypeEnum!) {\n  getBudgetStatsByCategories(editionId: $editionId, lineType: $lineType) {\n    categoryName\n    totalEstimated\n    total\n  }\n}": typeof types.GetBudgetStatsByCategoriesDocument,
     "query getEditionStats($editionId: Float!) {\n  edition(id: $editionId) {\n    id\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": typeof types.GetEditionStatsDocument,
-    "query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n  }\n}": typeof types.GetEditionsDocument,
+    "query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n    openingBalance\n  }\n}": typeof types.GetEditionsDocument,
     "mutation addInvoice($name: String!, $authorId: String!, $editionId: Float!, $note: String, $payments: [AddInvoicePaymentsInput!]!, $status: InvoiceStatus!, $totalAmount: Float!, $vendorId: Float!) {\n  addInvoice(\n    name: $name\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": typeof types.AddInvoiceDocument,
     "mutation addOrUpdateVendor($id: Float, $name: String!, $address: String, $email: String, $phone: String, $description: String) {\n  addOrUpdateVendor(\n    id: $id\n    name: $name\n    address: $address\n    email: $email\n    phone: $phone\n    description: $description\n  ) {\n    id\n    name\n    address\n    email\n    phoneNumber\n    description\n  }\n}": typeof types.AddOrUpdateVendorDocument,
     "mutation deleteInvoice($id: Float!) {\n  deleteInvoice(id: $id) {\n    id\n  }\n}": typeof types.DeleteInvoiceDocument,
@@ -52,7 +52,7 @@ const documents: Documents = {
     "mutation validateOrder($editionId: Float!, $originId: Float!, $paymentMethod: ValidateOrderPaymentMethodInput!, $sales: [ValidateOrderSalesInput!]!) {\n  validateOrder(\n    editionId: $editionId\n    originId: $originId\n    paymentMethod: $paymentMethod\n    sales: $sales\n  ) {\n    id\n  }\n}": types.ValidateOrderDocument,
     "query getBudgetStatsByCategories($editionId: Float!, $lineType: LineTypeEnum!) {\n  getBudgetStatsByCategories(editionId: $editionId, lineType: $lineType) {\n    categoryName\n    totalEstimated\n    total\n  }\n}": types.GetBudgetStatsByCategoriesDocument,
     "query getEditionStats($editionId: Float!) {\n  edition(id: $editionId) {\n    id\n    totalExpense\n    totalIncome\n    totalPrevisionnalExpense\n    totalPrevisionnalIncome\n  }\n}": types.GetEditionStatsDocument,
-    "query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n  }\n}": types.GetEditionsDocument,
+    "query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n    openingBalance\n  }\n}": types.GetEditionsDocument,
     "mutation addInvoice($name: String!, $authorId: String!, $editionId: Float!, $note: String, $payments: [AddInvoicePaymentsInput!]!, $status: InvoiceStatus!, $totalAmount: Float!, $vendorId: Float!) {\n  addInvoice(\n    name: $name\n    editionId: $editionId\n    note: $note\n    payments: $payments\n    status: $status\n    totalAmount: $totalAmount\n    vendorId: $vendorId\n    authorId: $authorId\n  ) {\n    id\n  }\n}": types.AddInvoiceDocument,
     "mutation addOrUpdateVendor($id: Float, $name: String!, $address: String, $email: String, $phone: String, $description: String) {\n  addOrUpdateVendor(\n    id: $id\n    name: $name\n    address: $address\n    email: $email\n    phone: $phone\n    description: $description\n  ) {\n    id\n    name\n    address\n    email\n    phoneNumber\n    description\n  }\n}": types.AddOrUpdateVendorDocument,
     "mutation deleteInvoice($id: Float!) {\n  deleteInvoice(id: $id) {\n    id\n  }\n}": types.DeleteInvoiceDocument,
@@ -129,7 +129,7 @@ export function graphql(source: "query getEditionStats($editionId: Float!) {\n  
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n  }\n}"): (typeof documents)["query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n  }\n}"];
+export function graphql(source: "query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n    openingBalance\n  }\n}"): (typeof documents)["query getEditions {\n  editions {\n    id\n    name\n    active\n    startDate\n    endDate\n    openingBalance\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
