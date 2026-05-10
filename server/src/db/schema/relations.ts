@@ -4,6 +4,7 @@ import { budgetCategoriesTable } from "./budget-categories.js";
 import { budgetLinesTable } from "./budget-lines.js";
 import { editionsTable } from "./editions.js";
 import { invoicesTable } from "./invoices.js";
+import { orderOriginBudgetLinesTable } from "./order-origin-budget-lines.js";
 import { orderOriginsTable } from "./order-origins.js";
 import { ordersTable } from "./orders.js";
 import { paymentsTable } from "./payments.js";
@@ -30,6 +31,7 @@ export const budgetLinesRelations = relations(
     }),
     sales: many(salesTable),
     payments: many(paymentsTable),
+    orderOriginBudgetLines: many(orderOriginBudgetLinesTable),
   }),
 );
 
@@ -112,5 +114,20 @@ export const orderOriginsRelations = relations(
   orderOriginsTable,
   ({ many }) => ({
     orders: many(ordersTable),
+    orderOriginBudgetLines: many(orderOriginBudgetLinesTable),
+  }),
+);
+
+export const orderOriginBudgetLinesRelations = relations(
+  orderOriginBudgetLinesTable,
+  ({ one }) => ({
+    orderOrigin: one(orderOriginsTable, {
+      fields: [orderOriginBudgetLinesTable.orderOriginId],
+      references: [orderOriginsTable.id],
+    }),
+    budgetLine: one(budgetLinesTable, {
+      fields: [orderOriginBudgetLinesTable.budgetLineId],
+      references: [budgetLinesTable.id],
+    }),
   }),
 );
