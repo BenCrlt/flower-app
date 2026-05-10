@@ -169,6 +169,13 @@
       "when": 1778418238045,
       "tag": "0023_add-order-origin-budget-lines",
       "breakpoints": true
+    },
+    {
+      "idx": 24,
+      "version": "7",
+      "when": 1778422731962,
+      "tag": "0024_add-openning-balance",
+      "breakpoints": true
     }
   ]
 }

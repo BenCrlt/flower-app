@@ -7,6 +7,7 @@ export const addEditionInput = z.object({
   startDate: z.string().datetime(),
   endDate: z.string().datetime(),
   active: z.boolean().default(false),
+  openingBalance: z.number().min(0).default(0),
 });
 
 export const addEdition = async (

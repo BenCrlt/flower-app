@@ -1,6 +1,7 @@
 import { TypographyH2 } from "@/components/ui/typography";
 import { authClient } from "@/lib/auth-client";
 import { DangerZoneCard } from "./components/danger-zone/card";
+import { EditionCard } from "./components/edition/card";
 import { HelloAssoCard } from "./components/hello-asso/card";
 import { OrderOriginsCard } from "./components/order-origins/card";
 import { PersonnalInfosCard } from "./components/personnal-infos/card";
@@ -13,9 +14,10 @@ export function SettingsPanel() {
     <div className="flex flex-col gap-4">
       <TypographyH2>Paramètres</TypographyH2>
       <PersonnalInfosCard />
-      {isAdmin && <DangerZoneCard />}
-      <HelloAssoCard />
       <OrderOriginsCard />
+      <HelloAssoCard />
+      <EditionCard />
+      {isAdmin && <DangerZoneCard />}
     </div>
   );
 }

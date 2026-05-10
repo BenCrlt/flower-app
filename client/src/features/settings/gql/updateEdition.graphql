@@ -1,0 +1,21 @@
+mutation updateEdition(
+  $id: Float!
+  $name: String
+  $startDate: String
+  $endDate: String
+  $openingBalance: Float
+) {
+  updateEdition(
+    id: $id
+    name: $name
+    startDate: $startDate
+    endDate: $endDate
+    openingBalance: $openingBalance
+  ) {
+    id
+    name
+    startDate
+    endDate
+    openingBalance
+  }
+}
