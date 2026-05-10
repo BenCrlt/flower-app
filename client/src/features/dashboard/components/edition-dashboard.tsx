@@ -1,17 +1,12 @@
 import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
 import { useGetEditionStatsQuery } from "../hooks/useGetEditionStats";
+import type { EditionStats } from "../types";
 import { BudgetByCategoriesChart } from "./budget-by-categories-chart";
 import { CurrentBalanceCard } from "./current-balance-card";
-import { IncomeExpenseCard } from "./income-expense-card";
+import { ForecastVsActualCards } from "./forecast-vs-actual-cards";
 
-export type EditionStats = {
-  id: number;
-  totalExpense: number;
-  totalIncome: number;
-  totalPrevisionnalExpense: number;
-  totalPrevisionnalIncome: number;
-};
+export type { EditionStats };
 
 export function EditionDashboard() {
   const { edition } = useEdition();
@@ -21,19 +16,30 @@ export function EditionDashboard() {
       editionId: edition.id,
     },
   });
+  const stats = data?.edition;
+  const editionStatsFallback: EditionStats = {
+    id: edition.id,
+    totalExpense: 0,
+    totalIncome: 0,
+    totalPrevisionnalExpense: 0,
+    totalPrevisionnalIncome: 0,
+  };
+
   return (
     <div className="w-full max-w-300">
-      <TypographyH2>Tableau de bord</TypographyH2>
-      <div className="grid grid-cols-1 gap-4 py-4 md:grid-cols-5 md:grid-rows-3">
-        <div className="*:h-full md:col-start-1 md:col-span-2 md:row-start-1 md:row-span-1">
-          <CurrentBalanceCard />
-        </div>
-        <div className="*:h-full md:col-start-1 md:col-span-2 md:row-start-2 md:row-span-2">
-          <IncomeExpenseCard edition={data?.edition ?? null} isLoading={isPending} />
-        </div>
-        <div className="*:h-full md:col-start-3 md:col-span-3 md:row-start-1 md:row-span-3">
-          <BudgetByCategoriesChart />
-        </div>
+      <TypographyH2 className="mb-2">Tableau de bord</TypographyH2>
+      <div className="flex flex-col gap-6 py-4">
+        <CurrentBalanceCard
+          openingBalance={edition.openingBalance}
+          totalIncome={isPending ? null : (stats?.totalIncome ?? 0)}
+          totalExpense={isPending ? null : (stats?.totalExpense ?? 0)}
+          isLoading={isPending}
+        />
+        <ForecastVsActualCards
+          edition={isPending ? null : (stats ?? editionStatsFallback)}
+          isLoading={isPending}
+        />
+        <BudgetByCategoriesChart />
       </div>
     </div>
   );
