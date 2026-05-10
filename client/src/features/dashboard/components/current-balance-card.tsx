@@ -22,13 +22,29 @@ interface Props {
   isLoading: boolean;
 }
 
+/** Évite NaN si valeur absente ou corrompue (ex. localStorage / parsing réseau). */
+function finiteEuroAmount(value: unknown): number | null {
+  if (value === null || value === undefined) return null;
+  const n = Number(value);
+  return Number.isFinite(n) ? n : null;
+}
+
 export function CurrentBalanceCard({
   openingBalance,
   totalIncome,
   totalExpense,
   isLoading,
 }: Props) {
-  if (isLoading || totalIncome === null || totalExpense === null) {
+  const incomeF = finiteEuroAmount(totalIncome);
+  const expenseF = finiteEuroAmount(totalExpense);
+  const openingF = finiteEuroAmount(openingBalance);
+
+  if (
+    isLoading ||
+    incomeF === null ||
+    expenseF === null ||
+    openingF === null
+  ) {
     return (
       <Card className="flex flex-col">
         <CardHeader>
@@ -56,8 +72,8 @@ export function CurrentBalanceCard({
     );
   }
 
-  const netFlow = totalIncome - totalExpense;
-  const currentBalance = openingBalance + netFlow;
+  const netFlow = incomeF - expenseF;
+  const currentBalance = openingF + netFlow;
   const flowPositive = netFlow >= 0;
 
   return (

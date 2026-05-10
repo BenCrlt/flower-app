@@ -1,8 +1,9 @@
 export const formatPriceToEuros = (amount: number) => {
-  const formatted = new Intl.NumberFormat("fr-FR", {
+  const n = Number(amount);
+  const safe = Number.isFinite(n) ? n : 0;
+
+  return new Intl.NumberFormat("fr-FR", {
     style: "currency",
     currency: "EUR",
-  }).format(amount);
-
-  return formatted;
+  }).format(safe);
 };
