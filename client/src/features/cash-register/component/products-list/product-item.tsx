@@ -4,106 +4,133 @@ import { Card, CardTitle } from "@/components/ui/card";
 import { AnimatePresence, motion } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
-import { CartProduct } from "../../CashRegisterContext";
+import { CatalogProduct } from "../../CashRegisterContext";
 import { useCashRegister } from "../../hooks/useCashRegister";
+import { FreePriceAmountSheet } from "./free-price-amount-sheet";
 
 interface Props {
-  product: CartProduct;
+  product: CatalogProduct;
 }
 
 export const ProductItem = ({ product }: Props) => {
-  const { onAddProductToCart, onRemoveProductToCart } = useCashRegister();
+  const {
+    getFixedProductQuantity,
+    onAddFixedProduct,
+    onRemoveFixedProduct,
+    onAddFreePriceProduct,
+  } = useCashRegister();
   const [quantityDirection, setQuantityDirection] = useState<"up" | "down">("up");
+  const [freePriceSheetOpen, setFreePriceSheetOpen] = useState(false);
+
+  const quantity = getFixedProductQuantity(product.id);
 
   const handleAddProduct = () => {
+    if (product.isFreePrice) {
+      setFreePriceSheetOpen(true);
+      return;
+    }
     setQuantityDirection("up");
-    onAddProductToCart(product.id);
+    onAddFixedProduct(product.id);
   };
 
   const handleRemoveProduct = () => {
-    if (!product.quantity) {
+    if (!quantity) {
       return;
     }
     setQuantityDirection("down");
-    onRemoveProductToCart(product.id);
+    onRemoveFixedProduct(product.id);
   };
 
   return (
-    <motion.div
-      className="aspect-square"
-      whileHover={{ y: -4, scale: 1.015 }}
-      whileTap={{ scale: 0.975 }}
-      transition={{ type: "spring", stiffness: 460, damping: 26, mass: 0.45 }}
-    >
-      <Card
-        key={product.id}
-        className="h-full cursor-pointer p-3 transition-colors hover:bg-muted/50 hover:shadow-md"
-        onClick={handleAddProduct}
+    <>
+      <motion.div
+        className="aspect-square"
+        whileHover={{ y: -4, scale: 1.015 }}
+        whileTap={{ scale: 0.975 }}
+        transition={{ type: "spring", stiffness: 460, damping: 26, mass: 0.45 }}
       >
-        <div className="flex h-full flex-col">
-          <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
-            <CardTitle className="line-clamp-2 text-center text-base">
-              {product.name}
-            </CardTitle>
-            <CategoryBadge
-              name={product.category.name}
-              color={product.category.color}
-            />
-          </div>
-          <div
-            className="mt-3 flex items-center gap-4 self-center text-center"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <motion.div
-              whileHover={product.quantity ? { scale: 1.1 } : undefined}
-              whileTap={product.quantity ? { scale: 0.84 } : undefined}
-              transition={{ type: "spring", stiffness: 560, damping: 24 }}
-            >
-              <Button
-                onClick={handleRemoveProduct}
-                disabled={!product.quantity}
-                size="icon-sm"
-              >
-                <Minus />
-              </Button>
-            </motion.div>
-            <div className="relative flex h-9 w-8 items-center justify-center overflow-hidden">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.span
-                  key={product.quantity}
-                  className="absolute text-2xl"
-                  initial={{
-                    opacity: 0,
-                    y: quantityDirection === "up" ? 10 : -10,
-                    scale: 0.9,
-                  }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{
-                    opacity: 0,
-                    y: quantityDirection === "up" ? -10 : 10,
-                    scale: 0.9,
-                  }}
-                  transition={{ duration: 0.11, ease: "easeOut" }}
-                >
-                  {product.quantity}
-                </motion.span>
-              </AnimatePresence>
+        <Card
+          key={product.id}
+          className="h-full cursor-pointer p-3 transition-colors hover:bg-muted/50 hover:shadow-md"
+          onClick={handleAddProduct}
+        >
+          <div className="flex h-full flex-col">
+            <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
+              <CardTitle className="line-clamp-2 text-center text-base">
+                {product.name}
+              </CardTitle>
+              <CategoryBadge
+                name={product.category.name}
+                color={product.category.color}
+              />
             </div>
-            <motion.div
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.84 }}
-              transition={{ type: "spring", stiffness: 560, damping: 24 }}
-            >
-              <Button
-                onClick={handleAddProduct}
-                size="icon-sm"
+            {product.isFreePrice ? (
+              <p className="mt-3 text-center text-xs text-muted-foreground">
+                Appuyer pour choisir le montant
+              </p>
+            ) : (
+              <div
+                className="mt-3 flex items-center gap-4 self-center text-center"
+                onClick={(e) => e.stopPropagation()}
               >
-                <Plus />
-              </Button>
-            </motion.div>
+                <motion.div
+                  whileHover={quantity ? { scale: 1.1 } : undefined}
+                  whileTap={quantity ? { scale: 0.84 } : undefined}
+                  transition={{ type: "spring", stiffness: 560, damping: 24 }}
+                >
+                  <Button
+                    onClick={handleRemoveProduct}
+                    disabled={!quantity}
+                    size="icon-sm"
+                  >
+                    <Minus />
+                  </Button>
+                </motion.div>
+                <div className="relative flex h-9 w-8 items-center justify-center overflow-hidden">
+                  <AnimatePresence mode="wait" initial={false}>
+                    <motion.span
+                      key={quantity}
+                      className="absolute text-2xl"
+                      initial={{
+                        opacity: 0,
+                        y: quantityDirection === "up" ? 10 : -10,
+                        scale: 0.9,
+                      }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{
+                        opacity: 0,
+                        y: quantityDirection === "up" ? -10 : 10,
+                        scale: 0.9,
+                      }}
+                      transition={{ duration: 0.11, ease: "easeOut" }}
+                    >
+                      {quantity}
+                    </motion.span>
+                  </AnimatePresence>
+                </div>
+                <motion.div
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.84 }}
+                  transition={{ type: "spring", stiffness: 560, damping: 24 }}
+                >
+                  <Button onClick={handleAddProduct} size="icon-sm">
+                    <Plus />
+                  </Button>
+                </motion.div>
+              </div>
+            )}
           </div>
-        </div>
-      </Card>
-    </motion.div>
+        </Card>
+      </motion.div>
+
+      {product.isFreePrice ? (
+        <FreePriceAmountSheet
+          open={freePriceSheetOpen}
+          onOpenChange={setFreePriceSheetOpen}
+          productName={product.name}
+          onConfirm={(amount) => onAddFreePriceProduct(product.id, amount)}
+        />
+      ) : null}
+    </>
   );
 };

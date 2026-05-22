@@ -2,12 +2,13 @@ import { eq, inArray, sql } from "drizzle-orm";
 import { budgetLinesTable } from "../../../db/schema/budget-lines.js";
 import { salesTable } from "../../../db/schema/sales.js";
 import { db } from "../../../index.js";
+import { saleLineAmountSql } from "./saleLineAmountSql.js";
 
 export async function loadTotalAmount(orderIds: number[]): Promise<number[]> {
   const totalAmountByOrderId = await db
     .select({
       orderId: salesTable.orderId,
-      totalAmount: sql<number>`sum(${budgetLinesTable.estimatedUnitPrice} * ${salesTable.quantity})`,
+      totalAmount: sql<number>`sum(${saleLineAmountSql})`,
     })
     .from(salesTable)
     .innerJoin(

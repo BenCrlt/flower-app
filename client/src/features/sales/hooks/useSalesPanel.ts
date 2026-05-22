@@ -5,6 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { subMonths } from "date-fns";
 import { useMemo, useState } from "react";
 import { getColumns, SalesTableRow } from "../components/columns";
+import { getSaleEffectiveUnitPrice } from "../utils/salePrice";
 import { useGetOrdersQuery } from "./getOrdersQuery";
 import { useGetOrderOriginsQuery } from "./useGetOrderOrigins";
 
@@ -62,7 +63,7 @@ export function useSalesPanel(): UseSalesPanelResult {
           id: sale.id,
           quantity: sale.quantity,
           budgetLineName: sale.budgetLine?.name ?? "Article inconnu",
-          estimatedUnitPrice: Number(sale.budgetLine?.estimatedUnitPrice ?? 0),
+          estimatedUnitPrice: getSaleEffectiveUnitPrice(sale),
           categoryName: sale.budgetLine?.category?.name ?? null,
           categoryColor: sale.budgetLine?.category?.color ?? null,
         })),

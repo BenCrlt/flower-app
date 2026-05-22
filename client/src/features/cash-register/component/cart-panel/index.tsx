@@ -7,17 +7,14 @@ import { CartPanelMobile } from "./cart-panel-mobile";
 import { PaymentMethodDialog } from "./payment-method-dialog";
 
 export const CartPanel = () => {
-  const { allCartProducts, onCancelOrder } = useCashRegister();
+  const { cartLines, onCancelOrder } = useCashRegister();
   const [openPaymentMethodDialog, setOpenPaymentMethodDialog] = useState(false);
   const [openCancelOrderDialog, setOpenCancelOrderDialog] = useState(false);
 
-  const cartItems = allCartProducts.filter((product) => product.quantity > 0);
-  const totalQuantity = cartItems.reduce(
-    (acc, product) => acc + product.quantity,
-    0,
-  );
+  const cartItems = cartLines;
+  const totalQuantity = cartItems.length;
   const totalPrice = cartItems.reduce(
-    (acc, product) => acc + product.quantity * product.unitPrice,
+    (acc, line) => acc + line.quantity * line.unitPrice,
     0,
   );
 

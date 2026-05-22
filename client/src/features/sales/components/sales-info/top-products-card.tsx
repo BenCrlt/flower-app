@@ -13,6 +13,7 @@ import {
   GetOrdersQuery,
 } from "@/generated/graphql";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
+import { getSaleLineTotal } from "../../utils/salePrice";
 import { Package } from "lucide-react";
 import { useMemo } from "react";
 
@@ -49,12 +50,17 @@ function RankBadge({ rank }: { rank: number }) {
 export const TopProductsCard = ({ filteredSales }: Props) => {
   const topProducts = useMemo(() => {
     const salesCountByProducts = new Map<number, number>();
+    const revenueByProducts = new Map<number, number>();
     const budgetLineById = new Map<number, BudgetLineMeta>();
 
     filteredSales.forEach((sale) => {
       salesCountByProducts.set(
         sale.budgetLineId,
         (salesCountByProducts.get(sale.budgetLineId) || 0) + sale.quantity,
+      );
+      revenueByProducts.set(
+        sale.budgetLineId,
+        (revenueByProducts.get(sale.budgetLineId) || 0) + getSaleLineTotal(sale),
       );
       if (sale.budgetLine) {
         const existing = budgetLineById.get(sale.budgetLineId);
@@ -69,12 +75,11 @@ export const TopProductsCard = ({ filteredSales }: Props) => {
     const sorted = Array.from(salesCountByProducts.entries())
       .map(([budgetLineId, quantity]) => {
         const meta = budgetLineById.get(budgetLineId);
-        const unit = Number(meta?.estimatedUnitPrice ?? 0);
         return {
           budgetLineId,
           quantity,
           name: meta?.name ?? `Produit #${budgetLineId}`,
-          totalPrice: unit * quantity,
+          totalPrice: revenueByProducts.get(budgetLineId) ?? 0,
           category: meta?.category ?? null,
         };
       })

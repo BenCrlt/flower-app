@@ -57,6 +57,7 @@ export function AddBudgetLineSheet({
               errors={errors}
               allCategories={allCategories}
               namePlaceholder={`Nom de la ${lineTypeString}`}
+              lineType={lineType}
               setValue={setValue}
             />
           </div>

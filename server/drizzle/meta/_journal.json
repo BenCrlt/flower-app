@@ -176,6 +176,13 @@
       "when": 1778422731962,
       "tag": "0024_add-openning-balance",
       "breakpoints": true
+    },
+    {
+      "idx": 25,
+      "version": "7",
+      "when": 1779462748920,
+      "tag": "0025_futuristic_jimmy_woo",
+      "breakpoints": true
     }
   ]
 }

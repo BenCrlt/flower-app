@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { useCashRegister } from "../../hooks/useCashRegister";
 
 export const CategoriesFilter = () => {
-  const { allCategoriesInProducts, selectedCategory, onSelectCategory } =
+  const { allCategoriesInCatalog, selectedCategory, onSelectCategory } =
     useCashRegister();
 
   return (
@@ -25,7 +25,7 @@ export const CategoriesFilter = () => {
           Toutes
         </Badge>
       </motion.div>
-      {allCategoriesInProducts.map((category) => (
+      {allCategoriesInCatalog.map((category) => (
         <motion.div
           key={category.id}
           whileHover={{ y: -2, scale: 1.04 }}

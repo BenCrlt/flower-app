@@ -6,6 +6,11 @@ import {
   budgetLinesTable,
 } from "../../../db/schema/budget-lines.js";
 import { LineTypeEnum } from "../types.js";
+import {
+  assertFreePriceAllowedForLineType,
+  assertFreePriceCanChange,
+} from "./freePriceRules.js";
+import { loadSalesCount } from "./loadSalesCount.js";
 
 export const updateBudgetLineInput = z.object({
   id: z.number().min(1),
@@ -17,16 +22,42 @@ export const updateBudgetLineInput = z.object({
   estimatedQuantity: z.number().int().min(0).optional(),
   estimatedUnitPrice: z.number().min(0).optional(),
   helloAssoProductId: z.number().min(1).optional(),
+  isFreePrice: z.boolean().optional(),
 });
 
 export const updateBudgetLine = async (
   input: z.infer<typeof updateBudgetLineInput>,
 ): Promise<BudgetLine | null> => {
-  const { id, ...fieldsToUpdate } = input;
+  const { id, isFreePrice, ...fieldsToUpdate } = input;
+
+  const existing = await db.query.budgetLinesTable.findFirst({
+    where: eq(budgetLinesTable.id, id),
+  });
+
+  if (!existing) {
+    return null;
+  }
+
+  const nextLineType = fieldsToUpdate.lineType ?? existing.lineType;
+  const nextIsFreePrice = isFreePrice ?? existing.isFreePrice;
+
+  assertFreePriceAllowedForLineType(nextLineType, nextIsFreePrice);
+
+  if (isFreePrice !== undefined) {
+    const salesCounts = await loadSalesCount([id]);
+    await assertFreePriceCanChange(
+      id,
+      existing.isFreePrice,
+      isFreePrice,
+      salesCounts[0] ?? null,
+    );
+  }
+
   return db
     .update(budgetLinesTable)
     .set({
       ...fieldsToUpdate,
+      ...(isFreePrice !== undefined ? { isFreePrice } : {}),
       estimatedUnitPrice: fieldsToUpdate.estimatedUnitPrice?.toString(),
     })
     .where(eq(budgetLinesTable.id, id))

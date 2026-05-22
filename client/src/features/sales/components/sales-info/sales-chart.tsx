@@ -23,6 +23,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { BudgetCategoriesItem, GetOrdersQuery } from "@/generated/graphql";
+import { getSaleLineTotal } from "../../utils/salePrice";
 import { formatTimestampToLocaleString } from "@/utils/DateUtils";
 import {
   differenceInDays,
@@ -63,12 +64,7 @@ export const SalesChart = ({
   forecastAvgDailyQuantity,
 }: Props) => {
   const totalFilteredSalesAmount = useMemo(() => {
-    return filteredSales.reduce(
-      (sum, sale) =>
-        sum +
-        sale.quantity * Number(sale.budgetLine?.estimatedUnitPrice ?? "0"),
-      0,
-    );
+    return filteredSales.reduce((sum, sale) => sum + getSaleLineTotal(sale), 0);
   }, [filteredSales]);
 
   const isDailyBuckets = differenceInDays(range.to, range.from) >= 3;
