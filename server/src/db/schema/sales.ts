@@ -1,6 +1,12 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { InferSelectModel } from "drizzle-orm";
-import { integer, pgTable, smallint, timestamp } from "drizzle-orm/pg-core";
+import {
+  integer,
+  numeric,
+  pgTable,
+  smallint,
+  timestamp,
+} from "drizzle-orm/pg-core";
 import { budgetLinesTable } from "./budget-lines.js";
 import { ordersTable } from "./orders.js";
 
@@ -18,5 +24,9 @@ export const salesTable = drizzleSilk(
       .notNull()
       .references(() => ordersTable.id, { onDelete: "cascade" }),
     helloAssoSaleItemId: integer().unique(),
+    unitPrice: numeric("unitPrice", {
+      precision: 10,
+      scale: 2,
+    }),
   }),
 );

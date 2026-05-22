@@ -60,7 +60,14 @@ export const budgetLinesResolver = resolver.of(budgetLinesTable, {
 
   realCost: field(z.number().min(0).nullable())
     .derivedFrom("id")
-    .load(async (lines) => loadRealCost(lines.map((line) => line.id))),
+    .load(async (lines) =>
+      loadRealCost(
+        lines.map((line) => ({
+          id: line.id,
+          lineType: line.lineType as "income" | "expense",
+        })),
+      ),
+    ),
   salesCount: field(z.number().int().min(0).nullable())
     .derivedFrom("id")
     .load(async (lines) => loadSalesCount(lines.map((line) => line.id))),

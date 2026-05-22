@@ -1,27 +1,43 @@
 import {
   BudgetCategoriesItem,
-  BudgetLinesItem,
   GetOrderOriginQuery,
   ValidateOrderPaymentMethodInput,
 } from "@/generated/graphql";
 import { createContext } from "react";
 
-export interface CartProduct extends Pick<BudgetLinesItem, "id" | "name"> {
+export interface CatalogProduct {
+  id: number;
+  name: string;
+  unitPrice: number;
+  isFreePrice: boolean;
+  category: BudgetCategoriesItem;
+}
+
+export interface CartLine {
+  cartLineId: string;
+  productId: number;
+  name: string;
+  category: BudgetCategoriesItem;
   quantity: number;
   unitPrice: number;
-  category: BudgetCategoriesItem;
+  isFreePrice: boolean;
 }
 
 export interface CashRegisterContextValue {
   handleSelectOrigin: (originId: number | null) => void;
   openSelectOriginDialog: boolean;
   orderOrigin: GetOrderOriginQuery["orderOrigin"];
-  allCartProducts: CartProduct[];
-  cartProducts: CartProduct[];
-  onAddProductToCart: (productId: number) => void;
-  onRemoveProductToCart: (productId: number) => void;
+  catalogProducts: CatalogProduct[];
+  catalogProductsFiltered: CatalogProduct[];
+  cartLines: CartLine[];
+  cartLinesFiltered: CartLine[];
+  getFixedProductQuantity: (productId: number) => number;
+  onAddFixedProduct: (productId: number) => void;
+  onRemoveFixedProduct: (productId: number) => void;
+  onAddFreePriceProduct: (productId: number, unitPrice: number) => void;
+  onRemoveCartLine: (cartLineId: string) => void;
   onSelectCategory: (category: BudgetCategoriesItem | null) => void;
-  allCategoriesInProducts: BudgetCategoriesItem[];
+  allCategoriesInCatalog: BudgetCategoriesItem[];
   selectedCategory: BudgetCategoriesItem | null;
   onValidateOrder: (paymentMethod: ValidateOrderPaymentMethodInput) => void;
   onStartCardPayment: (amount: number) => boolean;

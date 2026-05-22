@@ -19,6 +19,7 @@ type BudgetLinesItem {
   estimatedUnitPrice: String!
   helloAssoProductId: Int
   id: Int!
+  isFreePrice: Boolean!
   lineType: LineType!
   name: String!
   realCost: Float
@@ -89,7 +90,7 @@ enum LineTypeEnum {
 
 type Mutation {
   addBudgetCategory(color: String!, name: String!): BudgetCategoriesItem
-  addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, lineType: LineTypeEnum!, name: String!): BudgetLinesItem
+  addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, isFreePrice: Boolean, lineType: LineTypeEnum!, name: String!): BudgetLinesItem
   addEdition(active: Boolean, endDate: String!, name: String!, openingBalance: Float, startDate: String!): EditionsItem
   addHelloAssoConfig(budgetCategoryId: Float, editionId: Float!, enableSynchro: Boolean, formSlug: String!): HelloAssoConfigItem
   addInvoice(authorId: String!, editionId: Float!, name: String!, note: String, payments: [AddInvoicePaymentsInput!]!, status: InvoiceStatus!, totalAmount: Float!, vendorId: Float!): InvoicesItem
@@ -103,7 +104,7 @@ type Mutation {
   deleteVendor(id: Float!): VendorsItem
   synchroSales(from: String!, helloAssoConfigId: Float!, to: String!): [SalesItem!]!
   updateBudgetCategory(id: Float!, name: String!): BudgetCategoriesItem
-  updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, helloAssoProductId: Float, id: Float!, lineType: LineTypeEnum, name: String): BudgetLinesItem
+  updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, helloAssoProductId: Float, id: Float!, isFreePrice: Boolean, lineType: LineTypeEnum, name: String): BudgetLinesItem
   updateEdition(endDate: String, id: Float!, name: String, openingBalance: Float, startDate: String): EditionsItem
   updateHelloAssoConfig(formSlug: String!, id: Float!): HelloAssoConfigItem
   updateInvoice(authorId: String, editionId: Float!, id: Float!, name: String, note: String, payments: [UpdateInvoicePaymentsInput!], status: InvoiceStatus, totalAmount: Float, vendorId: Float): InvoicesItem
@@ -166,6 +167,7 @@ type SalesItem {
   id: Int!
   orderId: Int!
   quantity: Float!
+  unitPrice: String
 }
 
 type SumUpConfig {
@@ -203,7 +205,8 @@ enum ValidateOrderPaymentMethodInput {
 
 input ValidateOrderSalesInput {
   budgetLineId: Float!
-  quantity: Float!
+  quantity: Int!
+  unitPrice: Float
 }
 
 type VendorsItem {

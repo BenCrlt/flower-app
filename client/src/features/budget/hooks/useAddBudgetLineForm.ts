@@ -38,7 +38,11 @@ export function useAddBudgetLineForm({ setOpen, lineType }: Props): {
   } = useForm<BudgetLineFormValues>({
     resolver: budgetLineFormResolver,
     mode: "onTouched",
-    defaultValues: { estimatedQuantity: 1, estimatedUnitPrice: 0 },
+    defaultValues: {
+      estimatedQuantity: 1,
+      estimatedUnitPrice: 0,
+      isFreePrice: false,
+    },
   });
 
   function onSubmit(data: BudgetLineFormValues) {

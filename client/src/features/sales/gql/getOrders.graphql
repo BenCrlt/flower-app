@@ -26,6 +26,7 @@ query getOrders(
       id
       budgetLineId
       quantity
+      unitPrice
       executedAt
       budgetLine {
         id

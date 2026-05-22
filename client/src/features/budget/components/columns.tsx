@@ -21,6 +21,8 @@ export interface BudgetTableRow {
   realCost: number | null;
   helloAssoProductId: number | null;
   lineType: LineType;
+  isFreePrice: boolean;
+  salesCount: number | null;
 }
 
 interface GetBudgetLineColumnsProps {

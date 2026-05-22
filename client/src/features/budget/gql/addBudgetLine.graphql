@@ -5,6 +5,7 @@ mutation addBudgetLine(
   $editionId: Float!
   $estimatedQuantity: Int!
   $estimatedUnitPrice: Float!
+  $isFreePrice: Boolean
   $lineType: LineTypeEnum!
 ) {
   addBudgetLine(
@@ -14,6 +15,7 @@ mutation addBudgetLine(
     editionId: $editionId
     estimatedQuantity: $estimatedQuantity
     estimatedUnitPrice: $estimatedUnitPrice
+    isFreePrice: $isFreePrice
     lineType: $lineType
   ) {
     id

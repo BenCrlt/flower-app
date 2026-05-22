@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -13,10 +12,11 @@ import { formatPriceToEuros } from "@/utils/PriceUtils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShoppingBag, Trash } from "lucide-react";
 import { useState } from "react";
-import { CartProduct } from "../../CashRegisterContext";
+import { CartLine } from "../../CashRegisterContext";
+import { useCashRegister } from "../../hooks/useCashRegister";
 
 interface Props {
-  cartItems: CartProduct[];
+  cartItems: CartLine[];
   totalQuantity: number;
   totalPrice: number;
   onProceedToPayment: () => void;
@@ -30,6 +30,7 @@ export const CartPanelMobile = ({
   onProceedToPayment,
   onCancelOrder,
 }: Props) => {
+  const { onRemoveCartLine } = useCashRegister();
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -89,22 +90,34 @@ export const CartPanelMobile = ({
             ) : (
               cartItems.map((item) => (
                 <div
-                  key={item.id}
+                  key={item.cartLineId}
                   className="flex items-center justify-between gap-3 rounded-md border p-3"
                 >
                   <div className="min-w-0">
                     <p className="line-clamp-2 text-sm font-medium">
                       {item.name}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {formatPriceToEuros(item.unitPrice)} / unite
-                    </p>
+                    {item.isFreePrice ? (
+                      <p className="text-xs text-muted-foreground">Don</p>
+                    ) : (
+                      <p className="text-xs text-muted-foreground">
+                        {formatPriceToEuros(item.unitPrice)} / unité ×{" "}
+                        {item.quantity}
+                      </p>
+                    )}
                   </div>
-                  <div className="text-right">
-                    <Badge>{item.quantity}</Badge>
-                    <p className="mt-1 text-xs text-muted-foreground">
+                  <div className="flex items-center gap-2 text-right">
+                    <p className="text-sm font-medium">
                       {formatPriceToEuros(item.unitPrice * item.quantity)}
                     </p>
+                    <Button
+                      variant="ghost"
+                      size="icon-sm"
+                      onClick={() => onRemoveCartLine(item.cartLineId)}
+                      aria-label="Retirer du panier"
+                    >
+                      <Trash className="size-4" />
+                    </Button>
                   </div>
                 </div>
               ))
@@ -130,6 +143,7 @@ export const CartPanelMobile = ({
             </div>
             <Button
               size="lg"
+              className="min-h-12 w-full"
               disabled={!cartItems.length}
               onClick={() => {
                 setIsOpen(false);
@@ -142,6 +156,7 @@ export const CartPanelMobile = ({
             <Button
               variant="destructive"
               size="lg"
+              className="min-h-12 w-full"
               onClick={() => {
                 setIsOpen(false);
                 onCancelOrder();

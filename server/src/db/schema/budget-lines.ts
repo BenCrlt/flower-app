@@ -1,6 +1,7 @@
 import { drizzleSilk } from "@gqloom/drizzle";
 import { InferSelectModel } from "drizzle-orm";
 import {
+  boolean,
   integer,
   numeric,
   pgEnum,
@@ -35,6 +36,7 @@ export const budgetLinesTable = drizzleSilk(
       .default("0.00")
       .notNull(),
     helloAssoProductId: integer().unique(),
+    isFreePrice: boolean().default(false).notNull(),
   }),
 );
 

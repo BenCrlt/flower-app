@@ -4,10 +4,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
 import { AnimatePresence, motion } from "framer-motion";
 import { ShoppingBag, Trash } from "lucide-react";
-import { CartProduct } from "../../CashRegisterContext";
+import { CartLine } from "../../CashRegisterContext";
+import { useCashRegister } from "../../hooks/useCashRegister";
 
 interface Props {
-  cartItems: CartProduct[];
+  cartItems: CartLine[];
   totalQuantity: number;
   totalPrice: number;
   onProceedToPayment: () => void;
@@ -21,6 +22,8 @@ export const CartPanelDesktop = ({
   onProceedToPayment,
   onCancelOrder,
 }: Props) => {
+  const { onRemoveCartLine } = useCashRegister();
+
   return (
     <Card className="hidden h-full min-h-0 pb-4 lg:flex lg:flex-col">
       <CardHeader className="px-4 sm:px-6">
@@ -47,7 +50,7 @@ export const CartPanelDesktop = ({
           ) : (
             cartItems.map((item) => (
               <motion.div
-                key={item.id}
+                key={item.cartLineId}
                 layout
                 initial={{ opacity: 0, x: 18, scale: 0.98 }}
                 animate={{ opacity: 1, x: 0, scale: 1 }}
@@ -62,25 +65,35 @@ export const CartPanelDesktop = ({
               >
                 <p className="line-clamp-2 text-sm font-medium">{item.name}</p>
                 <div className="flex items-center gap-2">
-                  <motion.div
-                    key={`${item.id}-${item.quantity}`}
-                    initial={{ scale: 0.8, opacity: 0.5 }}
-                    animate={{ scale: 1, opacity: 1 }}
-                    transition={{ type: "spring", stiffness: 650, damping: 22 }}
-                  >
-                    <Badge>{item.quantity}</Badge>
-                  </motion.div>
+                  {!item.isFreePrice ? (
+                    <motion.div
+                      key={`${item.cartLineId}-${item.quantity}`}
+                      initial={{ scale: 0.8, opacity: 0.5 }}
+                      animate={{ scale: 1, opacity: 1 }}
+                      transition={{ type: "spring", stiffness: 650, damping: 22 }}
+                    >
+                      <Badge>{item.quantity}</Badge>
+                    </motion.div>
+                  ) : null}
                   <span className="text-xs text-muted-foreground">
                     {formatPriceToEuros(item.unitPrice * item.quantity)}
                   </span>
+                  <Button
+                    variant="ghost"
+                    size="icon-sm"
+                    onClick={() => onRemoveCartLine(item.cartLineId)}
+                    aria-label="Retirer du panier"
+                  >
+                    <Trash className="size-4" />
+                  </Button>
                 </div>
               </motion.div>
             ))
           )}
         </AnimatePresence>
       </CardContent>
-      <div className="mt-auto space-y-3 border-t px-4 pt-4 sm:px-6">
-        <div className="flex items-center justify-between">
+      <div className="mt-auto space-y-3 px-4 sm:px-6">
+        <div className="flex items-center justify-between border-t pt-3">
           <span className="text-sm text-muted-foreground">Total</span>
           <div className="relative h-7 min-w-24 overflow-hidden text-right">
             <AnimatePresence mode="wait" initial={false}>
@@ -97,28 +110,23 @@ export const CartPanelDesktop = ({
             </AnimatePresence>
           </div>
         </div>
-        <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
-          <Button
-            className="w-full"
-            size="lg"
-            disabled={!cartItems.length}
-            onClick={onProceedToPayment}
-          >
-            <ShoppingBag />
-            Passer au paiement
-          </Button>
-        </motion.div>
-        <motion.div whileHover={{ scale: 1.01 }} whileTap={{ scale: 0.98 }}>
-          <Button
-            variant="destructive"
-            className="w-full"
-            size="lg"
-            onClick={onCancelOrder}
-          >
-            <Trash />
-            Annuler la commande
-          </Button>
-        </motion.div>
+        <Button
+          className="w-full"
+          disabled={!cartItems.length}
+          onClick={onProceedToPayment}
+        >
+          <ShoppingBag />
+          Passer au paiement
+        </Button>
+        <Button
+          variant="destructive"
+          className="w-full"
+          disabled={!cartItems.length}
+          onClick={onCancelOrder}
+        >
+          <Trash />
+          Annuler la commande
+        </Button>
       </div>
     </Card>
   );

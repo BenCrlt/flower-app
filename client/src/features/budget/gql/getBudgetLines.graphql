@@ -13,6 +13,7 @@ query getBudgetLines(
     description
     estimatedQuantity
     estimatedUnitPrice
+    isFreePrice
     realCost
     salesCount
     lineType

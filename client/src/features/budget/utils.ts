@@ -54,16 +54,11 @@ export const getTextColorForGapFromLineType = (
 };
 
 export const getRealCostForBudgetLine = (
-  line: Pick<
-    BudgetLinesItem,
-    "lineType" | "realCost" | "estimatedUnitPrice" | "salesCount"
-  >,
+  line: Pick<BudgetLinesItem, "lineType" | "realCost" | "salesCount">,
 ): number | null => {
-  if (line.lineType === LineType.Expense) {
-    return line.realCost ?? null;
+  if (!line.salesCount && line.lineType === LineType.Income) {
+    return null;
   }
 
-  return line.salesCount
-    ? Number(line.estimatedUnitPrice) * line.salesCount
-    : null;
+  return line.realCost ?? null;
 };

@@ -54,6 +54,8 @@ export function BudgetTable() {
         realCost: getRealCostForBudgetLine(item),
         helloAssoProductId: item.helloAssoProductId ?? null,
         lineType: item.lineType,
+        isFreePrice: item.isFreePrice,
+        salesCount: item.salesCount ?? null,
       })) || [],
     [data],
   );

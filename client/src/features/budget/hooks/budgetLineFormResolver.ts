@@ -6,6 +6,7 @@ export type BudgetLineFormValues = {
   estimatedQuantity: number;
   estimatedUnitPrice: number;
   budgetCategoryId: number;
+  isFreePrice: boolean;
 };
 
 export const budgetLineFormResolver: Resolver<BudgetLineFormValues> = async (

@@ -9,6 +9,7 @@ import {
   paymentsTable,
   salesTable,
 } from "../../../db/schema/index.js";
+import { saleLineAmountSql } from "../../sale/utils/saleLineAmountSql.js";
 
 export const statsByCategoryOutput = z.array(
   z.object({
@@ -104,7 +105,7 @@ const getTotalIncomeStatsByCategoryId = async (
   const totalEstimatedStats = await db
     .select({
       categoryId: budgetLinesTable.budgetCategoryId,
-      total: sql<number>`sum(${salesTable.quantity} * ${budgetLinesTable.estimatedUnitPrice})`,
+      total: sql<number>`sum(${saleLineAmountSql})`,
     })
     .from(budgetLinesTable)
     .innerJoin(salesTable, eq(salesTable.budgetLineId, budgetLinesTable.id))
