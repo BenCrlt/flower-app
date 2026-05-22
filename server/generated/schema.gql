@@ -21,7 +21,7 @@ type BudgetLinesItem {
   id: Int!
   lineType: LineType!
   name: String!
-  realCost: Int
+  realCost: Float
   salesCount: Int
 }
 

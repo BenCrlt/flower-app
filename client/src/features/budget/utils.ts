@@ -19,10 +19,13 @@ export const getGapBetweenRealAndPrevisionnal = (
   if (realAmount === null) {
     return null;
   }
+
+  const gap = previsionnalAmount !== 0 ? (realAmount / previsionnalAmount - 1) : 1
+
   if (inPercent) {
-    return (realAmount / previsionnalAmount - 1) * 100;
+    return gap * 100;
   }
-  return realAmount - previsionnalAmount;
+  return gap;
 };
 
 export const formatGapForCell = (gap: number | null, inPercent = false) => {

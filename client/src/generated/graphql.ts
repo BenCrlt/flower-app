@@ -41,7 +41,7 @@ export type BudgetLinesItem = {
   id: Scalars['Int']['output'];
   lineType: LineType;
   name: Scalars['String']['output'];
-  realCost?: Maybe<Scalars['Int']['output']>;
+  realCost?: Maybe<Scalars['Float']['output']>;
   salesCount?: Maybe<Scalars['Int']['output']>;
 };
 
