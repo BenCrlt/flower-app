@@ -6,7 +6,7 @@ import { useSumUpQuery } from "./useSumUpQuery";
 export const PENDING_CARD_PAYMENT_KEY = "cash-register-pending-card-payment";
 
 interface UseSumUpParams {
-  onValidateCardPayment: () => void;
+  onValidateCardPayment: (txCode: string | null) => void;
 }
 
 export const useSumUp = ({ onValidateCardPayment }: UseSumUpParams) => {
@@ -95,10 +95,7 @@ export const useSumUp = ({ onValidateCardPayment }: UseSumUpParams) => {
     }
 
     if (paymentStatus === "success") {
-      onValidateCardPayment();
-      toast.success("Paiement carte confirme", {
-        description: txCode ? `Transaction SumUp: ${txCode}` : undefined,
-      });
+      onValidateCardPayment(txCode);
       return;
     }
 
