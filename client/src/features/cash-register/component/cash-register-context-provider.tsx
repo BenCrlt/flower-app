@@ -3,7 +3,7 @@ import {
   BudgetCategoriesItem,
   ValidateOrderPaymentMethodInput,
 } from "@/generated/graphql";
-import { ReactNode, useCallback, useMemo, useState } from "react";
+import { ReactNode, useCallback, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 import {
   CartLine,
@@ -72,10 +72,12 @@ export const CashRegisterContextProvider = ({
       return Number.isNaN(parsedOriginId) ? null : parsedOriginId;
     },
   );
-  const [catalogProducts, setCatalogProducts] = useState<CatalogProduct[]>(
-    [],
-  );
+  const [catalogProducts, setCatalogProducts] = useState<CatalogProduct[]>([]);
   const [cartLines, setCartLines] = useState<CartLine[]>([]);
+  const pendingCardPaymentValidationRef = useRef(false);
+  const pendingSumUpTxCodeRef = useRef<string | null>(null);
+  const lastSubmittedPaymentMethodRef =
+    useRef<ValidateOrderPaymentMethodInput | null>(null);
 
   const catalogById = useMemo(
     () => new Map(catalogProducts.map((product) => [product.id, product])),
@@ -97,8 +99,7 @@ export const CashRegisterContextProvider = ({
     items: T[],
   ) =>
     items.filter(
-      (item) =>
-        !selectedCategory || selectedCategory.id === item.category.id,
+      (item) => !selectedCategory || selectedCategory.id === item.category.id,
     );
 
   const catalogProductsFiltered = filterByCategory(catalogProducts);
@@ -119,11 +120,7 @@ export const CashRegisterContextProvider = ({
         return [];
       }
 
-      if (
-        parsed.length > 0 &&
-        parsed[0] &&
-        "cartLineId" in parsed[0]
-      ) {
+      if (parsed.length > 0 && parsed[0] && "cartLineId" in parsed[0]) {
         return (parsed as StoredCartLine[]).filter(
           (item) =>
             typeof item.cartLineId === "string" &&
@@ -152,10 +149,7 @@ export const CashRegisterContextProvider = ({
   }, [cartStorageKey]);
 
   const restoreCartLines = useCallback(
-    (
-      catalog: CatalogProduct[],
-      storedLines: StoredCartLine[],
-    ): CartLine[] => {
+    (catalog: CatalogProduct[], storedLines: StoredCartLine[]): CartLine[] => {
       const catalogMap = new Map(catalog.map((p) => [p.id, p]));
 
       return storedLines.flatMap((stored) => {
@@ -165,9 +159,7 @@ export const CashRegisterContextProvider = ({
         }
 
         const unitPrice =
-          stored.unitPrice !== undefined
-            ? stored.unitPrice
-            : product.unitPrice;
+          stored.unitPrice !== undefined ? stored.unitPrice : product.unitPrice;
 
         return [
           {
@@ -209,22 +201,6 @@ export const CashRegisterContextProvider = ({
     [persistCartLines],
   );
 
-  const { data: orderOriginData } = useGetOrderOriginQuery({
-    variables: { id: selectedOriginId ?? 0 },
-    enabled: selectedOriginId !== null,
-    onComplete: ({ orderOrigin }) => {
-      const catalog = buildCatalogFromBudgetLines(
-        orderOrigin?.budgetLines ?? [],
-      );
-      const stored = getStoredCartLines();
-      setCatalogProducts(catalog);
-      setCartLines(restoreCartLines(catalog, stored));
-      if (!stored.length) {
-        localStorage.setItem(cartStorageKey, JSON.stringify([]));
-      }
-    },
-  });
-
   function clearCart() {
     setCartLines([]);
     setSelectedCategory(null);
@@ -233,13 +209,93 @@ export const CashRegisterContextProvider = ({
 
   const { mutate: validateOrder } = useValidateOrderMutation({
     onError: (error) => {
+      lastSubmittedPaymentMethodRef.current = null;
+      pendingSumUpTxCodeRef.current = null;
       toast.error("Erreur lors de la validation de la commande", {
         description: error.message,
       });
     },
     onSuccess: () => {
       clearCart();
+
+      const paymentMethod = lastSubmittedPaymentMethodRef.current;
+      lastSubmittedPaymentMethodRef.current = null;
+
+      if (paymentMethod === ValidateOrderPaymentMethodInput.Card) {
+        const txCode = pendingSumUpTxCodeRef.current;
+        pendingSumUpTxCodeRef.current = null;
+        toast.success("Paiement carte confirme", {
+          description: txCode ? `Transaction SumUp: ${txCode}` : undefined,
+        });
+        return;
+      }
+
       toast.success("Commande validée avec succès");
+    },
+  });
+
+  const submitOrder = useCallback(
+    (
+      lines: CartLine[],
+      paymentMethod: ValidateOrderPaymentMethodInput,
+    ): boolean => {
+      if (!lines.length) {
+        return false;
+      }
+
+      lastSubmittedPaymentMethodRef.current = paymentMethod;
+
+      const sales = lines.map((line) => ({
+        budgetLineId: line.productId,
+        quantity: line.quantity,
+        ...(line.isFreePrice ? { unitPrice: line.unitPrice } : {}),
+      }));
+
+      void validateOrder({
+        editionId: edition.id,
+        originId: selectedOriginId ?? 0,
+        paymentMethod,
+        sales,
+      });
+
+      return true;
+    },
+    [edition.id, selectedOriginId, validateOrder],
+  );
+
+  const flushPendingCardPaymentValidation = useCallback(
+    (lines: CartLine[]) => {
+      if (!pendingCardPaymentValidationRef.current) {
+        return;
+      }
+
+      pendingCardPaymentValidationRef.current = false;
+
+      if (!submitOrder(lines, ValidateOrderPaymentMethodInput.Card)) {
+        pendingSumUpTxCodeRef.current = null;
+        toast.error("Impossible de valider la commande", {
+          description: "Le panier est vide apres le retour du paiement carte.",
+        });
+      }
+    },
+    [submitOrder],
+  );
+
+  const { data: orderOriginData } = useGetOrderOriginQuery({
+    variables: { id: selectedOriginId ?? 0 },
+    enabled: selectedOriginId !== null,
+    onComplete: ({ orderOrigin }) => {
+      const catalog = buildCatalogFromBudgetLines(
+        orderOrigin?.budgetLines ?? [],
+      );
+      const stored = getStoredCartLines();
+      const restored = restoreCartLines(catalog, stored);
+      setCatalogProducts(catalog);
+      setCartLines(restored);
+      if (!stored.length) {
+        localStorage.setItem(cartStorageKey, JSON.stringify([]));
+      }
+      flushPendingCardPaymentValidation(restored);
     },
   });
 
@@ -347,37 +403,39 @@ export const CashRegisterContextProvider = ({
 
   const openSelectOriginDialog = selectedOriginId === null;
 
-  const handleSelectOrigin = (originId: number | null) => {
-    setSelectedOriginId(originId);
-    if (originId) {
-      localStorage.setItem(CASH_REGISTER_ORIGIN_ID_KEY, originId.toString());
-    } else {
-      localStorage.removeItem(CASH_REGISTER_ORIGIN_ID_KEY);
-    }
-  };
+  const handleSelectOrigin = useCallback(
+    (originId: number | null) => {
+      if (originId !== selectedOriginId) {
+        clearCart();
+        setCatalogProducts([]);
+        pendingCardPaymentValidationRef.current = false;
+        pendingSumUpTxCodeRef.current = null;
+      }
 
-  const onValidateOrder = (paymentMethod: ValidateOrderPaymentMethodInput) => {
-    if (!cartLines.length) {
-      return;
-    }
+      setSelectedOriginId(originId);
+      if (originId) {
+        localStorage.setItem(CASH_REGISTER_ORIGIN_ID_KEY, originId.toString());
+      } else {
+        localStorage.removeItem(CASH_REGISTER_ORIGIN_ID_KEY);
+      }
+    },
+    [selectedOriginId],
+  );
 
-    const sales = cartLines.map((line) => ({
-      budgetLineId: line.productId,
-      quantity: line.quantity,
-      ...(line.isFreePrice ? { unitPrice: line.unitPrice } : {}),
-    }));
+  const onValidateOrder = useCallback(
+    (paymentMethod: ValidateOrderPaymentMethodInput) => {
+      submitOrder(cartLines, paymentMethod);
+    },
+    [cartLines, submitOrder],
+  );
 
-    void validateOrder({
-      editionId: edition.id,
-      originId: selectedOriginId ?? 0,
-      paymentMethod,
-      sales,
-    });
-  };
+  const onValidateCardPayment = useCallback((txCode: string | null) => {
+    pendingSumUpTxCodeRef.current = txCode;
+    pendingCardPaymentValidationRef.current = true;
+  }, []);
 
   const { startCardPayment } = useSumUp({
-    onValidateCardPayment: () =>
-      onValidateOrder(ValidateOrderPaymentMethodInput.Card),
+    onValidateCardPayment,
   });
 
   return (
