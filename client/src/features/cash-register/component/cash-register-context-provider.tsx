@@ -403,14 +403,24 @@ export const CashRegisterContextProvider = ({
 
   const openSelectOriginDialog = selectedOriginId === null;
 
-  const handleSelectOrigin = (originId: number | null) => {
-    setSelectedOriginId(originId);
-    if (originId) {
-      localStorage.setItem(CASH_REGISTER_ORIGIN_ID_KEY, originId.toString());
-    } else {
-      localStorage.removeItem(CASH_REGISTER_ORIGIN_ID_KEY);
-    }
-  };
+  const handleSelectOrigin = useCallback(
+    (originId: number | null) => {
+      if (originId !== selectedOriginId) {
+        clearCart();
+        setCatalogProducts([]);
+        pendingCardPaymentValidationRef.current = false;
+        pendingSumUpTxCodeRef.current = null;
+      }
+
+      setSelectedOriginId(originId);
+      if (originId) {
+        localStorage.setItem(CASH_REGISTER_ORIGIN_ID_KEY, originId.toString());
+      } else {
+        localStorage.removeItem(CASH_REGISTER_ORIGIN_ID_KEY);
+      }
+    },
+    [selectedOriginId],
+  );
 
   const onValidateOrder = useCallback(
     (paymentMethod: ValidateOrderPaymentMethodInput) => {
