@@ -13,6 +13,13 @@ export interface PaymentLineRow {
   unitPrice: number;
 }
 
+export interface InvoiceFileRow {
+  id: number;
+  fileName: string;
+  mimeType: string;
+  sizeBytes: number;
+}
+
 export interface InvoiceTableRow {
   id: number;
   name: string;
@@ -23,6 +30,7 @@ export interface InvoiceTableRow {
   executedAt: string;
   note: string;
   payments: PaymentLineRow[];
+  invoiceFiles: InvoiceFileRow[];
 }
 
 interface GetInvoicesTableColumns {

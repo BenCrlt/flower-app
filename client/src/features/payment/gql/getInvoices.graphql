@@ -20,5 +20,12 @@ query getInvoices($editionId: Float!, $status: InvoiceStatus) {
       quantity
       unitPrice
     }
+    invoiceFiles {
+      id
+      fileName
+      mimeType
+      sizeBytes
+      createdAt
+    }
   }
 }

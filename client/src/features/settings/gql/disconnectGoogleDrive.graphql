@@ -1,0 +1,9 @@
+mutation disconnectGoogleDrive($editionId: Float!) {
+  disconnectGoogleDrive(editionId: $editionId) {
+    editionId
+    isConnected
+    invoiceFolderId
+    googleAccountEmail
+    connectedAt
+  }
+}

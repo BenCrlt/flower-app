@@ -13,8 +13,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { InvoiceStatus, VendorsItem } from "@/generated/graphql";
-import { CirclePlus, Plus, Trash2 } from "lucide-react";
+import { CirclePlus, Plus } from "lucide-react";
 import { ReactElement, useState } from "react";
 import {
   Control,
@@ -25,6 +26,7 @@ import {
   UseFormSetValue,
 } from "react-hook-form";
 import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
+import { InvoicePaymentLineField } from "./invoice-payment-line-field";
 import { InvoiceStatusBadge } from "./invoice-status-badge";
 
 interface Props {
@@ -52,6 +54,7 @@ export function InvoiceFormFields({
   totalAmount,
   setValue,
 }: Props): ReactElement {
+  const isMobile = useIsMobile();
   const [openAddVendorDialog, setOpenAddVendorDialog] = useState(false);
   const [selectedPaymentIndex, setSelectedPaymentIndex] = useState<number | null>(
     null,
@@ -59,13 +62,15 @@ export function InvoiceFormFields({
 
   return (
     <>
-      {/* Nom */}
       <Field>
         <span className="text-sm font-medium text-foreground">Nom</span>
-        <Input {...register("name")} placeholder="Ajouter un nom..." />
+        <Input
+          {...register("name")}
+          placeholder="Ajouter un nom..."
+          className="h-11"
+        />
       </Field>
-      {/* Fournisseur */}
-      {/*  setValue("vendorId", vendor.id) */}
+
       <Field data-invalid={!!errors.vendorId}>
         <span className="text-sm font-medium text-foreground">Fournisseur</span>
         <Controller
@@ -103,7 +108,6 @@ export function InvoiceFormFields({
         />
       </Field>
 
-      {/* Statut */}
       <Field data-invalid={!!errors.status}>
         <span className="text-sm font-medium text-foreground">Statut</span>
         <Controller
@@ -114,7 +118,7 @@ export function InvoiceFormFields({
               value={field.value}
               onValueChange={(val) => field.onChange(val as InvoiceStatus)}
             >
-              <SelectTrigger>
+              <SelectTrigger className="h-11 w-full">
                 <SelectValue placeholder="Sélectionnez un statut..." />
               </SelectTrigger>
               <SelectContent>
@@ -130,104 +134,79 @@ export function InvoiceFormFields({
         <FieldError errors={[errors.status]} />
       </Field>
 
-      {/* Note */}
       <Field>
         <span className="text-sm font-medium text-foreground">Note</span>
-        <Textarea {...register("note")} placeholder="Ajouter une note..." />
+        <Textarea
+          {...register("note")}
+          placeholder="Ajouter une note..."
+          className="min-h-24"
+        />
       </Field>
 
-      {/* Lignes de paiement */}
-      <div className="grid grid-cols-20 gap-2 items-center">
-        <span className="text-sm font-medium text-foreground col-span-10">
-          Articles
-        </span>
-        <span className="text-sm font-medium text-foreground col-span-3">
-          Quantité
-        </span>
-        <div></div>
-        <span className="text-sm font-medium text-foreground col-span-5">
-          Prix
-        </span>
-        <div></div>
-        {paymentFields.map((_, index) => (
-          <>
-            <Field className="col-span-10">
-              <Controller
-                name={`payments.${index}.budgetLineId`}
+      <div className="flex flex-col gap-3">
+        <span className="text-sm font-medium text-foreground">Articles</span>
+
+        {isMobile ? (
+          <div className="flex flex-col gap-3">
+            {paymentFields.map((field, index) => (
+              <InvoicePaymentLineField
+                key={field.id}
+                index={index}
                 control={control}
-                render={({ field: f }) => (
-                  <PopoverCommand
-                    items={budgetLines.map((line) => ({
-                      label: line.name,
-                      value: line.id,
-                    }))}
-                    selectedValue={f.value}
-                    setSelectedValue={(value) => f.onChange(Number(value))}
-                    inputPlaceholder="Sélectionner un article..."
-                    commandInputPlaceholder="Rechercher un article..."
-                    title="Articles"
-                    emptyMessage="Pas d'article trouvé."
-                    className="w-full"
-                    contentClassName="w-[--radix-popover-trigger-width]"
-                    actions={[
-                      <CommandItem
-                        key="add-budget-line"
-                        onSelect={() => setSelectedPaymentIndex(index)}
-                      >
-                        <Plus className="h-4 w-4" />
-                        Créer un nouvel article
-                      </CommandItem>,
-                    ]}
-                  />
-                )}
+                register={register}
+                budgetLines={budgetLines}
+                canRemove={paymentFields.length > 1}
+                onRemove={() => removePayment(index)}
+                onAddBudgetLine={() => setSelectedPaymentIndex(index)}
+                layout="mobile"
               />
-            </Field>
-            <Field className="col-span-3">
-              <Input
-                placeholder="Qté"
-                className="w-12s"
-                {...register(`payments.${index}.quantity`, {
-                  valueAsNumber: true,
-                })}
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-20 items-center gap-2">
+            <span className="text-muted-foreground col-span-10 text-xs font-medium">
+              Article
+            </span>
+            <span className="text-muted-foreground col-span-3 text-xs font-medium">
+              Qté
+            </span>
+            <div />
+            <span className="text-muted-foreground col-span-5 text-xs font-medium">
+              Prix
+            </span>
+            <div />
+            {paymentFields.map((field, index) => (
+              <InvoicePaymentLineField
+                key={field.id}
+                index={index}
+                control={control}
+                register={register}
+                budgetLines={budgetLines}
+                canRemove={paymentFields.length > 1}
+                onRemove={() => removePayment(index)}
+                onAddBudgetLine={() => setSelectedPaymentIndex(index)}
+                layout="desktop"
               />
-            </Field>
-            <span className="text-muted-foreground justify-self-center">×</span>
-            <Field className="col-span-5">
-              <Input
-                placeholder="Prix"
-                className="w-20"
-                {...register(`payments.${index}.unitPrice`, {
-                  valueAsNumber: true,
-                })}
-              />
-            </Field>
-            <Button
-              type="button"
-              variant="ghost"
-              size="icon"
-              onClick={() => removePayment(index)}
-              disabled={paymentFields.length === 1}
-            >
-              <Trash2 className="h-4 w-4 text-muted-foreground" />
-            </Button>
-          </>
-        ))}
-        {errors.payments && (
-          <p className="text-sm text-destructive col-span-20">
-            {errors.payments.message}
-          </p>
+            ))}
+          </div>
         )}
+
+        {errors.payments && (
+          <p className="text-sm text-destructive">{errors.payments.message}</p>
+        )}
+
         <Button
           type="button"
           variant="outline"
-          size="sm"
+          size={isMobile ? "default" : "sm"}
           onClick={appendPayment}
-          className="w-fit"
+          className="h-11 w-full md:h-9 md:w-fit"
         >
           <CirclePlus className="mr-1 h-4 w-4" />
           Ajouter un article
         </Button>
       </div>
+
       <AddBudgetLineDialog
         open={selectedPaymentIndex !== null}
         setOpen={(open) => {
@@ -244,16 +223,17 @@ export function InvoiceFormFields({
         }}
       />
 
-      {/* Total */}
-      <p className="text-sm text-muted-foreground">
-        {"Montant total : "}
-        <span className="font-medium text-foreground">
-          {totalAmount.toLocaleString("fr-FR", {
-            style: "currency",
-            currency: "EUR",
-          })}
-        </span>
-      </p>
+      <div className="bg-muted/30 rounded-lg border px-3 py-3 md:border-0 md:bg-transparent md:p-0">
+        <p className="text-sm text-muted-foreground">
+          Montant total :{" "}
+          <span className="text-base font-semibold text-foreground">
+            {totalAmount.toLocaleString("fr-FR", {
+              style: "currency",
+              currency: "EUR",
+            })}
+          </span>
+        </p>
+      </div>
     </>
   );
 }

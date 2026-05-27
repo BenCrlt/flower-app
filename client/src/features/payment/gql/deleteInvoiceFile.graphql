@@ -1,0 +1,3 @@
+mutation deleteInvoiceFile($id: Float!, $deleteFromDrive: Boolean!) {
+  deleteInvoiceFile(id: $id, deleteFromDrive: $deleteFromDrive)
+}
