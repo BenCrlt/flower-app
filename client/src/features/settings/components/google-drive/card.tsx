@@ -11,8 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Spinner } from "@/components/ui/spinner";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
-import { getGoogleDriveOAuthStartUrl } from "@/lib/invoice-file-api";
 import { authClient } from "@/lib/auth-client";
+import { getGoogleDriveOAuthStartUrl } from "@/lib/invoice-file-api";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { useDisconnectGoogleDriveMutation } from "../../hooks/useDisconnectGoogleDriveMutation";
@@ -125,11 +125,7 @@ export function GoogleDriveCard() {
             )}
 
             {isAdmin && !config?.isConnected && (
-              <Button
-                type="button"
-                className="w-fit"
-                onClick={handleConnect}
-              >
+              <Button type="button" className="w-fit" onClick={handleConnect}>
                 Connecter Google Drive
               </Button>
             )}
@@ -138,7 +134,7 @@ export function GoogleDriveCard() {
               <>
                 <Field>
                   <FieldLabel htmlFor="invoiceFolderId">
-                    ID du dossier « Facture / Devis »
+                    ID du dossier contenant les factures et devis
                   </FieldLabel>
                   <Input
                     id="invoiceFolderId"
