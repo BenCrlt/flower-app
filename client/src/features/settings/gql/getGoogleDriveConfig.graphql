@@ -1,0 +1,9 @@
+query getGoogleDriveConfig($editionId: Float!) {
+  googleDriveConfig(editionId: $editionId) {
+    editionId
+    isConnected
+    invoiceFolderId
+    googleAccountEmail
+    connectedAt
+  }
+}

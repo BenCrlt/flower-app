@@ -2,6 +2,7 @@ import { TypographyH2 } from "@/components/ui/typography";
 import { authClient } from "@/lib/auth-client";
 import { DangerZoneCard } from "./components/danger-zone/card";
 import { EditionCard } from "./components/edition/card";
+import { GoogleDriveCard } from "./components/google-drive/card";
 import { HelloAssoCard } from "./components/hello-asso/card";
 import { OrderOriginsCard } from "./components/order-origins/card";
 import { PersonnalInfosCard } from "./components/personnal-infos/card";
@@ -16,6 +17,7 @@ export function SettingsPanel() {
       <PersonnalInfosCard />
       <OrderOriginsCard />
       <HelloAssoCard />
+      <GoogleDriveCard />
       <EditionCard />
       {isAdmin && <DangerZoneCard />}
     </div>

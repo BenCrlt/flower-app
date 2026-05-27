@@ -135,6 +135,14 @@ Interface GraphiQL : `http://localhost:3000/graphiql`
 | `receipts` | Reçus |
 | `users` | Utilisateurs |
 | `vendors` | Fournisseurs |
+| `google_drive_config` | Connexion Drive OAuth par édition (dossier Facture / Devis) |
+| `invoice_files` | Pièces jointes Drive liées aux factures |
+
+### Google Drive (factures)
+
+Variables serveur : `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_DRIVE_REDIRECT_URI`, `GOOGLE_DRIVE_TOKEN_ENCRYPTION_KEY`.
+
+Console Google Cloud : activer l’API Drive, créer des identifiants OAuth « Application Web », URI de redirection = `GOOGLE_DRIVE_REDIRECT_URI`.
 
 ## Workflow Git
 

@@ -12,15 +12,27 @@ import {
 import { useGetBudgetLinesQuery } from "@/features/budget/hooks/useGetBudgetLinesQuery";
 import { useEdition } from "@/features/edition/EditionContext";
 import { LineTypeEnum } from "@/generated/graphql";
+import { useGetGoogleDriveConfigQuery } from "@/features/settings/hooks/useGetGoogleDriveConfigQuery";
+import { Spinner } from "@/components/ui/spinner";
 import { CirclePlus } from "lucide-react";
 import { ReactElement, useState } from "react";
 import { useGetVendorsQuery } from "../hooks/useGetVendorsQuery";
 import { useInvoiceForm } from "../hooks/useInvoiceForm";
+import { InvoiceFilesSection } from "./invoice-files-section";
 import { InvoiceFormFields } from "./invoice-form-fields";
 
 export function AddInvoiceSheet(): ReactElement {
   const [open, setOpen] = useState(false);
+  const [pendingFiles, setPendingFiles] = useState<File[]>([]);
   const { edition } = useEdition();
+
+  const { data: driveConfigData } = useGetGoogleDriveConfigQuery({
+    variables: { editionId: edition.id },
+  });
+  const driveConfigured = Boolean(
+    driveConfigData?.googleDriveConfig.isConnected &&
+      driveConfigData.googleDriveConfig.invoiceFolderId,
+  );
 
   const { data: vendorsData } = useGetVendorsQuery();
   const { data: budgetLinesData } = useGetBudgetLinesQuery({
@@ -38,7 +50,13 @@ export function AddInvoiceSheet(): ReactElement {
     removePayment,
     totalAmount,
     setValue,
-  } = useInvoiceForm({ setOpen });
+    invoiceName,
+    isSubmitting,
+  } = useInvoiceForm({
+    setOpen,
+    pendingFiles,
+    onPendingFilesClear: () => setPendingFiles([]),
+  });
 
   return (
     <Sheet
@@ -71,11 +89,23 @@ export function AddInvoiceSheet(): ReactElement {
               totalAmount={totalAmount}
               setValue={setValue}
             />
+            <InvoiceFilesSection
+              invoiceName={invoiceName}
+              driveConfigured={driveConfigured}
+              pendingFiles={pendingFiles}
+              onPendingFilesChange={setPendingFiles}
+            />
           </div>
           <SheetFooter>
-            <Button type="submit">Ajouter</Button>
+            <Button type="submit" disabled={isSubmitting}>
+              {isSubmitting ? <Spinner /> : "Ajouter"}
+            </Button>
             <SheetClose asChild>
-              <Button variant="outline" onClick={handleClose}>
+              <Button
+                variant="outline"
+                onClick={handleClose}
+                disabled={isSubmitting}
+              >
                 Annuler
               </Button>
             </SheetClose>

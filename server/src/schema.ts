@@ -5,6 +5,7 @@ import {
   budgetLinesResolver,
 } from "./modules/budget/resolver.js";
 import { editionsResolver } from "./modules/editions/resolver.js";
+import { googleDriveResolver } from "./modules/google-drive/resolver.js";
 import { helloAssoResolver } from "./modules/helloasso/resolver.js";
 import { invoiceResolver, vendorResolver } from "./modules/payment/resolver.js";
 import {
@@ -21,6 +22,7 @@ export const schema = weave(
   vendorResolver,
   invoiceResolver,
   helloAssoResolver,
+  googleDriveResolver,
   orderResolver,
   salesResolver,
   orderOriginResolver,

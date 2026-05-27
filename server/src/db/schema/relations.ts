@@ -3,6 +3,8 @@ import { user } from "./auth.js";
 import { budgetCategoriesTable } from "./budget-categories.js";
 import { budgetLinesTable } from "./budget-lines.js";
 import { editionsTable } from "./editions.js";
+import { googleDriveConfigTable } from "./google-drive-config.js";
+import { invoiceFilesTable } from "./invoice-files.js";
 import { invoicesTable } from "./invoices.js";
 import { orderOriginBudgetLinesTable } from "./order-origin-budget-lines.js";
 import { orderOriginsTable } from "./order-origins.js";
@@ -35,11 +37,12 @@ export const budgetLinesRelations = relations(
   }),
 );
 
-export const editionsRelations = relations(editionsTable, ({ many }) => ({
+export const editionsRelations = relations(editionsTable, ({ many, one }) => ({
   budgetLines: many(budgetLinesTable),
   sales: many(salesTable),
   payments: many(paymentsTable),
   invoices: many(invoicesTable),
+  googleDriveConfig: one(googleDriveConfigTable),
 }));
 
 export const paymentsRelations = relations(paymentsTable, ({ one }) => ({
@@ -71,7 +74,33 @@ export const invoicesRelations = relations(invoicesTable, ({ one, many }) => ({
     references: [user.id],
   }),
   payments: many(paymentsTable),
+  invoiceFiles: many(invoiceFilesTable),
 }));
+
+export const invoiceFilesRelations = relations(invoiceFilesTable, ({ one }) => ({
+  invoice: one(invoicesTable, {
+    fields: [invoiceFilesTable.invoiceId],
+    references: [invoicesTable.id],
+  }),
+  uploadedBy: one(user, {
+    fields: [invoiceFilesTable.uploadedById],
+    references: [user.id],
+  }),
+}));
+
+export const googleDriveConfigRelations = relations(
+  googleDriveConfigTable,
+  ({ one }) => ({
+    edition: one(editionsTable, {
+      fields: [googleDriveConfigTable.editionId],
+      references: [editionsTable.id],
+    }),
+    connectedBy: one(user, {
+      fields: [googleDriveConfigTable.connectedById],
+      references: [user.id],
+    }),
+  }),
+);
 
 export const salesRelations = relations(salesTable, ({ one }) => ({
   budgetLine: one(budgetLinesTable, {

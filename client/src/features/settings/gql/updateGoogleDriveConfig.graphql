@@ -1,0 +1,15 @@
+mutation updateGoogleDriveConfig(
+  $editionId: Float!
+  $invoiceFolderId: String!
+) {
+  updateGoogleDriveConfig(
+    editionId: $editionId
+    invoiceFolderId: $invoiceFolderId
+  ) {
+    editionId
+    isConnected
+    invoiceFolderId
+    googleAccountEmail
+    connectedAt
+  }
+}

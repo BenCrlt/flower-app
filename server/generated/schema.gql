@@ -45,10 +45,29 @@ type GetBudgetStatsByCategories {
   totalEstimated: Float!
 }
 
+type GoogleDriveConfig {
+  connectedAt: String
+  editionId: Float!
+  googleAccountEmail: String
+  invoiceFolderId: String
+  isConnected: Boolean!
+}
+
 type HelloAssoConfigItem {
   editionId: Int!
   formSlug: String!
   id: Int!
+}
+
+type InvoiceFilesItem {
+  createdAt: String!
+  driveFileId: String!
+  fileName: String!
+  id: Int!
+  invoiceId: Int!
+  mimeType: String!
+  sizeBytes: Int!
+  uploadedById: String!
 }
 
 enum InvoiceStatus {
@@ -63,6 +82,7 @@ type InvoicesItem {
   editionId: Int!
   executedAt: String
   id: Int!
+  invoiceFiles: [InvoiceFilesItem!]!
   name: String!
   note: String
   payments: [PaymentsItem!]!
@@ -100,12 +120,15 @@ type Mutation {
   deleteBudgetLine(id: Float!): BudgetLinesItem
   deleteEdition(id: Float!): EditionsItem
   deleteInvoice(id: Float!): InvoicesItem
+  deleteInvoiceFile(deleteFromDrive: Boolean!, id: Float!): Boolean!
   deleteOrderOrigin(id: Float!): OrderOriginsItem
   deleteVendor(id: Float!): VendorsItem
+  disconnectGoogleDrive(editionId: Float!): GoogleDriveConfig!
   synchroSales(from: String!, helloAssoConfigId: Float!, to: String!): [SalesItem!]!
   updateBudgetCategory(id: Float!, name: String!): BudgetCategoriesItem
   updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, helloAssoProductId: Float, id: Float!, isFreePrice: Boolean, lineType: LineTypeEnum, name: String): BudgetLinesItem
   updateEdition(endDate: String, id: Float!, name: String, openingBalance: Float, startDate: String): EditionsItem
+  updateGoogleDriveConfig(editionId: Float!, invoiceFolderId: String!): GoogleDriveConfig!
   updateHelloAssoConfig(formSlug: String!, id: Float!): HelloAssoConfigItem
   updateInvoice(authorId: String, editionId: Float!, id: Float!, name: String, note: String, payments: [UpdateInvoicePaymentsInput!], status: InvoiceStatus, totalAmount: Float, vendorId: Float): InvoicesItem
   validateOrder(editionId: Float!, originId: Float!, paymentMethod: ValidateOrderPaymentMethodInput!, sales: [ValidateOrderSalesInput!]!): OrdersItem
@@ -150,6 +173,7 @@ type Query {
   edition(id: Float!): EditionsItem
   editions: [EditionsItem!]!
   getBudgetStatsByCategories(editionId: Float!, lineType: LineTypeEnum!): [GetBudgetStatsByCategories!]!
+  googleDriveConfig(editionId: Float!): GoogleDriveConfig!
   helloAssoConfig(editionId: Float!): HelloAssoConfigItem
   invoices(editionId: Float!, status: InvoiceStatus): [InvoicesItem!]!
   orderOrigin(id: Float!): OrderOriginsItem

@@ -19,6 +19,10 @@ import { loadAuthors } from "./utils/loadAuthors.js";
 import { loadPayments } from "./utils/loadPayments.js";
 import { loadVendors } from "./utils/loadVendors.js";
 import { updateInvoice, updateInvoiceInput } from "./utils/updateInvoice.js";
+import {
+  invoiceFilesField,
+  loadInvoiceFiles,
+} from "../google-drive/resolver.js";
 
 export const invoiceResolver = resolver.of(invoicesTable, {
   invoices: query(invoicesTable.$list())
@@ -34,6 +38,10 @@ export const invoiceResolver = resolver.of(invoicesTable, {
   vendor: field(vendorsTable.$nullable())
     .derivedFrom("vendorId")
     .load(async (invoices) => loadVendors(_.map(invoices, "vendorId"))),
+
+  invoiceFiles: invoiceFilesField
+    .derivedFrom("id")
+    .load(async (invoices) => loadInvoiceFiles(_.map(invoices, "id"))),
 
   addInvoice: mutation(invoicesTable.$nullable())
     .input(addInvoiceInput)
