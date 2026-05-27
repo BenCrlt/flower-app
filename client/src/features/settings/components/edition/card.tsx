@@ -13,6 +13,7 @@ import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
 import { useUpdateEdition } from "@/features/settings/hooks/useUpdateEdition";
 import type { UpdateEditionMutation } from "@/generated/graphql";
+import { parseEditionDateTime } from "@/utils/DateUtils";
 import { format, parse } from "date-fns";
 import { Save } from "lucide-react";
 import { useEffect } from "react";
@@ -26,25 +27,6 @@ interface EditionFormValues {
   startTime: string;
   endDate: string;
   endTime: string;
-}
-
-function parseEditionDateTime(raw: string): Date | null {
-  const s = raw?.trim() ?? "";
-  if (!s) return null;
-
-  if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s)) {
-    const parsed = parse(s, "d/M/yyyy", new Date());
-    return Number.isNaN(parsed.getTime()) ? null : parsed;
-  }
-
-  if (/^\d{4}-\d{2}-\d{2}$/.test(s)) {
-    const parsed = parse(s, "yyyy-MM-dd", new Date());
-    return Number.isNaN(parsed.getTime()) ? null : parsed;
-  }
-
-  const numeric = /^\d+$/.test(s);
-  const d = numeric ? new Date(Number(s)) : new Date(s);
-  return Number.isNaN(d.getTime()) ? null : d;
 }
 
 function toDatePart(raw: string): string {

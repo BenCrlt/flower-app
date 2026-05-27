@@ -18,21 +18,26 @@ export type StrictDateRange = {
   to: Date;
 };
 
+export type DateRangeQuickFilter = {
+  id: string;
+  label: string;
+  getRange: () => StrictDateRange;
+  disabled?: boolean;
+  title?: string;
+};
+
 interface Props {
   dateRange: StrictDateRange;
   handleSelectDateRange: (dateRange: StrictDateRange) => void;
   maxDate?: Date;
-  presets?: {
-    label: string;
-    subDaysCount: number;
-    startDate?: Date;
-  }[];
+  quickFilters?: DateRangeQuickFilter[];
 }
 
 export function DateRangePicker({
   dateRange,
   handleSelectDateRange,
   maxDate,
+  quickFilters,
 }: Props) {
   const [open, setOpen] = React.useState(false);
 
@@ -44,6 +49,14 @@ export function DateRangePicker({
       from: dateRange.from,
       to: dateRange.to,
     });
+  };
+
+  const applyQuickFilter = (filter: DateRangeQuickFilter) => {
+    if (filter.disabled) {
+      return;
+    }
+    handleSelectDateRange(filter.getRange());
+    setOpen(false);
   };
 
   return (
@@ -78,6 +91,24 @@ export function DateRangePicker({
           }
           required
         />
+        {quickFilters?.length ? (
+          <div className="flex max-w-[min(100vw-2rem,42rem)] flex-wrap gap-2 border-t bg-muted/30 p-3">
+            {quickFilters.map((filter) => (
+              <Button
+                key={filter.id}
+                type="button"
+                variant="outline"
+                size="sm"
+                className="h-auto min-h-7 max-w-full shrink whitespace-normal rounded-full px-3 py-1.5 text-center text-xs leading-snug font-normal"
+                disabled={filter.disabled}
+                title={filter.title}
+                onClick={() => applyQuickFilter(filter)}
+              >
+                {filter.label}
+              </Button>
+            ))}
+          </div>
+        ) : null}
       </PopoverContent>
     </Popover>
   );

@@ -16,16 +16,16 @@ import { GetOrdersQuery } from "@/generated/graphql";
 import { getSaleLineTotal } from "../../utils/salePrice";
 import { formatTimestampToLocaleString } from "@/utils/DateUtils";
 import {
-  differenceInDays,
   eachDayOfInterval,
-  eachMinuteOfInterval,
+  eachHourOfInterval,
   endOfDay,
   format,
-  roundToNearestMinutes,
   startOfDay,
+  startOfHour,
 } from "date-fns";
 import { useMemo } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { isChartHourlyRange } from "../../utils/editionDateRange";
 
 interface Props {
   filteredSales: GetOrdersQuery["orders"][number]["sales"];
@@ -37,36 +37,31 @@ export const SalesChart = ({ filteredSales, range }: Props) => {
     return filteredSales.reduce((sum, sale) => sum + getSaleLineTotal(sale), 0);
   }, [filteredSales]);
 
-  const isDailyBuckets = differenceInDays(range.to, range.from) >= 3;
+  const isHourlyDisplay = isChartHourlyRange(range);
 
   const data = useMemo(() => {
-    const isHourlyDisplay = !isDailyBuckets;
     if (isHourlyDisplay) {
-      const thirtyMinutesIntervals = eachMinuteOfInterval(
-        {
-          start: startOfDay(range.from),
-          end: endOfDay(range.to),
-        },
-        { step: 30 },
-      );
+      const hours = eachHourOfInterval({
+        start: startOfDay(range.from),
+        end: endOfDay(range.to),
+      });
 
-      const salesByInterval = new Map<string, number>();
+      const salesByHour = new Map<string, number>();
       filteredSales.forEach((sale) => {
-        const intervalKey = roundToNearestMinutes(
+        const hourKey = startOfHour(
           new Date(
             formatTimestampToLocaleString(sale.executedAt, "yyyy-MM-dd HH:mm"),
           ),
-          { roundingMethod: "ceil", nearestTo: 30 },
         ).toISOString();
-        const currentSales = salesByInterval.get(intervalKey) || 0;
-        salesByInterval.set(intervalKey, currentSales + sale.quantity);
+        const currentSales = salesByHour.get(hourKey) || 0;
+        salesByHour.set(hourKey, currentSales + sale.quantity);
       });
 
-      return thirtyMinutesIntervals.map((date) => {
-        const intervalKey = date.toISOString();
-        const totalSales = salesByInterval.get(intervalKey) || 0;
+      return hours.map((date) => {
+        const hourKey = date.toISOString();
+        const totalSales = salesByHour.get(hourKey) || 0;
         return {
-          label: format(date, "HH:mm"),
+          label: format(date, "HH'h'"),
           totalAmount: totalSales,
         };
       });
@@ -96,7 +91,7 @@ export const SalesChart = ({ filteredSales, range }: Props) => {
         totalAmount: totalSales,
       };
     });
-  }, [filteredSales, range, isDailyBuckets]);
+  }, [filteredSales, range, isHourlyDisplay]);
 
   const chartConfig = {
     totalAmount: {

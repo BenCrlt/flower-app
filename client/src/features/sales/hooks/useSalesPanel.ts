@@ -1,4 +1,7 @@
-import { StrictDateRange } from "@/components/date-picker";
+import {
+  DateRangeQuickFilter,
+  StrictDateRange,
+} from "@/components/date-picker";
 import { useEdition } from "@/features/edition/EditionContext";
 import { BudgetCategoriesItem, GetOrdersQuery } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
@@ -9,6 +12,7 @@ import {
   filterSalesForChart,
   orderMatchesChartFilters,
 } from "../utils/salesFilters";
+import { buildSalesDateRangeQuickFilters } from "../utils/salesDateRangeQuickFilters";
 import { getSaleEffectiveUnitPrice } from "../utils/salePrice";
 import { useGetOrdersQuery } from "./getOrdersQuery";
 import { useGetOrderOriginsQuery } from "./useGetOrderOrigins";
@@ -19,6 +23,7 @@ interface UseSalesPanelResult {
   originOptions: { id: number; name: string }[];
   dateRange: StrictDateRange;
   handleSelectDateRange: (dateRange: StrictDateRange) => void;
+  dateRangeQuickFilters: DateRangeQuickFilter[];
   orders: GetOrdersQuery["orders"];
   columns: ColumnDef<SalesTableRow>[];
   rows: SalesTableRow[];
@@ -194,12 +199,18 @@ export function useSalesPanel(): UseSalesPanelResult {
     setDateRange(nextRange);
   };
 
+  const dateRangeQuickFilters = useMemo<DateRangeQuickFilter[]>(
+    () => buildSalesDateRangeQuickFilters(edition),
+    [edition.endDate, edition.startDate],
+  );
+
   return {
     originIdsFilter,
     handleSelectOrigin,
     originOptions: orderOriginsOptions?.orderOrigins ?? [],
     dateRange,
     handleSelectDateRange,
+    dateRangeQuickFilters,
     columns,
     rows,
     orders,

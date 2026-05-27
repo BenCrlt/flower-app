@@ -1,5 +1,9 @@
 import { CategoryBadge } from "@/components/CategoryBadge";
-import { DateRangePicker, StrictDateRange } from "@/components/date-picker";
+import {
+  DateRangePicker,
+  DateRangeQuickFilter,
+  StrictDateRange,
+} from "@/components/date-picker";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -23,6 +27,7 @@ interface Props {
   originOptions: { id: number; name: string }[];
   dateRange: StrictDateRange;
   handleSelectDateRange: (dateRange: StrictDateRange) => void;
+  dateRangeQuickFilters: DateRangeQuickFilter[];
   selectedCategoryIds: number[];
   selectedBudgetLineIds: number[];
   categoryOptions: Pick<BudgetCategoriesItem, "id" | "name" | "color">[];
@@ -37,6 +42,7 @@ export const SalesPanelActionsAndFiltersCard = ({
   handleSelectOrigin,
   dateRange,
   handleSelectDateRange,
+  dateRangeQuickFilters,
   selectedCategoryIds,
   selectedBudgetLineIds,
   categoryOptions,
@@ -57,6 +63,7 @@ export const SalesPanelActionsAndFiltersCard = ({
           <DateRangePicker
             dateRange={dateRange}
             handleSelectDateRange={handleSelectDateRange}
+            quickFilters={dateRangeQuickFilters}
           />
           {originOptions.length > 0 ? (
             <DropdownMenu>

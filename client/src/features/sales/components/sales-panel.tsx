@@ -14,6 +14,7 @@ export function SalesPanel() {
     columns,
     rows,
     handleSelectDateRange,
+    dateRangeQuickFilters,
     selectedCategoryIds,
     selectedBudgetLineIds,
     handleSelectCategory,
@@ -32,6 +33,7 @@ export function SalesPanel() {
         originOptions={originOptions}
         dateRange={dateRange}
         handleSelectDateRange={handleSelectDateRange}
+        dateRangeQuickFilters={dateRangeQuickFilters}
         selectedCategoryIds={selectedCategoryIds}
         selectedBudgetLineIds={selectedBudgetLineIds}
         categoryOptions={categoryOptions}
