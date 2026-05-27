@@ -9,6 +9,7 @@ import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
+import { toast } from "sonner";
 
 export const Route = createFileRoute("/auth/sign-in")({
   component: RouteComponent,
@@ -24,10 +25,17 @@ function RouteComponent() {
     e.preventDefault();
     if (!isValidForm) return;
 
-    authClient.signIn.username({
-      username,
-      password: pin,
-    });
+    authClient.signIn.username(
+      {
+        username,
+        password: pin,
+      },
+      {
+        onError: (ctx) => {
+          toast.error(ctx.error.message);
+        },
+      },
+    );
   };
 
   return (

@@ -22,12 +22,8 @@ function formatSignedEuros(amount: number): string {
 export function ForecastVsActualBlock({ real, forecast, lineType }: Props) {
   const progress =
     forecast > 0 ? Math.min((real / forecast) * 100, 100) : real > 0 ? 100 : 0;
-  const gapPercent =
-    forecast > 0 ? getGapBetweenRealAndPrevisionnal(real, forecast, true) : null;
-  const gapEuro =
-    forecast > 0 || real > 0
-      ? getGapBetweenRealAndPrevisionnal(real, forecast, false)
-      : null;
+  const gapPercent = getGapBetweenRealAndPrevisionnal(real, forecast, true);
+  const gapEuro = real - forecast;
 
   return (
     <div className="flex flex-col gap-4">

@@ -14,7 +14,14 @@ export function SalesPanel() {
     columns,
     rows,
     handleSelectDateRange,
-    orders,
+    dateRangeQuickFilters,
+    selectedCategoryIds,
+    selectedBudgetLineIds,
+    handleSelectCategory,
+    handleSelectBudgetLine,
+    categoryOptions,
+    articleOptions,
+    chartFilteredSales,
   } = useSalesPanel();
 
   return (
@@ -26,8 +33,15 @@ export function SalesPanel() {
         originOptions={originOptions}
         dateRange={dateRange}
         handleSelectDateRange={handleSelectDateRange}
+        dateRangeQuickFilters={dateRangeQuickFilters}
+        selectedCategoryIds={selectedCategoryIds}
+        selectedBudgetLineIds={selectedBudgetLineIds}
+        categoryOptions={categoryOptions}
+        articleOptions={articleOptions}
+        handleSelectCategory={handleSelectCategory}
+        handleSelectBudgetLine={handleSelectBudgetLine}
       />
-      <SalesInfo orders={orders} dateRange={dateRange} />
+      <SalesInfo dateRange={dateRange} filteredSales={chartFilteredSales} />
       <DataTable
         columns={columns}
         data={rows}

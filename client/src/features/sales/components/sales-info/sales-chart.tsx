@@ -1,9 +1,6 @@
-import { CategoryBadge } from "@/components/CategoryBadge";
 import { StrictDateRange } from "@/components/date-picker";
-import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -15,88 +12,56 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { BudgetCategoriesItem, GetOrdersQuery } from "@/generated/graphql";
+import { GetOrdersQuery } from "@/generated/graphql";
 import { getSaleLineTotal } from "../../utils/salePrice";
 import { formatTimestampToLocaleString } from "@/utils/DateUtils";
 import {
-  differenceInDays,
   eachDayOfInterval,
-  eachMinuteOfInterval,
+  eachHourOfInterval,
   endOfDay,
   format,
-  roundToNearestMinutes,
   startOfDay,
+  startOfHour,
 } from "date-fns";
-import { ListFilter } from "lucide-react";
 import { useMemo } from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ReferenceLine,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
+import { isChartHourlyRange } from "../../utils/editionDateRange";
 
 interface Props {
   filteredSales: GetOrdersQuery["orders"][number]["sales"];
-  selectedCategoryIds: number[];
-  categoryOptions: Pick<BudgetCategoriesItem, "id" | "name" | "color">[];
-  handleSelectCategory: (categoryId: number, checked: boolean) => void;
   range: StrictDateRange;
-  /** Moyenne prévisionnelle d’unités vendues par jour (durée de l’édition). */
-  forecastAvgDailyQuantity?: number;
 }
 
-export const SalesChart = ({
-  filteredSales,
-  selectedCategoryIds,
-  categoryOptions,
-  handleSelectCategory,
-  range,
-  forecastAvgDailyQuantity,
-}: Props) => {
+export const SalesChart = ({ filteredSales, range }: Props) => {
   const totalFilteredSalesAmount = useMemo(() => {
     return filteredSales.reduce((sum, sale) => sum + getSaleLineTotal(sale), 0);
   }, [filteredSales]);
 
-  const isDailyBuckets = differenceInDays(range.to, range.from) >= 3;
+  const isHourlyDisplay = isChartHourlyRange(range);
 
   const data = useMemo(() => {
-    const isHourlyDisplay = !isDailyBuckets;
     if (isHourlyDisplay) {
-      const thirtyMinutesIntervals = eachMinuteOfInterval(
-        {
-          start: startOfDay(range.from),
-          end: endOfDay(range.to),
-        },
-        { step: 30 },
-      );
+      const hours = eachHourOfInterval({
+        start: startOfDay(range.from),
+        end: endOfDay(range.to),
+      });
 
-      const salesByInterval = new Map<string, number>();
+      const salesByHour = new Map<string, number>();
       filteredSales.forEach((sale) => {
-        const intervalKey = roundToNearestMinutes(
+        const hourKey = startOfHour(
           new Date(
             formatTimestampToLocaleString(sale.executedAt, "yyyy-MM-dd HH:mm"),
           ),
-          { roundingMethod: "ceil", nearestTo: 30 },
         ).toISOString();
-        const currentSales = salesByInterval.get(intervalKey) || 0;
-        salesByInterval.set(intervalKey, currentSales + sale.quantity);
+        const currentSales = salesByHour.get(hourKey) || 0;
+        salesByHour.set(hourKey, currentSales + sale.quantity);
       });
 
-      return thirtyMinutesIntervals.map((date) => {
-        const intervalKey = date.toISOString();
-        const totalSales = salesByInterval.get(intervalKey) || 0;
+      return hours.map((date) => {
+        const hourKey = date.toISOString();
+        const totalSales = salesByHour.get(hourKey) || 0;
         return {
-          label: format(date, "HH:mm"),
+          label: format(date, "HH'h'"),
           totalAmount: totalSales,
         };
       });
@@ -126,7 +91,7 @@ export const SalesChart = ({
         totalAmount: totalSales,
       };
     });
-  }, [filteredSales, range, isDailyBuckets]);
+  }, [filteredSales, range, isHourlyDisplay]);
 
   const chartConfig = {
     totalAmount: {
@@ -139,62 +104,12 @@ export const SalesChart = ({
     <Card className="h-full min-h-0">
       <CardHeader className="shrink-0">
         <CardTitle>Evolution des ventes</CardTitle>
-        <CardAction>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant={selectedCategoryIds.length ? "default" : "outline"}
-                className={"border-dashed"}
-              >
-                <ListFilter />
-                Catégories{" "}
-                {selectedCategoryIds.length
-                  ? `(${selectedCategoryIds.length})`
-                  : ""}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-44">
-              <DropdownMenuGroup>
-                {categoryOptions.map((category) => (
-                  <DropdownMenuCheckboxItem
-                    key={category.id}
-                    className="capitalize"
-                    checked={selectedCategoryIds.includes(category.id)}
-                    onSelect={(e) => e.preventDefault()}
-                    onCheckedChange={(value) =>
-                      handleSelectCategory(category.id, value)
-                    }
-                  >
-                    <CategoryBadge
-                      name={category.name}
-                      color={category.color}
-                    />
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </CardAction>
-        <CardDescription className="space-y-1">
-          <p>
-            Total filtré :{" "}
-            {new Intl.NumberFormat("fr-FR", {
-              style: "currency",
-              currency: "EUR",
-            }).format(totalFilteredSalesAmount)}
-          </p>
-          {forecastAvgDailyQuantity != null && forecastAvgDailyQuantity > 0 ? (
-            <p className="text-muted-foreground">
-              Prévisionnel (recettes budgétées) :{" "}
-              {new Intl.NumberFormat("fr-FR", {
-                maximumFractionDigits: 1,
-              }).format(forecastAvgDailyQuantity)}{" "}
-              unité(s)/jour en moyenne sur l&apos;édition
-              {isDailyBuckets
-                ? " — ligne en pointillés sur le graphique."
-                : " — ligne masquée en vue horaire (< 3 jours)."}
-            </p>
-          ) : null}
+        <CardDescription>
+          Total filtré :{" "}
+          {new Intl.NumberFormat("fr-FR", {
+            style: "currency",
+            currency: "EUR",
+          }).format(totalFilteredSalesAmount)}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex min-h-0 flex-1 flex-col justify-center pb-0">
@@ -221,21 +136,6 @@ export const SalesChart = ({
               width={48}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            {forecastAvgDailyQuantity != null &&
-            forecastAvgDailyQuantity > 0 &&
-            isDailyBuckets ? (
-              <ReferenceLine
-                y={forecastAvgDailyQuantity}
-                stroke="var(--muted-foreground)"
-                strokeDasharray="6 4"
-                label={{
-                  value: "Prévisionnel (moy.)",
-                  position: "insideTopRight",
-                  fill: "var(--muted-foreground)",
-                  fontSize: 11,
-                }}
-              />
-            ) : null}
             <Area
               type="monotone"
               dataKey="totalAmount"

@@ -18,6 +18,7 @@ export interface SalesTableRow {
   authorUsername: string | null;
   sales: {
     id: number;
+    budgetLineId: number;
     quantity: number;
     budgetLineName: string;
     estimatedUnitPrice: number;
