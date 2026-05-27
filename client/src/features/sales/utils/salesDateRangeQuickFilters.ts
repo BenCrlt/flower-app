@@ -1,7 +1,7 @@
 import { DateRangeQuickFilter } from "@/components/date-picker";
 import { EditionBaseInfo } from "@/features/edition/EditionContext";
 import { parseEditionDateTime } from "@/utils/DateUtils";
-import { endOfDay, startOfDay, subDays, subHours, subMonths } from "date-fns";
+import { endOfDay, startOfDay, subDays, subMonths } from "date-fns";
 
 type EditionTimeline = "before" | "during" | "after";
 
