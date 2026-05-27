@@ -197,6 +197,9 @@ export function useSalesPanel(): UseSalesPanelResult {
 
   const handleSelectDateRange = (nextRange: StrictDateRange) => {
     setDateRange(nextRange);
+    setOriginIdsFilter([]);
+    setSelectedCategoryIds([]);
+    setSelectedBudgetLineIds([]);
   };
 
   const dateRangeQuickFilters = useMemo<DateRangeQuickFilter[]>(
