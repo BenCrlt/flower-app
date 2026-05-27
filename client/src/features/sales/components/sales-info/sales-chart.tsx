@@ -1,9 +1,6 @@
-import { CategoryBadge } from "@/components/CategoryBadge";
 import { StrictDateRange } from "@/components/date-picker";
-import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -15,14 +12,7 @@ import {
   ChartTooltip,
   ChartTooltipContent,
 } from "@/components/ui/chart";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { BudgetCategoriesItem, GetOrdersQuery } from "@/generated/graphql";
+import { GetOrdersQuery } from "@/generated/graphql";
 import { getSaleLineTotal } from "../../utils/salePrice";
 import { formatTimestampToLocaleString } from "@/utils/DateUtils";
 import {
@@ -34,25 +24,15 @@ import {
   roundToNearestMinutes,
   startOfDay,
 } from "date-fns";
-import { ListFilter } from "lucide-react";
 import { useMemo } from "react";
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface Props {
   filteredSales: GetOrdersQuery["orders"][number]["sales"];
-  selectedCategoryIds: number[];
-  categoryOptions: Pick<BudgetCategoriesItem, "id" | "name" | "color">[];
-  handleSelectCategory: (categoryId: number, checked: boolean) => void;
   range: StrictDateRange;
 }
 
-export const SalesChart = ({
-  filteredSales,
-  selectedCategoryIds,
-  categoryOptions,
-  handleSelectCategory,
-  range,
-}: Props) => {
+export const SalesChart = ({ filteredSales, range }: Props) => {
   const totalFilteredSalesAmount = useMemo(() => {
     return filteredSales.reduce((sum, sale) => sum + getSaleLineTotal(sale), 0);
   }, [filteredSales]);
@@ -129,42 +109,6 @@ export const SalesChart = ({
     <Card className="h-full min-h-0">
       <CardHeader className="shrink-0">
         <CardTitle>Evolution des ventes</CardTitle>
-        <CardAction>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant={selectedCategoryIds.length ? "default" : "outline"}
-                className={"border-dashed"}
-              >
-                <ListFilter />
-                Catégories{" "}
-                {selectedCategoryIds.length
-                  ? `(${selectedCategoryIds.length})`
-                  : ""}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" className="w-44">
-              <DropdownMenuGroup>
-                {categoryOptions.map((category) => (
-                  <DropdownMenuCheckboxItem
-                    key={category.id}
-                    className="capitalize"
-                    checked={selectedCategoryIds.includes(category.id)}
-                    onSelect={(e) => e.preventDefault()}
-                    onCheckedChange={(value) =>
-                      handleSelectCategory(category.id, value)
-                    }
-                  >
-                    <CategoryBadge
-                      name={category.name}
-                      color={category.color}
-                    />
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </CardAction>
         <CardDescription>
           Total filtré :{" "}
           {new Intl.NumberFormat("fr-FR", {

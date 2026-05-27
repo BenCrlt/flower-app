@@ -107,7 +107,8 @@ export const TopProductsCard = ({ filteredSales }: Props) => {
               Aucun produit pour ce filtre
             </p>
             <p className="max-w-[220px] text-xs text-muted-foreground">
-              Ajustez la période ou les catégories pour voir le classement.
+              Ajustez la période, les articles ou les catégories pour voir le
+              classement.
             </p>
           </div>
         ) : (
