@@ -2,16 +2,15 @@ import { PopoverCommand } from "@/components/PopoverCommand";
 import { Button } from "@/components/ui/button";
 import { CommandItem } from "@/components/ui/command";
 import { Field } from "@/components/ui/field";
-import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
 import { ReactElement } from "react";
-import { Control, Controller, UseFormRegister } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
+import { InvoiceDecimalInput } from "./invoice-decimal-input";
 
 interface Props {
   index: number;
   control: Control<InvoiceFormValues>;
-  register: UseFormRegister<InvoiceFormValues>;
   budgetLines: { id: number; name: string }[];
   canRemove: boolean;
   onRemove: () => void;
@@ -22,13 +21,13 @@ interface Props {
 export function InvoicePaymentLineField({
   index,
   control,
-  register,
   budgetLines,
   canRemove,
   onRemove,
   onAddBudgetLine,
   layout,
 }: Props): ReactElement {
+  const decimalInputMode = layout === "mobile" ? "decimal" : undefined;
   const budgetLinePicker = (
     <Controller
       name={`payments.${index}.budgetLineId`}
@@ -87,28 +86,36 @@ export function InvoicePaymentLineField({
               <span className="text-muted-foreground mb-1.5 block text-xs font-medium">
                 Quantité
               </span>
-              <Input
-                type="number"
-                inputMode="decimal"
-                placeholder="1"
-                className="h-11"
-                {...register(`payments.${index}.quantity`, {
-                  valueAsNumber: true,
-                })}
+              <Controller
+                name={`payments.${index}.quantity`}
+                control={control}
+                render={({ field }) => (
+                  <InvoiceDecimalInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    inputMode={decimalInputMode}
+                    placeholder="1"
+                    className="h-11"
+                  />
+                )}
               />
             </Field>
             <Field>
               <span className="text-muted-foreground mb-1.5 block text-xs font-medium">
                 Prix unitaire
               </span>
-              <Input
-                type="number"
-                inputMode="decimal"
-                placeholder="0,00"
-                className="h-11"
-                {...register(`payments.${index}.unitPrice`, {
-                  valueAsNumber: true,
-                })}
+              <Controller
+                name={`payments.${index}.unitPrice`}
+                control={control}
+                render={({ field }) => (
+                  <InvoiceDecimalInput
+                    value={field.value}
+                    onChange={field.onChange}
+                    inputMode={decimalInputMode}
+                    placeholder="0.00"
+                    className="h-11"
+                  />
+                )}
               />
             </Field>
           </div>
@@ -121,26 +128,32 @@ export function InvoicePaymentLineField({
     <>
       <Field className="col-span-10">{budgetLinePicker}</Field>
       <Field className="col-span-3">
-        <Input
-          type="number"
-          inputMode="decimal"
-          placeholder="Qté"
-          className="h-11 w-full"
-          {...register(`payments.${index}.quantity`, {
-            valueAsNumber: true,
-          })}
+        <Controller
+          name={`payments.${index}.quantity`}
+          control={control}
+          render={({ field }) => (
+            <InvoiceDecimalInput
+              value={field.value}
+              onChange={field.onChange}
+              placeholder="Qté"
+              className="h-11 w-full"
+            />
+          )}
         />
       </Field>
       <span className="text-muted-foreground justify-self-center">×</span>
       <Field className="col-span-5">
-        <Input
-          type="number"
-          inputMode="decimal"
-          placeholder="Prix"
-          className="h-11 w-full"
-          {...register(`payments.${index}.unitPrice`, {
-            valueAsNumber: true,
-          })}
+        <Controller
+          name={`payments.${index}.unitPrice`}
+          control={control}
+          render={({ field }) => (
+            <InvoiceDecimalInput
+              value={field.value}
+              onChange={field.onChange}
+              placeholder="Prix"
+              className="h-11 w-full"
+            />
+          )}
         />
       </Field>
       <Button

@@ -153,7 +153,6 @@ export function InvoiceFormFields({
                 key={field.id}
                 index={index}
                 control={control}
-                register={register}
                 budgetLines={budgetLines}
                 canRemove={paymentFields.length > 1}
                 onRemove={() => removePayment(index)}
@@ -180,7 +179,6 @@ export function InvoiceFormFields({
                 key={field.id}
                 index={index}
                 control={control}
-                register={register}
                 budgetLines={budgetLines}
                 canRemove={paymentFields.length > 1}
                 onRemove={() => removePayment(index)}
