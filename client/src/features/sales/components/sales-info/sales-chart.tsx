@@ -36,14 +36,7 @@ import {
 } from "date-fns";
 import { ListFilter } from "lucide-react";
 import { useMemo } from "react";
-import {
-  Area,
-  AreaChart,
-  CartesianGrid,
-  ReferenceLine,
-  XAxis,
-  YAxis,
-} from "recharts";
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 interface Props {
   filteredSales: GetOrdersQuery["orders"][number]["sales"];
@@ -51,8 +44,6 @@ interface Props {
   categoryOptions: Pick<BudgetCategoriesItem, "id" | "name" | "color">[];
   handleSelectCategory: (categoryId: number, checked: boolean) => void;
   range: StrictDateRange;
-  /** Moyenne prévisionnelle d’unités vendues par jour (durée de l’édition). */
-  forecastAvgDailyQuantity?: number;
 }
 
 export const SalesChart = ({
@@ -61,7 +52,6 @@ export const SalesChart = ({
   categoryOptions,
   handleSelectCategory,
   range,
-  forecastAvgDailyQuantity,
 }: Props) => {
   const totalFilteredSalesAmount = useMemo(() => {
     return filteredSales.reduce((sum, sale) => sum + getSaleLineTotal(sale), 0);
@@ -175,26 +165,12 @@ export const SalesChart = ({
             </DropdownMenuContent>
           </DropdownMenu>
         </CardAction>
-        <CardDescription className="space-y-1">
-          <p>
-            Total filtré :{" "}
-            {new Intl.NumberFormat("fr-FR", {
-              style: "currency",
-              currency: "EUR",
-            }).format(totalFilteredSalesAmount)}
-          </p>
-          {forecastAvgDailyQuantity != null && forecastAvgDailyQuantity > 0 ? (
-            <p className="text-muted-foreground">
-              Prévisionnel (recettes budgétées) :{" "}
-              {new Intl.NumberFormat("fr-FR", {
-                maximumFractionDigits: 1,
-              }).format(forecastAvgDailyQuantity)}{" "}
-              unité(s)/jour en moyenne sur l&apos;édition
-              {isDailyBuckets
-                ? " — ligne en pointillés sur le graphique."
-                : " — ligne masquée en vue horaire (< 3 jours)."}
-            </p>
-          ) : null}
+        <CardDescription>
+          Total filtré :{" "}
+          {new Intl.NumberFormat("fr-FR", {
+            style: "currency",
+            currency: "EUR",
+          }).format(totalFilteredSalesAmount)}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex min-h-0 flex-1 flex-col justify-center pb-0">
@@ -221,21 +197,6 @@ export const SalesChart = ({
               width={48}
             />
             <ChartTooltip content={<ChartTooltipContent />} />
-            {forecastAvgDailyQuantity != null &&
-            forecastAvgDailyQuantity > 0 &&
-            isDailyBuckets ? (
-              <ReferenceLine
-                y={forecastAvgDailyQuantity}
-                stroke="var(--muted-foreground)"
-                strokeDasharray="6 4"
-                label={{
-                  value: "Prévisionnel (moy.)",
-                  position: "insideTopRight",
-                  fill: "var(--muted-foreground)",
-                  fontSize: 11,
-                }}
-              />
-            ) : null}
             <Area
               type="monotone"
               dataKey="totalAmount"
