@@ -93,7 +93,7 @@ export function InvoicesTableActionsLine({ onDelete, onEdit, row }: Props) {
           <Separator />
           <DropdownMenuItem
             variant="destructive"
-            onClick={() => onDelete(row.original.id)}
+            onSelect={() => onDelete(row.original.id)}
           >
             <Trash /> Supprimer
           </DropdownMenuItem>

@@ -5,6 +5,7 @@ import { useDeleteInvoiceMutation } from "../hooks/useDeleteInvoiceMutation";
 import { useInvoicesPanel } from "../hooks/useInvoicesPanel";
 import { EditInvoiceSheet } from "./edit-invoice-sheet";
 import { getColumns, InvoiceTableRow } from "./columns";
+import { DeleteInvoiceDialog } from "./delete-invoice-dialog";
 import { InvoicesFiltersCard } from "./invoices-filters-card";
 import { InvoicesKpiCards } from "./invoices-kpi-cards";
 import { UncoveredBudgetLinesSheet } from "./uncovered-budget-lines-sheet";
@@ -32,8 +33,11 @@ export function InvoicesPanel() {
   const [selectedInvoiceId, setSelectedInvoiceId] = useState<number | null>(
     null,
   );
+  const [invoiceToDelete, setInvoiceToDelete] =
+    useState<InvoiceTableRow | null>(null);
 
-  const { mutate: deleteInvoice } = useDeleteInvoiceMutation();
+  const { mutate: deleteInvoice, isPending: isDeletePending } =
+    useDeleteInvoiceMutation();
 
   const selectedRow = useMemo(() => {
     if (selectedInvoiceId === null) {
@@ -42,21 +46,36 @@ export function InvoicesPanel() {
     return allRows.find((row) => row.id === selectedInvoiceId) ?? null;
   }, [allRows, selectedInvoiceId]);
 
-  const handleDeleteInvoice = useCallback(
-    (id: number) => {
-      deleteInvoice({ id });
-      setSelectedInvoiceId((current) => (current === id ? null : current));
-    },
-    [deleteInvoice],
-  );
+  const handleRequestDeleteInvoice = useCallback((id: number) => {
+    const row = allRows.find((invoice) => invoice.id === id);
+    if (row) {
+      setInvoiceToDelete(row);
+    }
+  }, [allRows]);
+
+  const handleConfirmDeleteInvoice = useCallback(() => {
+    if (!invoiceToDelete) {
+      return;
+    }
+    const id = invoiceToDelete.id;
+    deleteInvoice(
+      { id },
+      {
+        onSuccess: () => {
+          setInvoiceToDelete(null);
+          setSelectedInvoiceId((current) => (current === id ? null : current));
+        },
+      },
+    );
+  }, [deleteInvoice, invoiceToDelete]);
 
   const columns = useMemo(
     () =>
       getColumns({
-        onDelete: handleDeleteInvoice,
+        onDelete: handleRequestDeleteInvoice,
         onEdit: (row: InvoiceTableRow) => setSelectedInvoiceId(row.id),
       }),
-    [handleDeleteInvoice],
+    [handleRequestDeleteInvoice],
   );
 
   return (
@@ -99,6 +118,17 @@ export function InvoicesPanel() {
         open={uncoveredSheetOpen}
         onOpenChange={setUncoveredSheetOpen}
         lines={uncoveredBudgetLines}
+      />
+      <DeleteInvoiceDialog
+        open={invoiceToDelete !== null}
+        invoice={invoiceToDelete}
+        isPending={isDeletePending}
+        onOpenChange={(open) => {
+          if (!open && !isDeletePending) {
+            setInvoiceToDelete(null);
+          }
+        }}
+        onConfirm={handleConfirmDeleteInvoice}
       />
     </div>
   );
