@@ -30,14 +30,14 @@ export function UncoveredBudgetLinesSheet({
 }: Props) {
   return (
     <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="flex w-full flex-col sm:max-w-lg">
+      <SheetContent className="flex h-svh max-h-svh w-full flex-col overflow-hidden sm:max-w-lg">
         <SheetHeader>
           <SheetTitle>Lignes budget non déclarées</SheetTitle>
           <SheetDescription>
             Lignes de dépense sans aucun paiement rattaché à une facture.
           </SheetDescription>
         </SheetHeader>
-        <div className="mt-4 min-h-0 flex-1 overflow-y-auto">
+        <div className="scrollbar-gutter-stable mt-4 min-h-0 flex-1 overflow-y-auto px-1 pr-3">
           {lines.length === 0 ? (
             <p className="text-muted-foreground text-sm">
               Toutes les lignes de dépense ont au moins une déclaration en
