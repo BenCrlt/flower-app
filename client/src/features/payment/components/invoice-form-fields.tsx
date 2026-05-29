@@ -162,18 +162,14 @@ export function InvoiceFormFields({
             ))}
           </div>
         ) : (
-          <div className="grid grid-cols-20 items-center gap-2">
-            <span className="text-muted-foreground col-span-10 text-xs font-medium">
+          <div className="grid min-w-0 grid-cols-[minmax(0,1fr)_4rem_auto_5rem_2.25rem] items-center gap-x-2 gap-y-2">
+            <span className="text-muted-foreground text-xs font-medium">
               Article
             </span>
-            <span className="text-muted-foreground col-span-3 text-xs font-medium">
-              Qté
-            </span>
-            <div />
-            <span className="text-muted-foreground col-span-5 text-xs font-medium">
-              Prix
-            </span>
-            <div />
+            <span className="text-muted-foreground text-xs font-medium">Qté</span>
+            <span aria-hidden className="size-4" />
+            <span className="text-muted-foreground text-xs font-medium">Prix</span>
+            <span aria-hidden className="size-9" />
             {paymentFields.map((field, index) => (
               <InvoicePaymentLineField
                 key={field.id}

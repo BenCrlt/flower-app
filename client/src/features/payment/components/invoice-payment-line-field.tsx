@@ -126,8 +126,8 @@ export function InvoicePaymentLineField({
 
   return (
     <>
-      <Field className="col-span-10">{budgetLinePicker}</Field>
-      <Field className="col-span-3">
+      <Field className="min-w-0">{budgetLinePicker}</Field>
+      <Field>
         <Controller
           name={`payments.${index}.quantity`}
           control={control}
@@ -136,13 +136,13 @@ export function InvoicePaymentLineField({
               value={field.value}
               onChange={field.onChange}
               placeholder="Qté"
-              className="h-11 w-full"
+              className="h-11 w-full tabular-nums"
             />
           )}
         />
       </Field>
       <span className="text-muted-foreground justify-self-center">×</span>
-      <Field className="col-span-5">
+      <Field>
         <Controller
           name={`payments.${index}.unitPrice`}
           control={control}
@@ -151,7 +151,7 @@ export function InvoicePaymentLineField({
               value={field.value}
               onChange={field.onChange}
               placeholder="Prix"
-              className="h-11 w-full"
+              className="h-11 w-full text-left tabular-nums"
             />
           )}
         />
@@ -160,7 +160,7 @@ export function InvoicePaymentLineField({
         type="button"
         variant="ghost"
         size="icon"
-        className="size-9"
+        className="size-9 shrink-0 justify-self-end"
         onClick={onRemove}
         disabled={!canRemove}
         aria-label="Supprimer la ligne"

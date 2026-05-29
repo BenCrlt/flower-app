@@ -159,4 +159,8 @@
   .scrollbar-hide::-webkit-scrollbar {
     display: none; /* Chrome/Safari */
   }
+
+  .scrollbar-gutter-stable {
+    scrollbar-gutter: stable;
+  }
 }
