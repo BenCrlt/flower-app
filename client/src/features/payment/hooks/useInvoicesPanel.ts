@@ -1,6 +1,11 @@
 import { useGetBudgetLinesQuery } from "@/features/budget/hooks/useGetBudgetLinesQuery";
 import { useEdition } from "@/features/edition/EditionContext";
-import { GetBudgetLinesQuery, InvoiceStatus, LineTypeEnum } from "@/generated/graphql";
+import {
+  GetBudgetLinesQuery,
+  InvoicesStatusEnum,
+  InvoiceStatus,
+  LineTypeEnum,
+} from "@/generated/graphql";
 import { useMemo, useState } from "react";
 import { InvoiceTableRow } from "../components/columns";
 import { mapInvoiceToRow } from "../utils/mapInvoiceToRow";
@@ -34,10 +39,7 @@ function filterInvoiceRows(
   const query = searchQuery.trim().toLowerCase();
 
   return rows.filter((row) => {
-    if (
-      vendorIdsFilter.length > 0 &&
-      !vendorIdsFilter.includes(row.vendorId)
-    ) {
+    if (vendorIdsFilter.length > 0 && !vendorIdsFilter.includes(row.vendorId)) {
       return false;
     }
     if (statusFilter.length > 0 && !statusFilter.includes(row.status)) {
@@ -55,10 +57,11 @@ function filterInvoiceRows(
   });
 }
 
-function sumTotalAmount(
-  invoices: { totalAmount: string }[],
-): number {
-  return invoices.reduce((acc, invoice) => acc + Number(invoice.totalAmount), 0);
+function sumTotalAmount(invoices: { totalAmount: string }[]): number {
+  return invoices.reduce(
+    (acc, invoice) => acc + Number(invoice.totalAmount),
+    0,
+  );
 }
 
 function mapUncoveredBudgetLines(
@@ -77,8 +80,7 @@ function mapUncoveredBudgetLines(
             color: line.category.color,
           }
         : null,
-      forecastAmount:
-        line.estimatedQuantity * Number(line.estimatedUnitPrice),
+      forecastAmount: line.estimatedQuantity * Number(line.estimatedUnitPrice),
     }))
     .sort((a, b) => a.name.localeCompare(b.name, "fr"));
 }
@@ -95,13 +97,14 @@ export function useInvoicesPanel() {
       variables: { editionId: edition.id },
     });
 
-  const { data: budgetData, isLoading: budgetLoading } =
-    useGetBudgetLinesQuery({
+  const { data: budgetData, isLoading: budgetLoading } = useGetBudgetLinesQuery(
+    {
       variables: {
         editionId: edition.id,
         budgetLineType: LineTypeEnum.Expense,
       },
-    });
+    },
+  );
 
   const { data: vendorsData } = useGetVendorsQuery();
 
@@ -112,22 +115,17 @@ export function useInvoicesPanel() {
 
   const filteredRows = useMemo(
     () =>
-      filterInvoiceRows(
-        allRows,
-        searchQuery,
-        vendorIdsFilter,
-        statusFilter,
-      ),
+      filterInvoiceRows(allRows, searchQuery, vendorIdsFilter, statusFilter),
     [allRows, searchQuery, vendorIdsFilter, statusFilter],
   );
 
   const kpi = useMemo<InvoicesKpi>(() => {
     const invoices = invoicesData?.invoices ?? [];
     const paid = invoices.filter(
-      (invoice) => invoice.status === InvoiceStatus.Paid,
+      (invoice) => invoice.status === InvoicesStatusEnum.Paid,
     );
     const pending = invoices.filter(
-      (invoice) => invoice.status === InvoiceStatus.Pending,
+      (invoice) => invoice.status === InvoicesStatusEnum.Pending,
     );
     return {
       paidAmount: sumTotalAmount(paid),
@@ -153,10 +151,7 @@ export function useInvoicesPanel() {
 
   const uncoveredForecastTotal = useMemo(
     () =>
-      uncoveredBudgetLines.reduce(
-        (acc, line) => acc + line.forecastAmount,
-        0,
-      ),
+      uncoveredBudgetLines.reduce((acc, line) => acc + line.forecastAmount, 0),
     [uncoveredBudgetLines],
   );
 
