@@ -6,3 +6,6 @@ export const getOffsetFromPagination = (
 ) => {
   return (paginatedInput.page - 1) * paginatedInput.limit;
 };
+
+export const getPriceWithTVA = (priceWithoutTVA: number): number =>
+  priceWithoutTVA * 1.2;

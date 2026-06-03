@@ -6,6 +6,7 @@ import {
   invoiceStatusSchema,
   paymentsTable,
 } from "../../../db/schema/index.js";
+import { getPriceWithTVA } from "../../utils.js";
 
 const addPaymentInput = z.object({
   quantity: z.number().min(1),
@@ -22,11 +23,13 @@ export const addInvoiceInput = z.object({
   authorId: z.string().min(1),
   status: invoiceStatusSchema,
   payments: z.array(addPaymentInput).min(1),
+  withoutTVA: z.boolean().default(false),
 });
 
 export async function addInvoice({
   payments,
   totalAmount,
+  withoutTVA,
   ...input
 }: z.infer<typeof addInvoiceInput>): Promise<Invoice | null> {
   const [invoice] = await db
@@ -46,7 +49,9 @@ export async function addInvoice({
     payments.map((payment) => ({
       invoiceId: invoice.id,
       quantity: payment.quantity,
-      unitPrice: payment.unitPrice.toString(),
+      unitPrice: withoutTVA
+        ? getPriceWithTVA(payment.unitPrice).toString()
+        : payment.unitPrice.toString(),
       budgetLineId: payment.budgetLineId,
       editionId: input.editionId,
     })),

@@ -206,6 +206,7 @@ export type MutationAddInvoiceArgs = {
   status: InvoiceStatus;
   totalAmount: Scalars['Float']['input'];
   vendorId: Scalars['Float']['input'];
+  withoutTVA?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
 
