@@ -3,7 +3,12 @@ import { AddVendorDialog } from "@/components/add-vendor-dialog";
 import { PopoverCommand } from "@/components/PopoverCommand";
 import { Button } from "@/components/ui/button";
 import { CommandItem } from "@/components/ui/command";
-import { Field, FieldError } from "@/components/ui/field";
+import {
+  Field,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+} from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -24,10 +29,12 @@ import {
   FieldErrors,
   UseFormRegister,
   UseFormSetValue,
+  UseFormWatch,
 } from "react-hook-form";
 import { InvoiceFormValues } from "../hooks/invoiceFormResolver";
 import { InvoicePaymentLineField } from "./invoice-payment-line-field";
 import { InvoiceStatusBadge } from "./invoice-status-badge";
+import { Checkbox } from "@/components/ui/checkbox";
 
 interface Props {
   register: UseFormRegister<InvoiceFormValues>;
@@ -40,9 +47,11 @@ interface Props {
   removePayment: (index: number) => void;
   totalAmount: number;
   setValue: UseFormSetValue<InvoiceFormValues>;
+  watch: UseFormWatch<InvoiceFormValues>;
 }
 
 export function InvoiceFormFields({
+  watch,
   register,
   control,
   errors,
@@ -56,9 +65,11 @@ export function InvoiceFormFields({
 }: Props): ReactElement {
   const isMobile = useIsMobile();
   const [openAddVendorDialog, setOpenAddVendorDialog] = useState(false);
-  const [selectedPaymentIndex, setSelectedPaymentIndex] = useState<number | null>(
-    null,
-  );
+  const [selectedPaymentIndex, setSelectedPaymentIndex] = useState<
+    number | null
+  >(null);
+  const isEditing = !!watch("id");
+  const withoutTVA = watch("withoutTVA");
 
   return (
     <>
@@ -166,9 +177,13 @@ export function InvoiceFormFields({
             <span className="text-muted-foreground text-xs font-medium">
               Article
             </span>
-            <span className="text-muted-foreground text-xs font-medium">Qté</span>
+            <span className="text-muted-foreground text-xs font-medium">
+              Qté
+            </span>
             <span aria-hidden className="size-4" />
-            <span className="text-muted-foreground text-xs font-medium">Prix</span>
+            <span className="text-muted-foreground text-xs font-medium">
+              Prix
+            </span>
             <span aria-hidden className="size-9" />
             {paymentFields.map((field, index) => (
               <InvoicePaymentLineField
@@ -217,9 +232,32 @@ export function InvoiceFormFields({
         }}
       />
 
+      {!isEditing && (
+        <FieldGroup className="mx-auto">
+          <Field orientation="horizontal">
+            <Controller
+              control={control}
+              name="withoutTVA"
+              render={({ field }) => (
+                <Checkbox
+                  id="enable-synchro-checkbox"
+                  checked={field.value}
+                  onCheckedChange={(checked) =>
+                    field.onChange(checked === true)
+                  }
+                />
+              )}
+            />
+            <FieldLabel htmlFor="enable-synchro-checkbox">
+              Montant hors-taxe
+            </FieldLabel>
+          </Field>
+        </FieldGroup>
+      )}
+
       <div className="bg-muted/30 rounded-lg border px-3 py-3 md:border-0 md:bg-transparent md:p-0">
         <p className="text-sm text-muted-foreground">
-          Montant total :{" "}
+          Montant total {withoutTVA ? "(HT)" : ""} :{" "}
           <span className="text-base font-semibold text-foreground">
             {totalAmount.toLocaleString("fr-FR", {
               style: "currency",
@@ -227,6 +265,17 @@ export function InvoiceFormFields({
             })}
           </span>
         </p>
+        {withoutTVA && (
+          <p className="text-sm text-muted-foreground">
+            Montant total (TTC) :{" "}
+            <span className="text-base font-semibold text-foreground">
+              {(totalAmount * 1.2).toLocaleString("fr-FR", {
+                style: "currency",
+                currency: "EUR",
+              })}
+            </span>
+          </p>
+        )}
       </div>
     </>
   );

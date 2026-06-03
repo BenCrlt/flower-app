@@ -113,7 +113,7 @@ type Mutation {
   addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, isFreePrice: Boolean, lineType: LineTypeEnum!, name: String!): BudgetLinesItem
   addEdition(active: Boolean, endDate: String!, name: String!, openingBalance: Float, startDate: String!): EditionsItem
   addHelloAssoConfig(budgetCategoryId: Float, editionId: Float!, enableSynchro: Boolean, formSlug: String!): HelloAssoConfigItem
-  addInvoice(authorId: String!, editionId: Float!, name: String!, note: String, payments: [AddInvoicePaymentsInput!]!, status: InvoiceStatus!, totalAmount: Float!, vendorId: Float!): InvoicesItem
+  addInvoice(authorId: String!, editionId: Float!, name: String!, note: String, payments: [AddInvoicePaymentsInput!]!, status: InvoiceStatus!, totalAmount: Float!, vendorId: Float!, withoutTVA: Boolean): InvoicesItem
   addOrUpdateOrderOrigin(budgetLineIds: [Float!], id: Float, name: String!): OrderOriginsItem
   addOrUpdateVendor(address: String, description: String, email: String, id: Float, name: String!, phone: String): VendorsItem
   deleteBudgetCategory(id: Float!): BudgetCategoriesItem

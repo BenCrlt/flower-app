@@ -7,6 +7,7 @@ mutation addInvoice(
   $status: InvoiceStatus!
   $totalAmount: Float!
   $vendorId: Float!
+  $withoutTVA: Boolean
 ) {
   addInvoice(
     name: $name
@@ -17,6 +18,7 @@ mutation addInvoice(
     totalAmount: $totalAmount
     vendorId: $vendorId
     authorId: $authorId
+    withoutTVA: $withoutTVA
   ) {
     id
   }

@@ -1,9 +1,5 @@
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetClose,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetClose, SheetTrigger } from "@/components/ui/sheet";
 import { Spinner } from "@/components/ui/spinner";
 import { useGetBudgetLinesQuery } from "@/features/budget/hooks/useGetBudgetLinesQuery";
 import { useEdition } from "@/features/edition/EditionContext";
@@ -29,7 +25,7 @@ export function AddInvoiceSheet(): ReactElement {
   });
   const driveConfigured = Boolean(
     driveConfigData?.googleDriveConfig.isConnected &&
-      driveConfigData.googleDriveConfig.invoiceFolderId,
+    driveConfigData.googleDriveConfig.invoiceFolderId,
   );
 
   const { data: vendorsData } = useGetVendorsQuery();
@@ -50,6 +46,7 @@ export function AddInvoiceSheet(): ReactElement {
     setValue,
     invoiceName,
     isSubmitting,
+    watch,
   } = useInvoiceForm({
     setOpen,
     pendingFiles,
@@ -93,6 +90,7 @@ export function AddInvoiceSheet(): ReactElement {
         }
       >
         <InvoiceFormFields
+          watch={watch}
           register={register}
           control={control}
           errors={errors}
