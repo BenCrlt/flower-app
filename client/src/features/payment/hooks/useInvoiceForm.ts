@@ -9,6 +9,7 @@ import {
   useForm,
   UseFormRegister,
   UseFormSetValue,
+  UseFormWatch,
 } from "react-hook-form";
 import { invoiceFormResolver, InvoiceFormValues } from "./invoiceFormResolver";
 import { uploadInvoiceFile } from "@/lib/invoice-file-api";
@@ -41,6 +42,7 @@ export function useInvoiceForm({
   setValue: UseFormSetValue<InvoiceFormValues>;
   invoiceName: string;
   isSubmitting: boolean;
+  watch: UseFormWatch<InvoiceFormValues>;
 } {
   const { edition } = useEdition();
   const queryClient = useQueryClient();
@@ -174,5 +176,6 @@ export function useInvoiceForm({
     setValue,
     invoiceName,
     isSubmitting,
+    watch,
   };
 }

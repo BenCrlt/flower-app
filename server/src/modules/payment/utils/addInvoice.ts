@@ -36,7 +36,9 @@ export async function addInvoice({
     .insert(invoicesTable)
     .values({
       ...input,
-      totalAmount: totalAmount.toString(),
+      totalAmount: withoutTVA
+        ? getPriceWithTVA(totalAmount).toString()
+        : totalAmount.toString(),
       executedAt: input.status === "PAID" ? new Date() : undefined,
     })
     .returning();

@@ -31,7 +31,7 @@ export function EditInvoiceSheet({
   });
   const driveConfigured = Boolean(
     driveConfigData?.googleDriveConfig.isConnected &&
-      driveConfigData.googleDriveConfig.invoiceFolderId,
+    driveConfigData.googleDriveConfig.invoiceFolderId,
   );
 
   const { data: vendorsData } = useGetVendorsQuery();
@@ -51,6 +51,7 @@ export function EditInvoiceSheet({
     totalAmount,
     setValue,
     isSubmitting,
+    watch,
   } = useInvoiceForm({ setOpen: onOpenChange, existingInvoice: invoice });
 
   return (
@@ -86,6 +87,7 @@ export function EditInvoiceSheet({
         }
       >
         <InvoiceFormFields
+          watch={watch}
           register={register}
           control={control}
           errors={errors}

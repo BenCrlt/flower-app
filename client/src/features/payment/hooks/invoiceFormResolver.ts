@@ -15,6 +15,7 @@ export type InvoiceFormValues = {
   status: InvoiceStatus;
   note: string;
   payments: PaymentLineValues[];
+  withoutTVA?: boolean;
 };
 
 export const invoiceFormResolver: Resolver<InvoiceFormValues> = (values) => {
