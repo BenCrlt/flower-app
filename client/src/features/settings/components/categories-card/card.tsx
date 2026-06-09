@@ -78,14 +78,8 @@ export function CategoriesCard() {
             transition={{ type: "spring", stiffness: 560, damping: 26 }}
           >
             <Badge
-              style={{
-                backgroundColor: DEFAULT_CATEGORY.color,
-                borderColor: DEFAULT_CATEGORY.color,
-                color: "#fff",
-              }}
               onClick={() => setOpen(true)}
               className="cursor-pointer px-3 py-1.5 text-sm transition-colors duration-150"
-              variant="secondary"
             >
               <Plus />
               Ajouter une catégorie
