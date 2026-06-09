@@ -7,9 +7,8 @@ export const CategoriesFilter = () => {
     useCashRegister();
 
   return (
-    <div className="-mx-4 flex min-w-0 gap-2 overflow-x-auto px-4 pb-1 scrollbar-hide snap-x">
+    <div className="flex min-w-0 flex-wrap gap-2">
       <motion.div
-        className="shrink-0 snap-start"
         whileHover={{ y: -2, scale: 1.04 }}
         whileTap={{ scale: 0.92 }}
         animate={{
@@ -29,7 +28,6 @@ export const CategoriesFilter = () => {
       {allCategoriesInCatalog.map((category) => (
         <motion.div
           key={category.id}
-          className="shrink-0 snap-start"
           whileHover={{ y: -2, scale: 1.04 }}
           whileTap={{ scale: 0.92 }}
           animate={{
