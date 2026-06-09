@@ -7,13 +7,18 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
-import { UpsertCategoryDialog } from "@/components/upsert-category-dialog";
+import {
+  DEFAULT_CATEGORY,
+  UpsertCategoryDialog,
+} from "@/components/upsert-category-dialog";
 import { useGetBudgetCategoriesQuery } from "@/features/budget/hooks/useGetBudgetCategoriesQuery";
 import { UpsertBudgetCategoryMutationVariables } from "@/generated/graphql";
 import { motion } from "framer-motion";
+import { Plus } from "lucide-react";
 import { useState } from "react";
 
 export function CategoriesCard() {
+  const [open, setOpen] = useState(false);
   const [editingCategory, setEditingCategory] =
     useState<UpsertBudgetCategoryMutationVariables>();
 
@@ -23,10 +28,12 @@ export function CategoriesCard() {
     category: UpsertBudgetCategoryMutationVariables,
   ) => {
     setEditingCategory(category);
+    setOpen(true);
   };
 
   const handleClose = () => {
     setEditingCategory(undefined);
+    setOpen(false);
   };
 
   return (
@@ -64,16 +71,35 @@ export function CategoriesCard() {
               </Badge>
             </motion.div>
           ))}
+          <motion.div
+            key={"create-category"}
+            whileHover={{ y: -2, scale: 1.04 }}
+            whileTap={{ scale: 0.92 }}
+            transition={{ type: "spring", stiffness: 560, damping: 26 }}
+          >
+            <Badge
+              style={{
+                backgroundColor: DEFAULT_CATEGORY.color,
+                borderColor: DEFAULT_CATEGORY.color,
+                color: "#fff",
+              }}
+              onClick={() => setOpen(true)}
+              className="cursor-pointer px-3 py-1.5 text-sm transition-colors duration-150"
+              variant="secondary"
+            >
+              <Plus />
+              Ajouter une catégorie
+            </Badge>
+          </motion.div>
         </CardContent>
       </Card>
-      {editingCategory && (
-        <UpsertCategoryDialog
-          open={!!editingCategory}
-          setOpen={handleClose}
-          editingCategory={editingCategory}
-          onSubmit={handleClose}
-        />
-      )}
+      <UpsertCategoryDialog
+        key={editingCategory?.id}
+        open={open}
+        setOpen={handleClose}
+        editingCategory={editingCategory}
+        onSubmit={handleClose}
+      />
     </>
   );
 }

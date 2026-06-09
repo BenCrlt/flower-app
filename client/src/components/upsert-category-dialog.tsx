@@ -18,7 +18,7 @@ interface Props {
   editingCategory?: UpsertBudgetCategoryMutationVariables;
 }
 
-const DEFAULT_CATEGORY = {
+export const DEFAULT_CATEGORY = {
   name: "",
   color: "#3b82f6",
 };
