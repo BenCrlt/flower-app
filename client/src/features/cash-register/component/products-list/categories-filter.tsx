@@ -7,8 +7,9 @@ export const CategoriesFilter = () => {
     useCashRegister();
 
   return (
-    <div className="flex gap-2">
+    <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 scrollbar-hide snap-x">
       <motion.div
+        className="shrink-0 snap-start"
         whileHover={{ y: -2, scale: 1.04 }}
         whileTap={{ scale: 0.92 }}
         animate={{
@@ -19,7 +20,7 @@ export const CategoriesFilter = () => {
       >
         <Badge
           variant={selectedCategory ? "secondary" : "default"}
-          className="cursor-pointer text-md transition-colors duration-150"
+          className="cursor-pointer px-3 py-1.5 text-sm transition-colors duration-150"
           onClick={() => onSelectCategory(null)}
         >
           Toutes
@@ -28,6 +29,7 @@ export const CategoriesFilter = () => {
       {allCategoriesInCatalog.map((category) => (
         <motion.div
           key={category.id}
+          className="shrink-0 snap-start"
           whileHover={{ y: -2, scale: 1.04 }}
           whileTap={{ scale: 0.92 }}
           animate={{
@@ -45,7 +47,7 @@ export const CategoriesFilter = () => {
               color: selectedCategory?.id === category.id ? "#fff" : undefined,
             }}
             onClick={() => onSelectCategory(category)}
-            className="cursor-pointer text-md transition-colors duration-150"
+            className="cursor-pointer px-3 py-1.5 text-sm transition-colors duration-150"
             variant="secondary"
           >
             {category.name}

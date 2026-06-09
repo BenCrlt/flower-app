@@ -30,7 +30,6 @@ interface GetBudgetLineColumnsProps {
   allCategories?: BudgetCategoriesItem[];
   showGapInPercent: boolean;
   onToggleGapInPercent: () => void;
-  isMobile: boolean;
 }
 
 export function getColumns({
@@ -38,59 +37,7 @@ export function getColumns({
   allCategories,
   showGapInPercent,
   onToggleGapInPercent,
-  isMobile,
 }: GetBudgetLineColumnsProps): ColumnDef<BudgetTableRow>[] {
-  if (isMobile) {
-    return [
-      {
-        header: ({ column }) => <SortableHeader column={column} title="Nom" />,
-        accessorKey: "name",
-        cell: ({ row }) => (
-          <span className="block truncate" title={row.original.name}>
-            {row.original.name}
-          </span>
-        ),
-      },
-      {
-        id: "estimatedCost",
-        header: ({ column }) => (
-          <SortableHeader
-            column={column}
-            title={
-              <span className="flex items-center gap-1">
-                Coût <MessageCircleQuestion className="h-4 w-4" />
-              </span>
-            }
-            className="justify-end"
-          />
-        ),
-        accessorFn: (row) => row.estimatedUnitPrice * row.estimatedQuantity,
-        cell: ({ row }) => (
-          <RowPrice
-            amount={
-              row.original.estimatedUnitPrice * row.original.estimatedQuantity
-            }
-          />
-        ),
-      },
-      {
-        id: "actualCost",
-        meta: { className: "w-fit" },
-        header: ({ column }) => (
-          <SortableHeader
-            column={column}
-            title={
-              <span className="flex items-center gap-1">
-                Coût <MessageCircleCheck className="h-4 w-4" />
-              </span>
-            }
-            className="justify-end"
-          />
-        ),
-        cell: ({ row }) => <RowPrice amount={row.original.realCost} />,
-      },
-    ];
-  }
   return [
     {
       header: ({ column }) => <SortableHeader column={column} title="Nom" />,

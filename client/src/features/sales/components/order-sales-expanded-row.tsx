@@ -1,17 +1,65 @@
 import { RowPrice } from "@/components/Table/RowPrice";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { formatPriceToEuros } from "@/utils/PriceUtils";
 import { SalesTableRow } from "./columns";
 
 interface OrderSalesExpandedRowProps {
   row: SalesTableRow;
 }
 
+function SaleLineMobileCard({
+  sale,
+}: {
+  sale: SalesTableRow["sales"][number];
+}) {
+  return (
+    <div className="rounded-md border bg-muted/20 p-3 text-sm">
+      <p className="font-medium">{sale.budgetLineName}</p>
+      {sale.categoryName ? (
+        <Badge
+          variant="outline"
+          className="mt-1.5"
+          style={
+            sale.categoryColor
+              ? { borderColor: sale.categoryColor }
+              : undefined
+          }
+        >
+          {sale.categoryName}
+        </Badge>
+      ) : null}
+      <div className="mt-2 flex items-center justify-between gap-2">
+        <span className="text-muted-foreground">
+          {sale.quantity} × {formatPriceToEuros(sale.estimatedUnitPrice)}
+        </span>
+        <RowPrice amount={sale.quantity * sale.estimatedUnitPrice} />
+      </div>
+    </div>
+  );
+}
+
 export function OrderSalesExpandedRow({ row }: OrderSalesExpandedRowProps) {
+  const isMobile = useIsMobile();
+
   if (!row.sales.length) {
     return (
       <div className="px-2 py-3 text-sm text-muted-foreground">
         Aucun article sur cette commande.
+      </div>
+    );
+  }
+
+  if (isMobile) {
+    return (
+      <div className="flex flex-col gap-2">
+        <p className="px-1 text-xs font-medium text-muted-foreground">
+          {row.sales.length} article{row.sales.length > 1 ? "s" : ""}
+        </p>
+        {row.sales.map((sale) => (
+          <SaleLineMobileCard key={sale.id} sale={sale} />
+        ))}
       </div>
     );
   }

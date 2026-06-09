@@ -1,20 +1,12 @@
-import { Button } from "@/components/ui/button";
+import { CheckboxFilterSheet } from "@/components/CheckboxFilterSheet";
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  DropdownMenu,
-  DropdownMenuCheckboxItem,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { InvoiceStatus } from "@/generated/graphql";
-import { ListFilter } from "lucide-react";
 import { AddInvoiceSheet } from "./add-invoice-sheet";
 import { InvoiceStatusBadge } from "./invoice-status-badge";
 
@@ -63,75 +55,35 @@ export function InvoicesFiltersCard({
               placeholder="Rechercher..."
               value={searchQuery}
               onChange={(event) => onSearchQueryChange(event.target.value)}
-              className="w-full sm:max-w-xs"
+              className="h-11 w-full sm:h-9 sm:max-w-xs"
             />
             {vendorOptions.length > 0 ? (
-              <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant={vendorIdsFilter.length ? "default" : "outline"}
-                  className="w-full border-dashed sm:w-auto sm:max-w-fit"
-                >
-                  <ListFilter />
-                  Fournisseur{" "}
-                  {vendorIdsFilter.length
-                    ? `(${vendorIdsFilter.length})`
-                    : ""}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                align="start"
-                className="max-h-72 w-56 overflow-y-auto"
-              >
-                <DropdownMenuGroup>
-                  {vendorOptions.map((vendor) => (
-                    <DropdownMenuCheckboxItem
-                      key={vendor.id}
-                      checked={vendorIdsFilter.includes(vendor.id)}
-                      onSelect={(event) => event.preventDefault()}
-                      onCheckedChange={(checked) =>
-                        onSelectVendor(vendor.id, checked)
-                      }
-                    >
-                      <span className="truncate">{vendor.name}</span>
-                    </DropdownMenuCheckboxItem>
-                  ))}
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-              </DropdownMenu>
+              <CheckboxFilterSheet
+                label="Fournisseur"
+                options={vendorOptions.map((vendor) => ({
+                  id: vendor.id,
+                  label: vendor.name,
+                }))}
+                selectedIds={vendorIdsFilter}
+                onToggle={onSelectVendor}
+                contentClassName="max-h-72"
+              />
             ) : null}
-            <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant={statusFilter.length ? "default" : "outline"}
-                className="w-full border-dashed sm:w-auto sm:max-w-fit"
-              >
-                <ListFilter />
-                Statut{" "}
-                {statusFilter.length ? `(${statusFilter.length})` : ""}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="start" className="w-44">
-              <DropdownMenuGroup>
-                {statusAvailable.map((status) => (
-                  <DropdownMenuCheckboxItem
-                    key={status}
-                    className="capitalize"
-                    checked={statusFilter.includes(status)}
-                    onSelect={(event) => event.preventDefault()}
-                    onCheckedChange={(checked) =>
-                      onSelectStatus(status, checked)
-                    }
-                  >
-                    <InvoiceStatusBadge status={status} />
-                  </DropdownMenuCheckboxItem>
-                ))}
-              </DropdownMenuGroup>
-            </DropdownMenuContent>
-            </DropdownMenu>
+            <CheckboxFilterSheet<InvoiceStatus>
+              label="Statut"
+              options={statusAvailable.map((status) => ({
+                id: status,
+                label: status,
+              }))}
+              selectedIds={statusFilter}
+              onToggle={onSelectStatus}
+              renderOption={(option) => (
+                <InvoiceStatusBadge status={option.id} />
+              )}
+            />
           </div>
         </div>
-        <div className="flex shrink-0 items-center justify-center sm:justify-end [&_button]:w-full sm:[&_button]:w-auto">
+        <div className="flex shrink-0 items-center justify-center sm:justify-end [&_button]:h-11 [&_button]:w-full sm:[&_button]:h-9 sm:[&_button]:w-auto">
           <AddInvoiceSheet />
         </div>
       </CardContent>

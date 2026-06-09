@@ -6,6 +6,7 @@ import { useInvoicesPanel } from "../hooks/useInvoicesPanel";
 import { EditInvoiceSheet } from "./edit-invoice-sheet";
 import { getColumns, InvoiceTableRow } from "./columns";
 import { DeleteInvoiceDialog } from "./delete-invoice-dialog";
+import { InvoiceMobileCard } from "./invoice-mobile-card";
 import { InvoicesFiltersCard } from "./invoices-filters-card";
 import { InvoicesKpiCards } from "./invoices-kpi-cards";
 import { UncoveredBudgetLinesSheet } from "./uncovered-budget-lines-sheet";
@@ -102,6 +103,13 @@ export function InvoicesPanel() {
         columns={columns}
         data={filteredRows}
         onRowClick={(row) => setSelectedInvoiceId(row.id)}
+        mobileCardRenderer={(row) => (
+          <InvoiceMobileCard
+            row={row}
+            onEdit={(invoice) => setSelectedInvoiceId(invoice.id)}
+            onDelete={handleRequestDeleteInvoice}
+          />
+        )}
       />
       {selectedRow ? (
         <EditInvoiceSheet

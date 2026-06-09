@@ -7,14 +7,6 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
 import type { UncoveredBudgetLine } from "../hooks/useInvoicesPanel";
 
 interface Props {
@@ -44,35 +36,29 @@ export function UncoveredBudgetLinesSheet({
               facture.
             </p>
           ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Nom</TableHead>
-                  <TableHead>Catégorie</TableHead>
-                  <TableHead className="text-right">Prévu</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {lines.map((line) => (
-                  <TableRow key={line.id}>
-                    <TableCell className="font-medium">{line.name}</TableCell>
-                    <TableCell>
-                      {line.category ? (
+            <div className="flex flex-col gap-2">
+              {lines.map((line) => (
+                <div
+                  key={line.id}
+                  className="flex items-center justify-between gap-3 rounded-lg border bg-card p-3"
+                >
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-medium">{line.name}</p>
+                    {line.category ? (
+                      <div className="mt-1">
                         <CategoryBadge
                           name={line.category.name}
                           color={line.category.color}
                         />
-                      ) : (
-                        <span className="text-muted-foreground">—</span>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <RowPrice amount={line.forecastAmount} />
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+                      </div>
+                    ) : (
+                      <p className="mt-1 text-xs text-muted-foreground">—</p>
+                    )}
+                  </div>
+                  <RowPrice amount={line.forecastAmount} />
+                </div>
+              ))}
+            </div>
           )}
         </div>
       </SheetContent>

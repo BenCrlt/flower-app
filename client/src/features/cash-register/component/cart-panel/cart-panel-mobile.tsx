@@ -34,7 +34,7 @@ export const CartPanelMobile = ({
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 backdrop-blur lg:hidden">
+    <div className="fixed inset-x-0 bottom-0 z-40 border-t bg-background/95 p-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] backdrop-blur md:hidden">
       <Sheet open={isOpen} onOpenChange={setIsOpen}>
         <div
           className="mx-auto flex max-w-5xl items-center gap-3"
@@ -62,10 +62,13 @@ export const CartPanelMobile = ({
             </div>
           </div>
           <SheetTrigger asChild>
-            <Button variant="outline">Payer</Button>
+            <Button variant="outline" className="min-h-11">
+              Payer
+            </Button>
           </SheetTrigger>
           <Button
             variant="destructive"
+            className="min-h-11"
             onClick={(e) => {
               e.stopPropagation();
               onCancelOrder();
@@ -112,7 +115,8 @@ export const CartPanelMobile = ({
                     </p>
                     <Button
                       variant="ghost"
-                      size="icon-sm"
+                      size="icon"
+                      className="size-9"
                       onClick={() => onRemoveCartLine(item.cartLineId)}
                       aria-label="Retirer du panier"
                     >
@@ -143,7 +147,7 @@ export const CartPanelMobile = ({
             </div>
             <Button
               size="lg"
-              className="min-h-12 w-full"
+              className="min-h-11 w-full"
               disabled={!cartItems.length}
               onClick={() => {
                 setIsOpen(false);
@@ -156,7 +160,7 @@ export const CartPanelMobile = ({
             <Button
               variant="destructive"
               size="lg"
-              className="min-h-12 w-full"
+              className="min-h-11 w-full"
               onClick={() => {
                 setIsOpen(false);
                 onCancelOrder();

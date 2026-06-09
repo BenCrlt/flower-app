@@ -4,6 +4,7 @@ import { useSalesPanel } from "../hooks/useSalesPanel";
 import { SalesPanelActionsAndFiltersCard } from "./actions-and-filters-card";
 import { OrderSalesExpandedRow } from "./order-sales-expanded-row";
 import { SalesInfo } from "./sales-info";
+import { SalesMobileCard } from "./sales-mobile-card";
 
 export function SalesPanel() {
   const {
@@ -49,6 +50,9 @@ export function SalesPanel() {
         isRowExpandable={(row) => row.sales.length > 0}
         expandOnRowClick
         renderExpandedRow={(row) => <OrderSalesExpandedRow row={row} />}
+        mobileCardRenderer={(row, meta) => (
+          <SalesMobileCard row={row} meta={meta} />
+        )}
       />
     </div>
   );

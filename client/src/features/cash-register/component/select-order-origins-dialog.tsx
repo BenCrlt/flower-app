@@ -17,15 +17,18 @@ export const SelectOrderOriginsDialog = () => {
 
   return (
     <Dialog open={openSelectOriginDialog}>
-      <DialogContent showCloseButton={false}>
+      <DialogContent
+        showCloseButton={false}
+        className="max-h-[90dvh] overflow-y-auto"
+      >
         <DialogHeader>
           <DialogTitle>Sélectionnez un point de vente</DialogTitle>
         </DialogHeader>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           {orderOrigins?.orderOrigins.map((origin) => (
             <Card
               key={origin.id}
-              className="aspect-square cursor-pointer p-3 transition-colors hover:bg-muted/50"
+              className="min-h-28 cursor-pointer p-4 transition-colors hover:bg-muted/50 min-[400px]:aspect-square min-[400px]:p-3"
               onClick={() => handleSelectOrigin(origin.id)}
             >
               <div className="flex h-full flex-col items-center justify-center gap-2">
