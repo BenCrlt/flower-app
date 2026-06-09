@@ -25,7 +25,7 @@ export const CartPanelDesktop = ({
   const { onRemoveCartLine } = useCashRegister();
 
   return (
-    <Card className="hidden h-full min-h-0 pb-4 lg:flex lg:flex-col">
+    <Card className="hidden h-full min-h-0 pb-4 md:flex md:flex-col">
       <CardHeader className="px-4 sm:px-6">
         <div className="flex items-center justify-between gap-2">
           <CardTitle>Panier en cours</CardTitle>

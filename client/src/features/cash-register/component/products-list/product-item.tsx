@@ -1,6 +1,7 @@
 import { CategoryBadge } from "@/components/CategoryBadge";
 import { Button } from "@/components/ui/button";
 import { Card, CardTitle } from "@/components/ui/card";
+import { useIsMobile } from "@/hooks/use-mobile";
 import { AnimatePresence, motion } from "framer-motion";
 import { Minus, Plus } from "lucide-react";
 import { useState } from "react";
@@ -13,6 +14,7 @@ interface Props {
 }
 
 export const ProductItem = ({ product }: Props) => {
+  const isMobile = useIsMobile();
   const {
     getFixedProductQuantity,
     onAddFixedProduct,
@@ -44,8 +46,8 @@ export const ProductItem = ({ product }: Props) => {
   return (
     <>
       <motion.div
-        className="aspect-square"
-        whileHover={{ y: -4, scale: 1.015 }}
+        className="min-h-36 min-[400px]:aspect-square"
+        whileHover={isMobile ? undefined : { y: -4, scale: 1.015 }}
         whileTap={{ scale: 0.975 }}
         transition={{ type: "spring", stiffness: 460, damping: 26, mass: 0.45 }}
       >
@@ -74,14 +76,17 @@ export const ProductItem = ({ product }: Props) => {
                 onClick={(e) => e.stopPropagation()}
               >
                 <motion.div
-                  whileHover={quantity ? { scale: 1.1 } : undefined}
+                  whileHover={
+                    !isMobile && quantity ? { scale: 1.1 } : undefined
+                  }
                   whileTap={quantity ? { scale: 0.84 } : undefined}
                   transition={{ type: "spring", stiffness: 560, damping: 24 }}
                 >
                   <Button
                     onClick={handleRemoveProduct}
                     disabled={!quantity}
-                    size="icon-sm"
+                    size="icon"
+                    className="size-11 min-[400px]:size-8"
                   >
                     <Minus />
                   </Button>
@@ -109,11 +114,15 @@ export const ProductItem = ({ product }: Props) => {
                   </AnimatePresence>
                 </div>
                 <motion.div
-                  whileHover={{ scale: 1.1 }}
+                  whileHover={!isMobile ? { scale: 1.1 } : undefined}
                   whileTap={{ scale: 0.84 }}
                   transition={{ type: "spring", stiffness: 560, damping: 24 }}
                 >
-                  <Button onClick={handleAddProduct} size="icon-sm">
+                  <Button
+                    onClick={handleAddProduct}
+                    size="icon"
+                    className="size-11 min-[400px]:size-8"
+                  >
                     <Plus />
                   </Button>
                 </motion.div>

@@ -9,7 +9,7 @@ export const ProductsList = () => {
   return (
     <div className="flex flex-col gap-4">
       <CategoriesFilter />
-      <div className="grid gap-4 grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid grid-cols-1 gap-4 min-[400px]:grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5">
         <AnimatePresence mode="popLayout">
           {catalogProductsFiltered.map((product) => (
             <motion.div
