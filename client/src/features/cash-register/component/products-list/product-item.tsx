@@ -57,13 +57,14 @@ export const ProductItem = ({ product }: Props) => {
           onClick={handleAddProduct}
         >
           <div className="flex h-full flex-col">
-            <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
+            <div className="flex w-full min-w-0 flex-1 flex-col items-center justify-center gap-2 text-center">
               <CardTitle className="line-clamp-2 text-center text-sm sm:text-base">
                 {product.name}
               </CardTitle>
               <CategoryBadge
                 name={product.category.name}
                 color={product.category.color}
+                className="max-w-full min-w-0 shrink truncate"
               />
             </div>
             {product.isFreePrice ? (

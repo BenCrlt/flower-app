@@ -7,7 +7,7 @@ export const CategoriesFilter = () => {
     useCashRegister();
 
   return (
-    <div className="flex min-w-0 flex-wrap gap-2">
+    <div className="flex min-w-0 flex-wrap gap-2 p-1">
       <motion.div
         whileHover={{ y: -2, scale: 1.04 }}
         whileTap={{ scale: 0.92 }}
@@ -39,9 +39,13 @@ export const CategoriesFilter = () => {
           <Badge
             style={{
               backgroundColor:
-                selectedCategory?.id === category.id ? category.color : undefined,
+                selectedCategory?.id === category.id
+                  ? category.color
+                  : undefined,
               borderColor:
-                selectedCategory?.id === category.id ? category.color : undefined,
+                selectedCategory?.id === category.id
+                  ? category.color
+                  : undefined,
               color: selectedCategory?.id === category.id ? "#fff" : undefined,
             }}
             onClick={() => onSelectCategory(category)}
