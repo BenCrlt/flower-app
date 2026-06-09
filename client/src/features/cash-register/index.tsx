@@ -6,8 +6,8 @@ import { SelectOrderOriginsDialog } from "./component/select-order-origins-dialo
 export const CashRegister = () => {
   return (
     <>
-      <div className="grid h-full min-h-0 gap-6 pb-24 md:grid-cols-[minmax(0,1fr)_22rem] md:items-start md:pb-0">
-        <div className="flex flex-col gap-6">
+      <div className="grid h-full min-h-0 min-w-0 gap-6 overflow-x-hidden pb-24 md:grid-cols-[minmax(0,1fr)_22rem] md:items-start md:pb-0">
+        <div className="flex min-w-0 flex-col gap-6">
           <OrderOriginBar />
           <ProductsList />
         </div>

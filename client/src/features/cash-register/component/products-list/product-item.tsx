@@ -46,19 +46,19 @@ export const ProductItem = ({ product }: Props) => {
   return (
     <>
       <motion.div
-        className="min-h-36 min-[400px]:aspect-square"
-        whileHover={isMobile ? undefined : { y: -4, scale: 1.015 }}
+        className="mx-auto aspect-square h-auto w-full min-w-0 max-h-44 max-w-44"
+        whileHover={isMobile ? undefined : { y: -4 }}
         whileTap={{ scale: 0.975 }}
         transition={{ type: "spring", stiffness: 460, damping: 26, mass: 0.45 }}
       >
         <Card
           key={product.id}
-          className="h-full cursor-pointer p-3 transition-colors hover:bg-muted/50 hover:shadow-md"
+          className="h-full min-h-0 cursor-pointer p-2 transition-colors hover:bg-muted/50 hover:shadow-md sm:p-3"
           onClick={handleAddProduct}
         >
           <div className="flex h-full flex-col">
             <div className="flex flex-1 flex-col items-center justify-center gap-2 text-center">
-              <CardTitle className="line-clamp-2 text-center text-base">
+              <CardTitle className="line-clamp-2 text-center text-sm sm:text-base">
                 {product.name}
               </CardTitle>
               <CategoryBadge
@@ -72,7 +72,7 @@ export const ProductItem = ({ product }: Props) => {
               </p>
             ) : (
               <div
-                className="mt-3 flex items-center gap-4 self-center text-center"
+                className="mt-2 flex items-center gap-2 self-center text-center sm:mt-3 sm:gap-4"
                 onClick={(e) => e.stopPropagation()}
               >
                 <motion.div
