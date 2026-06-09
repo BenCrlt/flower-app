@@ -2,7 +2,7 @@ import { BudgetCategoriesItem } from "@/generated/graphql";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
-import { AddCategoryDialog } from "./add-category-dialog";
+import { UpsertCategoryDialog } from "./upsert-category-dialog";
 import { CategoryBadge } from "./CategoryBadge";
 import { PopoverCommand } from "./PopoverCommand";
 import { CommandItem } from "./ui/command";
@@ -82,8 +82,8 @@ export const CategoryCommand = <T extends FieldValues>({
         )}
       />
       <FieldError errors={error ? [{ message: error }] : undefined} />
-      <AddCategoryDialog
-        onAdded={onAdded}
+      <UpsertCategoryDialog
+        onSubmit={onAdded}
         open={openAddCategoryDialog}
         setOpen={setOpenAddCategoryDialog}
       />

@@ -1,17 +1,17 @@
 import {
-  AddBudgetCategoryDocument,
-  AddBudgetCategoryMutationVariables,
+  UpsertBudgetCategoryDocument,
+  UpsertBudgetCategoryMutationVariables,
 } from "@/generated/graphql";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { gqlFetch } from "../../../lib/gqlFetch";
 
-export function useAddBudgetCategoryMutation() {
+export function useUpsertBudgetCategoryMutation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["addBudgetCategory"],
-    mutationFn: (variables: AddBudgetCategoryMutationVariables) =>
+    mutationKey: ["upsertBudgetCategory"],
+    mutationFn: (variables: UpsertBudgetCategoryMutationVariables) =>
       gqlFetch({
-        document: AddBudgetCategoryDocument,
+        document: UpsertBudgetCategoryDocument,
         variables,
       }),
     onSuccess: () => {

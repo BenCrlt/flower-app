@@ -4,9 +4,9 @@ import { db } from "../../db/index.js";
 import { budgetCategoriesTable } from "../../db/schema/budget-categories.js";
 import { budgetLinesTable } from "../../db/schema/budget-lines.js";
 import {
-  addBudgetCategory,
-  addBudgetCategoryInput,
-} from "./utils/addBudgetCategory.js";
+  upsertBudgetCategory,
+  upsertBudgetCategoryInput,
+} from "./utils/upsertBudgetCategory.js";
 import { addBudgetLine, addBudgetLineInput } from "./utils/addBudgetLine.js";
 import {
   deleteBudgetCategory,
@@ -24,10 +24,6 @@ import { loadBudgetCategory } from "./utils/loadBudgetCategory.js";
 import { loadRealCost } from "./utils/loadRealData.js";
 import { loadSalesCount } from "./utils/loadSalesCount.js";
 import {
-  updateBudgetCategory,
-  updateBudgetCategoryInput,
-} from "./utils/updateBudgetCategory.js";
-import {
   updateBudgetLine,
   updateBudgetLineInput,
 } from "./utils/updateBudgetLine.js";
@@ -36,12 +32,9 @@ export const budgetCategoriesResolver = resolver.of(budgetCategoriesTable, {
   budgetCategories: query(budgetCategoriesTable.$list()).resolve(() =>
     db.query.budgetCategoriesTable.findMany(),
   ),
-  addBudgetCategory: mutation(budgetCategoriesTable.$nullable())
-    .input(addBudgetCategoryInput)
-    .resolve(addBudgetCategory),
-  updateBudgetCategory: mutation(budgetCategoriesTable.$nullable())
-    .input(updateBudgetCategoryInput)
-    .resolve(updateBudgetCategory),
+  upsertBudgetCategory: mutation(budgetCategoriesTable.$nullable())
+    .input(upsertBudgetCategoryInput)
+    .resolve(upsertBudgetCategory),
   deleteBudgetCategory: mutation(budgetCategoriesTable.$nullable())
     .input(deleteBudgetCategoryInput)
     .resolve(deleteBudgetCategory),

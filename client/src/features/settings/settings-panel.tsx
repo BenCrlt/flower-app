@@ -6,6 +6,7 @@ import { GoogleDriveCard } from "./components/google-drive/card";
 import { HelloAssoCard } from "./components/hello-asso/card";
 import { OrderOriginsCard } from "./components/order-origins/card";
 import { PersonnalInfosCard } from "./components/personnal-infos/card";
+import { CategoriesCard } from "./components/categories-card/card";
 
 export function SettingsPanel() {
   const { data: session } = authClient.useSession();
@@ -16,6 +17,7 @@ export function SettingsPanel() {
       <TypographyH2>Paramètres</TypographyH2>
       <PersonnalInfosCard />
       <OrderOriginsCard />
+      <CategoriesCard />
       <HelloAssoCard />
       <GoogleDriveCard />
       <EditionCard />

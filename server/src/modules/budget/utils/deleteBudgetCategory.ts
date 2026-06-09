@@ -12,7 +12,9 @@ export const deleteBudgetCategoryInput = z.object({
 
 export const deleteBudgetCategory = async ({
   id,
-}: z.infer<typeof deleteBudgetCategoryInput>): Promise<BudgetCategory | null> => {
+}: z.infer<
+  typeof deleteBudgetCategoryInput
+>): Promise<BudgetCategory | null> => {
   return db
     .delete(budgetCategoriesTable)
     .where(eq(budgetCategoriesTable.id, id))

@@ -109,7 +109,6 @@ enum LineTypeEnum {
 }
 
 type Mutation {
-  addBudgetCategory(color: String!, name: String!): BudgetCategoriesItem
   addBudgetLine(budgetCategoryId: Float!, description: String, editionId: Float!, estimatedQuantity: Int!, estimatedUnitPrice: Float!, isFreePrice: Boolean, lineType: LineTypeEnum!, name: String!): BudgetLinesItem
   addEdition(active: Boolean, endDate: String!, name: String!, openingBalance: Float, startDate: String!): EditionsItem
   addHelloAssoConfig(budgetCategoryId: Float, editionId: Float!, enableSynchro: Boolean, formSlug: String!): HelloAssoConfigItem
@@ -125,12 +124,12 @@ type Mutation {
   deleteVendor(id: Float!): VendorsItem
   disconnectGoogleDrive(editionId: Float!): GoogleDriveConfig!
   synchroSales(from: String!, helloAssoConfigId: Float!, to: String!): [SalesItem!]!
-  updateBudgetCategory(id: Float!, name: String!): BudgetCategoriesItem
   updateBudgetLine(budgetCategoryId: Float, description: String, editionId: Float, estimatedQuantity: Int, estimatedUnitPrice: Float, helloAssoProductId: Float, id: Float!, isFreePrice: Boolean, lineType: LineTypeEnum, name: String): BudgetLinesItem
   updateEdition(endDate: String, id: Float!, name: String, openingBalance: Float, startDate: String): EditionsItem
   updateGoogleDriveConfig(editionId: Float!, invoiceFolderId: String!): GoogleDriveConfig!
   updateHelloAssoConfig(formSlug: String!, id: Float!): HelloAssoConfigItem
   updateInvoice(authorId: String, editionId: Float!, id: Float!, name: String, note: String, payments: [UpdateInvoicePaymentsInput!], status: InvoiceStatus, totalAmount: Float, vendorId: Float): InvoicesItem
+  upsertBudgetCategory(color: String!, id: Float, name: String!): BudgetCategoriesItem
   validateOrder(editionId: Float!, originId: Float!, paymentMethod: ValidateOrderPaymentMethodInput!, sales: [ValidateOrderSalesInput!]!): OrdersItem
 }
 
