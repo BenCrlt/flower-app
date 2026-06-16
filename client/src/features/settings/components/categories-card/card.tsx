@@ -46,7 +46,7 @@ export function CategoriesCard() {
             </TypographyP>
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex flex-wrap gap-4 overflow-x-hidden">
+        <CardContent className="flex flex-wrap gap-4 overflow-x-hidden py-1">
           {data?.budgetCategories.map((category) => (
             <motion.div
               key={category.id}
