@@ -9,7 +9,7 @@ import {
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { UpsertCategoryDialog } from "@/components/upsert-category-dialog";
 import { useGetBudgetCategoriesQuery } from "@/features/budget/hooks/useGetBudgetCategoriesQuery";
-import { UpsertBudgetCategoryMutationVariables } from "@/generated/graphql";
+import { GetBudgetCategoriesQuery } from "@/generated/graphql";
 import { motion } from "framer-motion";
 import { Plus } from "lucide-react";
 import { useState } from "react";
@@ -17,12 +17,12 @@ import { useState } from "react";
 export function CategoriesCard() {
   const [open, setOpen] = useState(false);
   const [editingCategory, setEditingCategory] =
-    useState<UpsertBudgetCategoryMutationVariables>();
+    useState<GetBudgetCategoriesQuery["budgetCategories"][number]>();
 
   const { data } = useGetBudgetCategoriesQuery();
 
   const handleSelectCategory = (
-    category: UpsertBudgetCategoryMutationVariables,
+    category: GetBudgetCategoriesQuery["budgetCategories"][number],
   ) => {
     setEditingCategory(category);
     setOpen(true);

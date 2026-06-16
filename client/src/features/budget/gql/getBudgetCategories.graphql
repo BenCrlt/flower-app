@@ -3,5 +3,6 @@ query getBudgetCategories {
     id
     name
     color
+    isUsed
   }
 }

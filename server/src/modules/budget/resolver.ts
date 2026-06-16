@@ -21,6 +21,7 @@ import {
   getBudgetLinesFilter,
 } from "./utils/getBudgetLines.js";
 import { loadBudgetCategory } from "./utils/loadBudgetCategory.js";
+import { areBudgetCategoriesUsed } from "./utils/isUsed.js";
 import { loadRealCost } from "./utils/loadRealData.js";
 import { loadSalesCount } from "./utils/loadSalesCount.js";
 import {
@@ -32,6 +33,11 @@ export const budgetCategoriesResolver = resolver.of(budgetCategoriesTable, {
   budgetCategories: query(budgetCategoriesTable.$list()).resolve(() =>
     db.query.budgetCategoriesTable.findMany(),
   ),
+  isUsed: field(z.boolean())
+    .derivedFrom("id")
+    .load((categories) =>
+      areBudgetCategoriesUsed(categories.map((category) => category.id)),
+    ),
   upsertBudgetCategory: mutation(budgetCategoriesTable.$nullable())
     .input(upsertBudgetCategoryInput)
     .resolve(upsertBudgetCategory),

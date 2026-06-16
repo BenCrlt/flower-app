@@ -1,5 +1,9 @@
 import { useUpsertBudgetCategoryMutation } from "@/features/budget/hooks/useUpsertBudgetCategoryMutation";
-import { UpsertBudgetCategoryMutationVariables } from "@/generated/graphql";
+import { useDeleteBudgetCategoryMutation } from "@/features/settings/hooks/useDeleteBudgetCategoryMutation";
+import {
+  GetBudgetCategoriesQuery,
+  UpsertBudgetCategoryMutationVariables,
+} from "@/generated/graphql";
 import { useState } from "react";
 import { Button } from "./ui/button";
 import {
@@ -15,7 +19,7 @@ interface Props {
   onSubmit: (id: number) => void;
   open: boolean;
   setOpen: (open: boolean) => void;
-  editingCategory?: UpsertBudgetCategoryMutationVariables;
+  editingCategory?: GetBudgetCategoriesQuery["budgetCategories"][number];
 }
 
 export const DEFAULT_CATEGORY = {
@@ -31,9 +35,17 @@ export function UpsertCategoryDialog({
 }: Props) {
   const [category, setCategory] =
     useState<UpsertBudgetCategoryMutationVariables>(
-      editingCategory ?? DEFAULT_CATEGORY,
+      editingCategory
+        ? {
+            id: editingCategory.id,
+            name: editingCategory.name,
+            color: editingCategory.color,
+          }
+        : DEFAULT_CATEGORY,
     );
   const { mutateAsync: addCategory } = useUpsertBudgetCategoryMutation();
+  const { mutateAsync: deleteCategory, isPending: isDeletePending } =
+    useDeleteBudgetCategoryMutation();
 
   const handleUpsertCategory = (): void => {
     if (!category.name) return;
@@ -44,6 +56,20 @@ export function UpsertCategoryDialog({
           setOpen(false);
           setCategory(DEFAULT_CATEGORY);
         }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+  };
+
+  const handleDeleteCategory = (): void => {
+    if (!editingCategory?.id || editingCategory.isUsed) return;
+
+    void deleteCategory({ id: editingCategory.id })
+      .then(() => {
+        onSubmit(editingCategory.id);
+        setOpen(false);
+        setCategory(DEFAULT_CATEGORY);
       })
       .catch((error) => {
         console.error(error);
@@ -83,7 +109,20 @@ export function UpsertCategoryDialog({
             </span>
           </div>
           <Button onClick={handleUpsertCategory}>Sauvegarder</Button>
-          {editingCategory && <Button variant="destructive">Supprimer</Button>}
+          {editingCategory && (
+            <Button
+              variant="destructive"
+              onClick={handleDeleteCategory}
+              disabled={editingCategory.isUsed || isDeletePending}
+              title={
+                editingCategory.isUsed
+                  ? "Catégorie utilisée dans une ligne budgétaire"
+                  : undefined
+              }
+            >
+              Supprimer
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>
