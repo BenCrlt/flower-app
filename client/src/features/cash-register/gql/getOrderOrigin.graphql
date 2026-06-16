@@ -12,6 +12,7 @@ query getOrderOrigin($id: Float!) {
         id
         name
         color
+        isUsed
       }
     }
   }
