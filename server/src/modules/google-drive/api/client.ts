@@ -36,7 +36,9 @@ export class GoogleDriveReauthRequiredError extends Error {
   }
 }
 
-export function isGoogleDriveReauthRequiredError(error: unknown): boolean {
+export function isGoogleDriveReauthRequiredError(
+  error: unknown,
+): error is GoogleDriveReauthRequiredError {
   return error instanceof GoogleDriveReauthRequiredError;
 }
 
@@ -253,7 +255,8 @@ export class GoogleDriveClient {
     };
     if (!res.ok || !raw.refresh_token) {
       throw new Error(
-        raw.error ?? "Google OAuth: refresh_token manquant (utilisez prompt=consent)",
+        raw.error ??
+          "Google OAuth: refresh_token manquant (utilisez prompt=consent)",
       );
     }
     return {
@@ -263,12 +266,9 @@ export class GoogleDriveClient {
   }
 
   static async fetchUserEmail(accessToken: string): Promise<string> {
-    const res = await fetch(
-      "https://www.googleapis.com/oauth2/v2/userinfo",
-      {
-        headers: { Authorization: `Bearer ${accessToken}` },
-      },
-    );
+    const res = await fetch("https://www.googleapis.com/oauth2/v2/userinfo", {
+      headers: { Authorization: `Bearer ${accessToken}` },
+    });
     if (!res.ok) {
       throw new Error(`Google userinfo failed (${res.status})`);
     }
