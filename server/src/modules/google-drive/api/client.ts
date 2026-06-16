@@ -22,6 +22,24 @@ interface TokenResponse {
   token_type: string;
 }
 
+interface OAuthErrorResponse {
+  error?: string;
+  error_description?: string;
+}
+
+export class GoogleDriveReauthRequiredError extends Error {
+  constructor() {
+    super(
+      "Connexion Google Drive expirée. Reconnectez Google Drive dans les paramètres.",
+    );
+    this.name = "GoogleDriveReauthRequiredError";
+  }
+}
+
+export function isGoogleDriveReauthRequiredError(error: unknown): boolean {
+  return error instanceof GoogleDriveReauthRequiredError;
+}
+
 export class GoogleDriveClient {
   private accessToken: string | null = null;
 
@@ -43,10 +61,15 @@ export class GoogleDriveClient {
       }),
     });
 
-    const raw = (await res.json()) as TokenResponse & { error?: string };
+    const raw = (await res.json()) as TokenResponse & OAuthErrorResponse;
     if (!res.ok) {
+      if (raw.error === "invalid_grant") {
+        throw new GoogleDriveReauthRequiredError();
+      }
       throw new Error(
-        raw.error ?? `Google OAuth refresh failed (${res.status})`,
+        raw.error_description ??
+          raw.error ??
+          `Google OAuth refresh failed (${res.status})`,
       );
     }
     this.accessToken = raw.access_token;

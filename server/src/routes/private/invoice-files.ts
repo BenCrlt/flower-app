@@ -5,6 +5,7 @@ import { db } from "../../db/index.js";
 import { invoiceFilesTable } from "../../db/schema/invoice-files.js";
 import { invoicesTable } from "../../db/schema/invoices.js";
 import { INVOICE_FILE_MAX_BYTES } from "../../modules/google-drive/constants.js";
+import { isGoogleDriveReauthRequiredError } from "../../modules/google-drive/api/client.js";
 import {
   createDriveClientFromConfig,
   getGoogleDriveConfigForEdition,
@@ -48,6 +49,9 @@ export const invoiceFilesRoutes: FastifyPluginAsync = async (fastify) => {
       });
       return reply.send({ file });
     } catch (err) {
+      if (isGoogleDriveReauthRequiredError(err)) {
+        return reply.status(401).send({ error: err.message });
+      }
       const message = err instanceof Error ? err.message : "Upload échoué";
       return reply.status(400).send({ error: message });
     }
@@ -95,6 +99,9 @@ export const invoiceFilesRoutes: FastifyPluginAsync = async (fastify) => {
         );
         return reply.send(buffer);
       } catch (err) {
+        if (isGoogleDriveReauthRequiredError(err)) {
+          return reply.status(401).send({ error: err.message });
+        }
         const message =
           err instanceof Error ? err.message : "Téléchargement échoué";
         return reply.status(500).send({ error: message });

@@ -132,6 +132,11 @@ export function GoogleDriveCard() {
 
             {isAdmin && config?.isConnected && (
               <>
+                <TypographyP className="text-muted-foreground text-sm">
+                  En cas d&apos;erreur OAuth (ex: invalid_grant), utilisez
+                  &quot;Resynchroniser la connexion&quot; pour relancer
+                  l&apos;autorisation Google.
+                </TypographyP>
                 <Field>
                   <FieldLabel htmlFor="invoiceFolderId">
                     ID du dossier contenant les factures et devis
@@ -150,6 +155,13 @@ export function GoogleDriveCard() {
                     disabled={isUpdating}
                   >
                     {isUpdating ? <Spinner /> : "Enregistrer le dossier"}
+                  </Button>
+                  <Button
+                    type="button"
+                    variant="secondary"
+                    onClick={handleConnect}
+                  >
+                    Resynchroniser la connexion
                   </Button>
                   <Button
                     type="button"
