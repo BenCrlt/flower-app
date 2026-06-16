@@ -7,10 +7,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
-import {
-  DEFAULT_CATEGORY,
-  UpsertCategoryDialog,
-} from "@/components/upsert-category-dialog";
+import { UpsertCategoryDialog } from "@/components/upsert-category-dialog";
 import { useGetBudgetCategoriesQuery } from "@/features/budget/hooks/useGetBudgetCategoriesQuery";
 import { UpsertBudgetCategoryMutationVariables } from "@/generated/graphql";
 import { motion } from "framer-motion";
@@ -49,10 +46,11 @@ export function CategoriesCard() {
             </TypographyP>
           </CardDescription>
         </CardHeader>
-        <CardContent className="flex gap-4">
+        <CardContent className="flex flex-wrap gap-4 overflow-x-hidden">
           {data?.budgetCategories.map((category) => (
             <motion.div
               key={category.id}
+              className="max-w-full"
               whileHover={{ y: -2, scale: 1.04 }}
               whileTap={{ scale: 0.92 }}
               transition={{ type: "spring", stiffness: 560, damping: 26 }}
@@ -64,7 +62,7 @@ export function CategoriesCard() {
                   color: "#fff",
                 }}
                 onClick={() => handleSelectCategory(category)}
-                className="cursor-pointer px-3 py-1.5 text-sm transition-colors duration-150"
+                className="max-w-full cursor-pointer px-3 py-1.5 text-sm transition-colors duration-150"
                 variant="secondary"
               >
                 {category.name}
@@ -73,13 +71,14 @@ export function CategoriesCard() {
           ))}
           <motion.div
             key={"create-category"}
+            className="max-w-full"
             whileHover={{ y: -2, scale: 1.04 }}
             whileTap={{ scale: 0.92 }}
             transition={{ type: "spring", stiffness: 560, damping: 26 }}
           >
             <Badge
               onClick={() => setOpen(true)}
-              className="cursor-pointer px-3 py-1.5 text-sm transition-colors duration-150"
+              className="max-w-full cursor-pointer px-3 py-1.5 text-sm transition-colors duration-150"
             >
               <Plus />
               Ajouter une catégorie
