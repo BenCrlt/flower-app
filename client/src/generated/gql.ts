@@ -14,12 +14,12 @@ import type { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "mutation AddBudgetCategory($name: String!, $color: String!) {\n  addBudgetCategory(name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}": typeof types.AddBudgetCategoryDocument,
     "mutation addBudgetLine($name: String!, $budgetCategoryId: Float!, $description: String, $editionId: Float!, $estimatedQuantity: Int!, $estimatedUnitPrice: Float!, $isFreePrice: Boolean, $lineType: LineTypeEnum!) {\n  addBudgetLine(\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n    isFreePrice: $isFreePrice\n    lineType: $lineType\n  ) {\n    id\n    name\n  }\n}": typeof types.AddBudgetLineDocument,
     "mutation deleteBudgetLine($id: Float!) {\n  deleteBudgetLine(id: $id) {\n    id\n    name\n  }\n}": typeof types.DeleteBudgetLineDocument,
-    "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n  }\n}": typeof types.GetBudgetCategoriesDocument,
+    "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n    isUsed\n  }\n}": typeof types.GetBudgetCategoriesDocument,
     "query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!, $excludeHelloAsso: Boolean) {\n  budgetLines(\n    editionId: $editionId\n    budgetLineType: $budgetLineType\n    excludeHelloAsso: $excludeHelloAsso\n  ) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    isFreePrice\n    realCost\n    salesCount\n    lineType\n    category {\n      id\n      name\n      color\n    }\n    helloAssoProductId\n  }\n}": typeof types.GetBudgetLinesDocument,
     "mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float, $isFreePrice: Boolean) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n    isFreePrice: $isFreePrice\n  ) {\n    id\n    name\n  }\n}": typeof types.UpdateBudgetLineDocument,
+    "mutation upsertBudgetCategory($id: Float, $name: String!, $color: String!) {\n  upsertBudgetCategory(id: $id, name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}": typeof types.UpsertBudgetCategoryDocument,
     "query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n    budgetLines {\n      id\n      name\n      estimatedUnitPrice\n      isFreePrice\n      category {\n        id\n        name\n        color\n      }\n    }\n  }\n}": typeof types.GetOrderOriginDocument,
     "query getSumUpConfig {\n  sumUpConfig {\n    affiliateKey\n    appId\n  }\n}": typeof types.GetSumUpConfigDocument,
     "mutation validateOrder($editionId: Float!, $originId: Float!, $paymentMethod: ValidateOrderPaymentMethodInput!, $sales: [ValidateOrderSalesInput!]!) {\n  validateOrder(\n    editionId: $editionId\n    originId: $originId\n    paymentMethod: $paymentMethod\n    sales: $sales\n  ) {\n    id\n  }\n}": typeof types.ValidateOrderDocument,
@@ -37,6 +37,7 @@ type Documents = {
     "query getOrders($editionId: Float!, $from: String, $to: String, $originIds: [Float!]) {\n  orders(editionId: $editionId, from: $from, to: $to, originIds: $originIds) {\n    id\n    totalAmount\n    executedAt\n    payerFirstName\n    payerLastName\n    payerEmail\n    helloAssoOrderId\n    authorId\n    originId\n    origin {\n      id\n      name\n    }\n    author {\n      id\n      username\n    }\n    sales {\n      id\n      budgetLineId\n      quantity\n      unitPrice\n      executedAt\n      budgetLine {\n        id\n        name\n        estimatedUnitPrice\n        category {\n          id\n          name\n          color\n        }\n      }\n    }\n  }\n}": typeof types.GetOrdersDocument,
     "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}": typeof types.AddHelloAssoConfigDocument,
     "mutation addOrUpdateOrderOrigin($id: Float, $name: String!, $budgetLineIds: [Float!]) {\n  addOrUpdateOrderOrigin(id: $id, name: $name, budgetLineIds: $budgetLineIds) {\n    id\n    name\n  }\n}": typeof types.AddOrUpdateOrderOriginDocument,
+    "mutation deleteBudgetCategory($id: Float!) {\n  deleteBudgetCategory(id: $id) {\n    id\n    name\n  }\n}": typeof types.DeleteBudgetCategoryDocument,
     "mutation deleteOrderOrigin($id: Float!) {\n  deleteOrderOrigin(id: $id) {\n    id\n    name\n  }\n}": typeof types.DeleteOrderOriginDocument,
     "mutation disconnectGoogleDrive($editionId: Float!) {\n  disconnectGoogleDrive(editionId: $editionId) {\n    editionId\n    isConnected\n    invoiceFolderId\n    googleAccountEmail\n    connectedAt\n  }\n}": typeof types.DisconnectGoogleDriveDocument,
     "query getGoogleDriveConfig($editionId: Float!) {\n  googleDriveConfig(editionId: $editionId) {\n    editionId\n    isConnected\n    invoiceFolderId\n    googleAccountEmail\n    connectedAt\n  }\n}": typeof types.GetGoogleDriveConfigDocument,
@@ -46,12 +47,12 @@ type Documents = {
     "mutation updateGoogleDriveConfig($editionId: Float!, $invoiceFolderId: String!) {\n  updateGoogleDriveConfig(\n    editionId: $editionId\n    invoiceFolderId: $invoiceFolderId\n  ) {\n    editionId\n    isConnected\n    invoiceFolderId\n    googleAccountEmail\n    connectedAt\n  }\n}": typeof types.UpdateGoogleDriveConfigDocument,
 };
 const documents: Documents = {
-    "mutation AddBudgetCategory($name: String!, $color: String!) {\n  addBudgetCategory(name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}": types.AddBudgetCategoryDocument,
     "mutation addBudgetLine($name: String!, $budgetCategoryId: Float!, $description: String, $editionId: Float!, $estimatedQuantity: Int!, $estimatedUnitPrice: Float!, $isFreePrice: Boolean, $lineType: LineTypeEnum!) {\n  addBudgetLine(\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n    isFreePrice: $isFreePrice\n    lineType: $lineType\n  ) {\n    id\n    name\n  }\n}": types.AddBudgetLineDocument,
     "mutation deleteBudgetLine($id: Float!) {\n  deleteBudgetLine(id: $id) {\n    id\n    name\n  }\n}": types.DeleteBudgetLineDocument,
-    "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n  }\n}": types.GetBudgetCategoriesDocument,
+    "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n    isUsed\n  }\n}": types.GetBudgetCategoriesDocument,
     "query getBudgetLines($editionId: Float!, $budgetLineType: LineTypeEnum!, $excludeHelloAsso: Boolean) {\n  budgetLines(\n    editionId: $editionId\n    budgetLineType: $budgetLineType\n    excludeHelloAsso: $excludeHelloAsso\n  ) {\n    id\n    name\n    description\n    estimatedQuantity\n    estimatedUnitPrice\n    isFreePrice\n    realCost\n    salesCount\n    lineType\n    category {\n      id\n      name\n      color\n    }\n    helloAssoProductId\n  }\n}": types.GetBudgetLinesDocument,
     "mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float, $isFreePrice: Boolean) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n    isFreePrice: $isFreePrice\n  ) {\n    id\n    name\n  }\n}": types.UpdateBudgetLineDocument,
+    "mutation upsertBudgetCategory($id: Float, $name: String!, $color: String!) {\n  upsertBudgetCategory(id: $id, name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}": types.UpsertBudgetCategoryDocument,
     "query getOrderOrigin($id: Float!) {\n  orderOrigin(id: $id) {\n    id\n    name\n    isPhysical\n    budgetLines {\n      id\n      name\n      estimatedUnitPrice\n      isFreePrice\n      category {\n        id\n        name\n        color\n      }\n    }\n  }\n}": types.GetOrderOriginDocument,
     "query getSumUpConfig {\n  sumUpConfig {\n    affiliateKey\n    appId\n  }\n}": types.GetSumUpConfigDocument,
     "mutation validateOrder($editionId: Float!, $originId: Float!, $paymentMethod: ValidateOrderPaymentMethodInput!, $sales: [ValidateOrderSalesInput!]!) {\n  validateOrder(\n    editionId: $editionId\n    originId: $originId\n    paymentMethod: $paymentMethod\n    sales: $sales\n  ) {\n    id\n  }\n}": types.ValidateOrderDocument,
@@ -69,6 +70,7 @@ const documents: Documents = {
     "query getOrders($editionId: Float!, $from: String, $to: String, $originIds: [Float!]) {\n  orders(editionId: $editionId, from: $from, to: $to, originIds: $originIds) {\n    id\n    totalAmount\n    executedAt\n    payerFirstName\n    payerLastName\n    payerEmail\n    helloAssoOrderId\n    authorId\n    originId\n    origin {\n      id\n      name\n    }\n    author {\n      id\n      username\n    }\n    sales {\n      id\n      budgetLineId\n      quantity\n      unitPrice\n      executedAt\n      budgetLine {\n        id\n        name\n        estimatedUnitPrice\n        category {\n          id\n          name\n          color\n        }\n      }\n    }\n  }\n}": types.GetOrdersDocument,
     "mutation AddHelloAssoConfig($formSlug: String!, $editionId: Float!, $enableSynchro: Boolean!, $budgetCategoryId: Float) {\n  addHelloAssoConfig(\n    formSlug: $formSlug\n    editionId: $editionId\n    enableSynchro: $enableSynchro\n    budgetCategoryId: $budgetCategoryId\n  ) {\n    id\n    formSlug\n  }\n}": types.AddHelloAssoConfigDocument,
     "mutation addOrUpdateOrderOrigin($id: Float, $name: String!, $budgetLineIds: [Float!]) {\n  addOrUpdateOrderOrigin(id: $id, name: $name, budgetLineIds: $budgetLineIds) {\n    id\n    name\n  }\n}": types.AddOrUpdateOrderOriginDocument,
+    "mutation deleteBudgetCategory($id: Float!) {\n  deleteBudgetCategory(id: $id) {\n    id\n    name\n  }\n}": types.DeleteBudgetCategoryDocument,
     "mutation deleteOrderOrigin($id: Float!) {\n  deleteOrderOrigin(id: $id) {\n    id\n    name\n  }\n}": types.DeleteOrderOriginDocument,
     "mutation disconnectGoogleDrive($editionId: Float!) {\n  disconnectGoogleDrive(editionId: $editionId) {\n    editionId\n    isConnected\n    invoiceFolderId\n    googleAccountEmail\n    connectedAt\n  }\n}": types.DisconnectGoogleDriveDocument,
     "query getGoogleDriveConfig($editionId: Float!) {\n  googleDriveConfig(editionId: $editionId) {\n    editionId\n    isConnected\n    invoiceFolderId\n    googleAccountEmail\n    connectedAt\n  }\n}": types.GetGoogleDriveConfigDocument,
@@ -95,10 +97,6 @@ export function graphql(source: string): unknown;
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "mutation AddBudgetCategory($name: String!, $color: String!) {\n  addBudgetCategory(name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}"): (typeof documents)["mutation AddBudgetCategory($name: String!, $color: String!) {\n  addBudgetCategory(name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}"];
-/**
- * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
- */
 export function graphql(source: "mutation addBudgetLine($name: String!, $budgetCategoryId: Float!, $description: String, $editionId: Float!, $estimatedQuantity: Int!, $estimatedUnitPrice: Float!, $isFreePrice: Boolean, $lineType: LineTypeEnum!) {\n  addBudgetLine(\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n    isFreePrice: $isFreePrice\n    lineType: $lineType\n  ) {\n    id\n    name\n  }\n}"): (typeof documents)["mutation addBudgetLine($name: String!, $budgetCategoryId: Float!, $description: String, $editionId: Float!, $estimatedQuantity: Int!, $estimatedUnitPrice: Float!, $isFreePrice: Boolean, $lineType: LineTypeEnum!) {\n  addBudgetLine(\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n    isFreePrice: $isFreePrice\n    lineType: $lineType\n  ) {\n    id\n    name\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
@@ -107,7 +105,7 @@ export function graphql(source: "mutation deleteBudgetLine($id: Float!) {\n  del
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function graphql(source: "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n  }\n}"): (typeof documents)["query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n  }\n}"];
+export function graphql(source: "query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n    isUsed\n  }\n}"): (typeof documents)["query getBudgetCategories {\n  budgetCategories {\n    id\n    name\n    color\n    isUsed\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -116,6 +114,10 @@ export function graphql(source: "query getBudgetLines($editionId: Float!, $budge
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float, $isFreePrice: Boolean) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n    isFreePrice: $isFreePrice\n  ) {\n    id\n    name\n  }\n}"): (typeof documents)["mutation updateBudgetLine($id: Float!, $name: String, $budgetCategoryId: Float, $description: String, $editionId: Float, $estimatedQuantity: Int, $estimatedUnitPrice: Float, $isFreePrice: Boolean) {\n  updateBudgetLine(\n    id: $id\n    name: $name\n    budgetCategoryId: $budgetCategoryId\n    description: $description\n    editionId: $editionId\n    estimatedQuantity: $estimatedQuantity\n    estimatedUnitPrice: $estimatedUnitPrice\n    isFreePrice: $isFreePrice\n  ) {\n    id\n    name\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation upsertBudgetCategory($id: Float, $name: String!, $color: String!) {\n  upsertBudgetCategory(id: $id, name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}"): (typeof documents)["mutation upsertBudgetCategory($id: Float, $name: String!, $color: String!) {\n  upsertBudgetCategory(id: $id, name: $name, color: $color) {\n    id\n    name\n    color\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
@@ -184,6 +186,10 @@ export function graphql(source: "mutation AddHelloAssoConfig($formSlug: String!,
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation addOrUpdateOrderOrigin($id: Float, $name: String!, $budgetLineIds: [Float!]) {\n  addOrUpdateOrderOrigin(id: $id, name: $name, budgetLineIds: $budgetLineIds) {\n    id\n    name\n  }\n}"): (typeof documents)["mutation addOrUpdateOrderOrigin($id: Float, $name: String!, $budgetLineIds: [Float!]) {\n  addOrUpdateOrderOrigin(id: $id, name: $name, budgetLineIds: $budgetLineIds) {\n    id\n    name\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "mutation deleteBudgetCategory($id: Float!) {\n  deleteBudgetCategory(id: $id) {\n    id\n    name\n  }\n}"): (typeof documents)["mutation deleteBudgetCategory($id: Float!) {\n  deleteBudgetCategory(id: $id) {\n    id\n    name\n  }\n}"];
 /**
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

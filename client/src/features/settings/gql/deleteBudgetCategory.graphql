@@ -1,0 +1,6 @@
+mutation deleteBudgetCategory($id: Float!) {
+  deleteBudgetCategory(id: $id) {
+    id
+    name
+  }
+}

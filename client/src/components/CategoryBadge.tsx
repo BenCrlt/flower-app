@@ -3,14 +3,11 @@ import { Badge } from "./ui/badge";
 interface Props {
   name: string;
   color: string | undefined;
+  editable?: boolean;
   className?: string;
 }
 
-export function CategoryBadge({
-  name,
-  color = "#3b82f6",
-  className,
-}: Props) {
+export function CategoryBadge({ name, color = "#3b82f6", className }: Props) {
   return (
     <Badge
       title={name}

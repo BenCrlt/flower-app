@@ -1,0 +1,7 @@
+mutation upsertBudgetCategory($id: Float, $name: String!, $color: String!) {
+  upsertBudgetCategory(id: $id, name: $name, color: $color) {
+    id
+    name
+    color
+  }
+}
