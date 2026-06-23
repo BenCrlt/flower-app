@@ -52,6 +52,7 @@ export const openPaymentSwitchLink = ({
     if (!config.appId) {
       throw new Error("App ID est manquante pour Android.");
     }
+    url.searchParams.set("app-id", config.appId);
     url.searchParams.set("callback", callbackUrl);
     url.searchParams.set("total", amount.toFixed(2));
   }
