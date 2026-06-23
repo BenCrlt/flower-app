@@ -13,6 +13,7 @@ import {
 import { useGetOrderOriginQuery } from "../hooks/useGetOrderOriginQuery";
 import { useSumUp } from "../hooks/useSumUp";
 import { useValidateOrderMutation } from "../hooks/useValidateOrderMutation";
+import { paymentToast } from "../lib/payment-toast";
 
 const CASH_REGISTER_ORIGIN_ID_KEY = "cash-register-origin-id";
 const CASH_REGISTER_CART_KEY_PREFIX = "cash-register-cart";
@@ -209,9 +210,14 @@ export const CashRegisterContextProvider = ({
 
   const { mutate: validateOrder } = useValidateOrderMutation({
     onError: (error) => {
+      const paymentMethod = lastSubmittedPaymentMethodRef.current;
       lastSubmittedPaymentMethodRef.current = null;
       pendingSumUpTxCodeRef.current = null;
-      toast.error("Erreur lors de la validation de la commande", {
+      const notify =
+        paymentMethod === ValidateOrderPaymentMethodInput.Card
+          ? paymentToast
+          : toast;
+      notify.error("Erreur lors de la validation de la commande", {
         description: error.message,
       });
     },
@@ -224,7 +230,7 @@ export const CashRegisterContextProvider = ({
       if (paymentMethod === ValidateOrderPaymentMethodInput.Card) {
         const txCode = pendingSumUpTxCodeRef.current;
         pendingSumUpTxCodeRef.current = null;
-        toast.success("Paiement carte confirme", {
+        paymentToast.success("Paiement carte confirme", {
           description: txCode ? `Transaction SumUp: ${txCode}` : undefined,
         });
         return;
@@ -273,7 +279,7 @@ export const CashRegisterContextProvider = ({
 
       if (!submitOrder(lines, ValidateOrderPaymentMethodInput.Card)) {
         pendingSumUpTxCodeRef.current = null;
-        toast.error("Impossible de valider la commande", {
+        paymentToast.error("Impossible de valider la commande", {
           description: "Le panier est vide apres le retour du paiement carte.",
         });
       }

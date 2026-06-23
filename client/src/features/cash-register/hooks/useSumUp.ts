@@ -1,6 +1,6 @@
 import { openPaymentSwitchLink } from "@/lib/payment-switch";
 import { useEffect, useRef } from "react";
-import { toast } from "sonner";
+import { paymentToast } from "../lib/payment-toast";
 import { useSumUpQuery } from "./useSumUpQuery";
 
 export const PENDING_CARD_PAYMENT_KEY = "cash-register-pending-card-payment";
@@ -28,7 +28,7 @@ export const useSumUp = ({ onValidateCardPayment }: UseSumUpParams) => {
       });
       return true;
     } catch (error) {
-      toast.error("Impossible de lancer SumUp", {
+      paymentToast.error("Impossible de lancer SumUp", {
         description:
           error instanceof Error ? error.message : "Une erreur est survenue.",
       });
@@ -87,7 +87,7 @@ export const useSumUp = ({ onValidateCardPayment }: UseSumUpParams) => {
       pendingForeignTxId &&
       callbackForeignTxId !== pendingForeignTxId
     ) {
-      toast.error("Paiement recu mais transaction inattendue", {
+      paymentToast.error("Paiement recu mais transaction inattendue", {
         description:
           "Le foreign-tx-id du callback ne correspond pas au paiement en cours.",
       });
@@ -99,7 +99,7 @@ export const useSumUp = ({ onValidateCardPayment }: UseSumUpParams) => {
       return;
     }
 
-    toast.error("Paiement carte non valide", {
+    paymentToast.error("Paiement carte non valide", {
       description: paymentMessage ?? `Statut SumUp: ${paymentStatus}`,
     });
   }, [onValidateCardPayment]);
