@@ -1,4 +1,5 @@
 import { BudgetLinesItem, LineType, LineTypeEnum } from "@/generated/graphql";
+import { formatPriceToEuros } from "@/utils/PriceUtils";
 
 export const getBudgetLineTypeString = (lineType: LineTypeEnum) => {
   switch (lineType) {
@@ -20,23 +21,34 @@ export const getGapBetweenRealAndPrevisionnal = (
     return null;
   }
 
-  const gap = previsionnalAmount !== 0 ? (realAmount / previsionnalAmount - 1) : 1
-
   if (inPercent) {
-    return gap * 100;
+    if (previsionnalAmount === 0) {
+      return realAmount > 0 ? 100 : 0;
+    }
+
+    return (realAmount / previsionnalAmount - 1) * 100;
   }
-  return gap;
+
+  return realAmount - previsionnalAmount;
 };
 
 export const formatGapForCell = (gap: number | null, inPercent = false) => {
   if (gap === null) {
     return "-";
   }
+  if (!inPercent) {
+    return formatSignedEuros(gap);
+  }
   return formatGap(gap, inPercent);
 };
 
 export const formatGap = (gap: number, inPercent = false, fixedDigits = 2) =>
   `${gap >= 0 ? "+" : ""}${gap.toFixed(fixedDigits)}${inPercent ? "%" : ""}`;
+
+export const formatSignedEuros = (amount: number): string => {
+  const sign = amount >= 0 ? "+" : "-";
+  return `${sign}${formatPriceToEuros(Math.abs(amount))}`;
+};
 
 export const getTextColorForGapFromLineType = (
   lineType: LineType,
@@ -62,3 +74,14 @@ export const getRealCostForBudgetLine = (
 
   return line.realCost ?? null;
 };
+
+export const getEstimatedAmount = (row: {
+  estimatedUnitPrice: number;
+  estimatedQuantity: number;
+}) => row.estimatedUnitPrice * row.estimatedQuantity;
+
+export const isUnplannedLine = (row: {
+  estimatedUnitPrice: number;
+  estimatedQuantity: number;
+  realCost: number | null;
+}) => getEstimatedAmount(row) === 0 && (row.realCost ?? 0) > 0;
