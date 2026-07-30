@@ -1,6 +1,6 @@
 # flower-app
 
-Application de gestion d’événements floraux (éditions, budget, ventes, paiements) avec un backend GraphQL (Mercurius x Fastify x GQLoom) et un frontend React.
+Application de gestion d’événements (éditions, budget, ventes, paiements) avec un backend GraphQL (Mercurius x Fastify x GQLoom) et un frontend React.
 
 ## Prérequis
 
