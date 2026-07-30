@@ -1,4 +1,6 @@
 import { DataTable } from "@/components/Table/DataTable";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TypographyH2 } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
 import { LineTypeEnum } from "@/generated/graphql";
@@ -7,17 +9,20 @@ import { toast } from "sonner";
 import { useDeleteBudgetLineMutation } from "../hooks/useDeleteBudgetLineMutation";
 import { useGetBudgetCategoriesQuery } from "../hooks/useGetBudgetCategoriesQuery";
 import { useGetBudgetLinesQuery } from "../hooks/useGetBudgetLinesQuery";
-import { getRealCostForBudgetLine } from "../utils";
+import { getRealCostForBudgetLine, isUnplannedLine } from "../utils";
 import { BudgetMobileCard } from "./budget-mobile-card";
+import { BudgetOverview } from "./budget-overview";
 import { BudgetTableFiltersAndActions } from "./budget-table-actions";
 import { BudgetTableRow, getColumns } from "./columns";
 import { EditBudgetLineSheet } from "./edit-budget-line-sheet";
+import { Coins, Percent, PiggyBank } from "lucide-react";
 
 export function BudgetTable() {
   const { edition } = useEdition();
   const [lineType, setLineType] = useState<LineTypeEnum>(LineTypeEnum.Income);
   const [selectedRow, setSelectedRow] = useState<BudgetTableRow | null>(null);
   const [showGapInPercent, setShowGapInPercent] = useState<boolean>(true);
+  const [onlyUnplanned, setOnlyUnplanned] = useState(false);
 
   const { data } = useGetBudgetLinesQuery({
     variables: {
@@ -58,6 +63,11 @@ export function BudgetTable() {
       })) || [],
     [data],
   );
+  const unplannedRows = useMemo(() => rows.filter(isUnplannedLine), [rows]);
+  const tableRows = useMemo(
+    () => (onlyUnplanned ? unplannedRows : rows),
+    [onlyUnplanned, rows, unplannedRows],
+  );
 
   const handleDeleteLine = (id: number) => deleteBudgetLine({ id });
 
@@ -69,11 +79,50 @@ export function BudgetTable() {
   });
 
   return (
-    <div className="flex w-full min-w-0 flex-col gap-4">
-      <TypographyH2>Budget prévisionnel</TypographyH2>
+    <div className="flex w-full min-w-0 flex-col gap-5">
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+        <div>
+          <TypographyH2>Budget prévisionnel</TypographyH2>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Vue d'ensemble et suivi détaillé des montants prévus et réels.
+          </p>
+        </div>
+        <Button
+          type="button"
+          variant="outline"
+          className="h-11 w-full lg:h-9 lg:w-auto"
+          onClick={() => setShowGapInPercent((prev) => !prev)}
+        >
+          <Percent />
+          Écart en {showGapInPercent ? "%" : "€"}
+        </Button>
+      </div>
+      <Tabs
+        value={lineType}
+        onValueChange={(value) => {
+          setLineType(value as LineTypeEnum);
+          setOnlyUnplanned(false);
+        }}
+      >
+        <TabsList className="h-11">
+          <TabsTrigger value={LineTypeEnum.Income}>
+            Recettes
+            <PiggyBank />
+          </TabsTrigger>
+          <TabsTrigger value={LineTypeEnum.Expense}>
+            Dépenses
+            <Coins />
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+      <BudgetOverview
+        rows={rows}
+        lineType={lineType}
+        showGapInPercent={showGapInPercent}
+      />
       <DataTable
         columns={columns}
-        data={rows}
+        data={tableRows}
         onRowClick={(row) => setSelectedRow(row)}
         mobileCardRenderer={(row) => (
           <BudgetMobileCard
@@ -86,12 +135,11 @@ export function BudgetTable() {
         actions={(table) => (
           <BudgetTableFiltersAndActions
             table={table}
-            onChangeLineType={(type) => setLineType(type)}
             lineType={lineType}
-            showGapInPercent={showGapInPercent}
-            onToggleGapInPercent={() =>
-              setShowGapInPercent((prev) => !prev)
-            }
+            onlyUnplanned={onlyUnplanned}
+            unplannedCount={unplannedRows.length}
+            onToggleOnlyUnplanned={() => setOnlyUnplanned((prev) => !prev)}
+            onClearOnlyUnplanned={() => setOnlyUnplanned(false)}
           />
         )}
       />

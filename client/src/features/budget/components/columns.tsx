@@ -45,6 +45,33 @@ export function getColumns({
       meta: { className: "w-px whitespace-nowrap" },
     },
     {
+      meta: { className: "w-px whitespace-nowrap" },
+      header: ({ column }) => (
+        <SortableHeader column={column} title="Catégorie" />
+      ),
+      accessorKey: "categoryName",
+      filterFn: (row, columnId, filterValue: string[]) => {
+        if (!filterValue.length) return true;
+        return filterValue.includes(row.getValue(columnId));
+      },
+      cell: ({ row }) => (
+        <CategoryBadge
+          name={row.original.categoryName}
+          color={row.original.categoryColor}
+        />
+      ),
+    },
+    {
+      header: "Description",
+      accessorKey: "description",
+      meta: { className: "max-w-48" },
+      cell: ({ getValue }) => (
+        <span className="block truncate" title={getValue<string>()}>
+          {getValue<string>()}
+        </span>
+      ),
+    },
+    {
       id: "estimatedCost",
       meta: { className: "w-px whitespace-nowrap" },
       header: ({ column }) => (
@@ -111,33 +138,6 @@ export function getColumns({
           />
         );
       },
-    },
-    {
-      header: "Description",
-      accessorKey: "description",
-      meta: { className: "max-w-48" },
-      cell: ({ getValue }) => (
-        <span className="block truncate" title={getValue<string>()}>
-          {getValue<string>()}
-        </span>
-      ),
-    },
-    {
-      meta: { className: "w-px whitespace-nowrap" },
-      header: ({ column }) => (
-        <SortableHeader column={column} title="Catégorie" />
-      ),
-      accessorKey: "categoryName",
-      filterFn: (row, columnId, filterValue: string[]) => {
-        if (!filterValue.length) return true;
-        return filterValue.includes(row.getValue(columnId));
-      },
-      cell: ({ row }) => (
-        <CategoryBadge
-          name={row.original.categoryName}
-          color={row.original.categoryColor}
-        />
-      ),
     },
     {
       id: "actions",
