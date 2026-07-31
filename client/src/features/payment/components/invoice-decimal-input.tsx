@@ -1,5 +1,11 @@
 import { Input } from "@/components/ui/input";
-import { ComponentProps, ReactElement, useEffect, useRef, useState } from "react";
+import {
+  ComponentProps,
+  ReactElement,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
 const PARTIAL_DECIMAL_PATTERN = /^\d*[,.]?\d*$/;
 

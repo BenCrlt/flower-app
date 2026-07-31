@@ -1,6 +1,8 @@
 import { CategoryBadge } from "@/components/CategoryBadge";
+import { Button } from "@/components/ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardHeader,
@@ -14,13 +16,15 @@ import {
 } from "@/generated/graphql";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
 import { getSaleLineTotal } from "../../utils/salePrice";
-import { Package } from "lucide-react";
+import { Link } from "@tanstack/react-router";
+import { ArrowUpRight, Package } from "lucide-react";
 import { useMemo } from "react";
 
 const TOP_PRODUCTS_LIMIT = 5;
 
 interface Props {
   filteredSales: GetOrdersQuery["orders"][number]["sales"];
+  showSalesLink?: boolean;
 }
 
 type BudgetLineMeta = Pick<BudgetLinesItem, "name" | "estimatedUnitPrice"> & {
@@ -47,7 +51,10 @@ function RankBadge({ rank }: { rank: number }) {
   );
 }
 
-export const TopProductsCard = ({ filteredSales }: Props) => {
+export const TopProductsCard = ({
+  filteredSales,
+  showSalesLink = false,
+}: Props) => {
   const topProducts = useMemo(() => {
     const salesCountByProducts = new Map<number, number>();
     const revenueByProducts = new Map<number, number>();
@@ -60,7 +67,8 @@ export const TopProductsCard = ({ filteredSales }: Props) => {
       );
       revenueByProducts.set(
         sale.budgetLineId,
-        (revenueByProducts.get(sale.budgetLineId) || 0) + getSaleLineTotal(sale),
+        (revenueByProducts.get(sale.budgetLineId) || 0) +
+          getSaleLineTotal(sale),
       );
       if (sale.budgetLine) {
         const existing = budgetLineById.get(sale.budgetLineId);
@@ -96,6 +104,16 @@ export const TopProductsCard = ({ filteredSales }: Props) => {
         <CardDescription>
           Top {TOP_PRODUCTS_LIMIT} par quantité sur les commandes filtrées.
         </CardDescription>
+        {showSalesLink && (
+          <CardAction>
+            <Button variant="outline" size="sm" className="gap-1.5" asChild>
+              <Link to="/sales">
+                Voir les ventes
+                <ArrowUpRight className="size-3.5 opacity-80" aria-hidden />
+              </Link>
+            </Button>
+          </CardAction>
+        )}
       </CardHeader>
       <CardContent className="flex flex-1 flex-col pt-0">
         {topProducts.length === 0 ? (

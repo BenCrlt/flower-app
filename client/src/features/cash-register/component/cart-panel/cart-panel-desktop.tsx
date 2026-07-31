@@ -29,7 +29,10 @@ export const CartPanelDesktop = ({
       <CardHeader className="px-4 sm:px-6">
         <div className="flex items-center justify-between gap-2">
           <CardTitle>Panier en cours</CardTitle>
-          <motion.div layout transition={{ type: "spring", stiffness: 560, damping: 30 }}>
+          <motion.div
+            layout
+            transition={{ type: "spring", stiffness: 560, damping: 30 }}
+          >
             <Badge variant="secondary">{totalQuantity} article(s)</Badge>
           </motion.div>
         </div>
@@ -70,7 +73,11 @@ export const CartPanelDesktop = ({
                       key={`${item.cartLineId}-${item.quantity}`}
                       initial={{ scale: 0.8, opacity: 0.5 }}
                       animate={{ scale: 1, opacity: 1 }}
-                      transition={{ type: "spring", stiffness: 650, damping: 22 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 650,
+                        damping: 22,
+                      }}
                     >
                       <Badge>{item.quantity}</Badge>
                     </motion.div>

@@ -47,12 +47,15 @@ export function InvoicesPanel() {
     return allRows.find((row) => row.id === selectedInvoiceId) ?? null;
   }, [allRows, selectedInvoiceId]);
 
-  const handleRequestDeleteInvoice = useCallback((id: number) => {
-    const row = allRows.find((invoice) => invoice.id === id);
-    if (row) {
-      setInvoiceToDelete(row);
-    }
-  }, [allRows]);
+  const handleRequestDeleteInvoice = useCallback(
+    (id: number) => {
+      const row = allRows.find((invoice) => invoice.id === id);
+      if (row) {
+        setInvoiceToDelete(row);
+      }
+    },
+    [allRows],
+  );
 
   const handleConfirmDeleteInvoice = useCallback(() => {
     if (!invoiceToDelete) {

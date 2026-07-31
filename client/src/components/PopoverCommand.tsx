@@ -19,12 +19,7 @@ import {
   CommandSeparator,
 } from "./ui/command";
 import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "./ui/sheet";
+import { Sheet, SheetContent, SheetHeader, SheetTitle } from "./ui/sheet";
 
 type PrimitiveValue = string | number;
 type DefaultItem = { label: string; value: PrimitiveValue };

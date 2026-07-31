@@ -9,10 +9,7 @@ import {
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Spinner } from "@/components/ui/spinner";
 import { TypographyP } from "@/components/ui/typography";
-import {
-  downloadInvoiceFile,
-  uploadInvoiceFile,
-} from "@/lib/invoice-file-api";
+import { downloadInvoiceFile, uploadInvoiceFile } from "@/lib/invoice-file-api";
 import { Download, FileText, Trash2 } from "lucide-react";
 import { Link } from "@tanstack/react-router";
 import { useQueryClient } from "@tanstack/react-query";

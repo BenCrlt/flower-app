@@ -1,5 +1,9 @@
 import { AppSidebar } from "@/components/AppSidebar";
-import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import {
+  SidebarInset,
+  SidebarProvider,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { EditionProvider } from "@/features/edition/EditionContext";
 import { authClient } from "@/lib/auth-client";
 import {

@@ -110,11 +110,7 @@ export function InvoicesKpiCards({
           canOpenUncoveredList &&
             "cursor-pointer transition-colors hover:bg-muted/50",
         )}
-        onClick={
-          canOpenUncoveredList
-            ? () => onViewUncoveredList()
-            : undefined
-        }
+        onClick={canOpenUncoveredList ? () => onViewUncoveredList() : undefined}
         onKeyDown={
           canOpenUncoveredList
             ? (event) => {
@@ -133,12 +129,13 @@ export function InvoicesKpiCards({
             <CardTitle>
               <TypographyH3>Dépenses non déclarées</TypographyH3>
             </CardTitle>
-            <Badge variant="destructive">Non déclaré</Badge>
+            <Badge variant="default">Non déclaré</Badge>
           </div>
           <CardDescription>
-            {canOpenUncoveredList ? (
-              <TypographyP>Cliquer pour plus de détails.</TypographyP>
-            ) : null}
+            <TypographyP>
+              Dépenses rattaché à aucune facture.
+              {canOpenUncoveredList ? " Cliquer pour plus de détails." : null}
+            </TypographyP>
           </CardDescription>
         </CardHeader>
         <CardContent>

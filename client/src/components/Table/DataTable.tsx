@@ -48,10 +48,7 @@ interface DataTableProps<TData, TValue> {
   isRowExpandable?: (row: TData) => boolean;
   renderExpandedRow?: (row: TData) => React.ReactNode;
   expandOnRowClick?: boolean;
-  mobileCardRenderer?: (
-    row: TData,
-    meta: MobileCardMeta,
-  ) => React.ReactNode;
+  mobileCardRenderer?: (row: TData, meta: MobileCardMeta) => React.ReactNode;
 }
 
 export function DataTable<TData, TValue>({
@@ -76,9 +73,8 @@ export function DataTable<TData, TValue>({
   const [expandedRowIds, setExpandedRowIds] = useState<Record<string, boolean>>(
     {},
   );
-  const [mobileVisibleCount, setMobileVisibleCount] = useState(
-    MOBILE_INITIAL_COUNT,
-  );
+  const [mobileVisibleCount, setMobileVisibleCount] =
+    useState(MOBILE_INITIAL_COUNT);
 
   const table = useReactTable({
     data,
@@ -104,8 +100,7 @@ export function DataTable<TData, TValue>({
   });
 
   const sortedRows = table.getSortedRowModel().rows;
-  const hasMoreOnMobile =
-    isMobile && mobileVisibleCount < sortedRows.length;
+  const hasMoreOnMobile = isMobile && mobileVisibleCount < sortedRows.length;
   const displayRows = isMobile
     ? sortedRows.slice(0, mobileVisibleCount)
     : table.getRowModel().rows;
@@ -223,9 +218,7 @@ export function DataTable<TData, TValue>({
                     handleToggleExpandedRow(rowId);
                   }}
                   aria-label={
-                    isExpanded
-                      ? "Masquer les détails"
-                      : "Afficher les détails"
+                    isExpanded ? "Masquer les détails" : "Afficher les détails"
                   }
                 >
                   {isExpanded ? (

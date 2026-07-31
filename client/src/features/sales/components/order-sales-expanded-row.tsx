@@ -22,9 +22,7 @@ function SaleLineMobileCard({
           variant="outline"
           className="mt-1.5"
           style={
-            sale.categoryColor
-              ? { borderColor: sale.categoryColor }
-              : undefined
+            sale.categoryColor ? { borderColor: sale.categoryColor } : undefined
           }
         >
           {sale.categoryName}

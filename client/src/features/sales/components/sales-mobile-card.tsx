@@ -58,9 +58,7 @@ export function SalesMobileCard({ row, meta }: Props) {
       </p>
       <div className="mt-1 space-y-0.5 text-xs text-muted-foreground">
         {payerName ? <p className="truncate">{payerName}</p> : null}
-        {row.payerEmail ? (
-          <p className="truncate">{row.payerEmail}</p>
-        ) : null}
+        {row.payerEmail ? <p className="truncate">{row.payerEmail}</p> : null}
         {row.authorUsername ? (
           <p className="truncate">Par {row.authorUsername}</p>
         ) : null}
