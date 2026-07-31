@@ -61,9 +61,7 @@ export function BudgetMobileCard({
         </div>
         <div className="flex flex-col items-center gap-1 px-2 py-2.5">
           <span className="text-xs text-muted-foreground">Écart</span>
-          <span
-            className={`text-sm font-semibold tabular-nums ${gapColor}`}
-          >
+          <span className={`text-sm font-semibold tabular-nums ${gapColor}`}>
             {formatGapForCell(gap, showGapInPercent)}
           </span>
         </div>
@@ -73,10 +71,7 @@ export function BudgetMobileCard({
         <p className="line-clamp-2 min-w-0 flex-1 text-xs text-muted-foreground">
           {row.description || "—"}
         </p>
-        <div
-          className="shrink-0"
-          onClick={(event) => event.stopPropagation()}
-        >
+        <div className="shrink-0" onClick={(event) => event.stopPropagation()}>
           <BudgetLineActionsMenu
             row={row}
             onDelete={onDelete}

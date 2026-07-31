@@ -27,13 +27,12 @@ export function InvoiceMobileCard({ row, onEdit, onDelete }: Props) {
           {row.note || "—"}
         </p>
         <div className="flex shrink-0 items-center gap-1">
-          <RowPrice amount={row.totalAmount} className="text-base font-semibold" />
+          <RowPrice
+            amount={row.totalAmount}
+            className="text-base font-semibold"
+          />
           <div onClick={(event) => event.stopPropagation()}>
-            <InvoiceActionsMenu
-              row={row}
-              onEdit={onEdit}
-              onDelete={onDelete}
-            />
+            <InvoiceActionsMenu row={row} onEdit={onEdit} onDelete={onDelete} />
           </div>
         </div>
       </div>

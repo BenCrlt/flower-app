@@ -152,18 +152,14 @@ export function CloseEditionDialog() {
         aria-describedby="close-edition-dialog-description"
         className="max-w-md"
       >
-        <form
-          onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col gap-4"
-        >
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
           <DialogHeader>
             <DialogTitle>
               Clôturer {activeEdition?.name ?? "l'édition"} ?
             </DialogTitle>
             <DialogDescription id="close-edition-dialog-description">
-              Cette action désactive l'édition en cours et crée
-              immédiatement la prochaine édition, sélectionnée
-              automatiquement.
+              Cette action désactive l'édition en cours et crée immédiatement la
+              prochaine édition, sélectionnée automatiquement.
             </DialogDescription>
           </DialogHeader>
 

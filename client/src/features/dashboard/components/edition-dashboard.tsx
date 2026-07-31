@@ -3,8 +3,10 @@ import { useEdition } from "@/features/edition/EditionContext";
 import { useGetEditionStatsQuery } from "../hooks/useGetEditionStats";
 import type { EditionStats } from "../types";
 import { BudgetByCategoriesChart } from "./budget-by-categories-chart";
-import { CurrentBalanceCard } from "./current-balance-card";
-import { ForecastVsActualCards } from "./forecast-vs-actual-cards";
+import { EditionComparisonChart } from "./edition-comparison-chart";
+import { InvoiceStatusSummary } from "./invoice-status-summary";
+import { KpiRow } from "./kpi-row";
+import { TopSellingProducts } from "./top-selling-products";
 
 export type { EditionStats };
 
@@ -16,30 +18,22 @@ export function EditionDashboard() {
       editionId: edition.id,
     },
   });
-  const stats = data?.edition;
-  const editionStatsFallback: EditionStats = {
-    id: edition.id,
-    totalExpense: 0,
-    totalIncome: 0,
-    totalPrevisionnalExpense: 0,
-    totalPrevisionnalIncome: 0,
-  };
 
   return (
     <div className="w-full max-w-300">
       <TypographyH2 className="mb-2">Tableau de bord</TypographyH2>
       <div className="flex flex-col gap-6 py-4">
-        <CurrentBalanceCard
+        <KpiRow
           openingBalance={edition.openingBalance}
-          totalIncome={isPending ? null : (stats?.totalIncome ?? 0)}
-          totalExpense={isPending ? null : (stats?.totalExpense ?? 0)}
-          isLoading={isPending}
-        />
-        <ForecastVsActualCards
-          edition={isPending ? null : (stats ?? editionStatsFallback)}
+          stats={data?.edition}
           isLoading={isPending}
         />
         <BudgetByCategoriesChart />
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+          <InvoiceStatusSummary />
+          <TopSellingProducts />
+        </div>
+        <EditionComparisonChart />
       </div>
     </div>
   );

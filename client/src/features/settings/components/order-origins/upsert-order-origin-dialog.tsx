@@ -156,8 +156,8 @@ export const UpsertOrderOriginDialog = ({
             <FieldGroup>
               <FieldLabel>Produits à la caisse (recettes)</FieldLabel>
               <FieldDescription>
-                Choisissez les lignes budgétaires proposées lors des ventes
-                pour ce point de vente (édition en cours, hors HelloAsso).
+                Choisissez les lignes budgétaires proposées lors des ventes pour
+                ce point de vente (édition en cours, hors HelloAsso).
               </FieldDescription>
               {showBudgetLinesSpinner ? (
                 <div className="flex items-center gap-2 py-6 text-muted-foreground">

@@ -64,7 +64,7 @@ function sumTotalAmount(invoices: { totalAmount: string }[]): number {
   );
 }
 
-function mapUncoveredBudgetLines(
+export function mapUncoveredBudgetLines(
   budgetLines: GetBudgetLinesQuery["budgetLines"],
   budgetLineIdsWithPayment: Set<number>,
 ): UncoveredBudgetLine[] {

@@ -26,7 +26,7 @@ export function UncoveredBudgetLinesSheet({
         <SheetHeader>
           <SheetTitle>Lignes budget non déclarées</SheetTitle>
           <SheetDescription>
-            Lignes de dépense sans aucun paiement rattaché à une facture.
+            Dépenses rattaché à aucune facture.
           </SheetDescription>
         </SheetHeader>
         <div className="scrollbar-gutter-stable mt-4 min-h-0 flex-1 overflow-y-auto px-1 pr-3">

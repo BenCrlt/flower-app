@@ -1,0 +1,9 @@
+query getEditionsComparison {
+  editions {
+    id
+    name
+    startDate
+    totalIncome
+    totalExpense
+  }
+}

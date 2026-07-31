@@ -21,7 +21,9 @@ export const ProductItem = ({ product }: Props) => {
     onRemoveFixedProduct,
     onAddFreePriceProduct,
   } = useCashRegister();
-  const [quantityDirection, setQuantityDirection] = useState<"up" | "down">("up");
+  const [quantityDirection, setQuantityDirection] = useState<"up" | "down">(
+    "up",
+  );
   const [freePriceSheetOpen, setFreePriceSheetOpen] = useState(false);
 
   const quantity = getFixedProductQuantity(product.id);

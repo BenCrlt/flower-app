@@ -85,10 +85,7 @@ export const SalesPanelActionsAndFiltersCard = ({
                   return option.label;
                 }
                 return (
-                  <CategoryBadge
-                    name={category.name}
-                    color={category.color}
-                  />
+                  <CategoryBadge name={category.name} color={category.color} />
                 );
               }}
             />
