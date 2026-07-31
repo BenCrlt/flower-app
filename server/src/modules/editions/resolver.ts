@@ -4,7 +4,9 @@ import z from "zod";
 import { db } from "../../db/index.js";
 import { editionsTable } from "../../db/schema/editions.js";
 import { LineTypeEnum } from "../budget/types.js";
+import { resolveWithContext } from "../graphql/context.js";
 import { addEdition, addEditionInput } from "./utils/addEdition.js";
+import { closeEdition, closeEditionInput } from "./utils/closeEdition.js";
 import { deleteEdition, deleteEditionInput } from "./utils/deleteEdition.js";
 import {
   getBudgetStatsByCategories,
@@ -72,6 +74,9 @@ export const editionsResolver = resolver.of(editionsTable, {
   deleteEdition: mutation(editionsTable.$nullable())
     .input(deleteEditionInput)
     .resolve(deleteEdition),
+  closeEdition: mutation(editionsTable.$nullable())
+    .input(closeEditionInput)
+    .resolve(resolveWithContext(closeEdition)),
 
   sumUpConfig: query(SumUpConfig).resolve(getSumUpConfig),
 });

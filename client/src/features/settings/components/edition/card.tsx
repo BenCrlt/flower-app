@@ -13,8 +13,12 @@ import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { useEdition } from "@/features/edition/EditionContext";
 import { useUpdateEdition } from "@/features/settings/hooks/useUpdateEdition";
 import type { UpdateEditionMutation } from "@/generated/graphql";
-import { parseEditionDateTime } from "@/utils/DateUtils";
-import { format, parse } from "date-fns";
+import {
+  dateAndTimeToIso,
+  normalizeTimeInput,
+  parseEditionDateTime,
+} from "@/utils/DateUtils";
+import { format } from "date-fns";
 import { Save } from "lucide-react";
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
@@ -39,32 +43,6 @@ function toTimePart(raw: string): string {
   const d = parseEditionDateTime(raw);
   if (!d) return "";
   return format(d, "HH:mm");
-}
-
-/** Accepte par ex. `9:30`, `09:30`, `14:05`. */
-function normalizeTimeInput(timeStr: string): string {
-  const t = timeStr.trim();
-  const m = /^(\d{1,2}):(\d{1,2})$/.exec(t);
-  if (!m) {
-    throw new Error("Heure invalide");
-  }
-  const hh = Number(m[1]);
-  const mm = Number(m[2]);
-  if (hh > 23 || mm > 59) {
-    throw new Error("Heure invalide");
-  }
-  return `${String(hh).padStart(2, "0")}:${String(mm).padStart(2, "0")}`;
-}
-
-/** Combine date + heure locales en ISO UTC pour l’API. */
-function dateAndTimeToIso(dateStr: string, timeStr: string): string {
-  const dPart = dateStr.trim();
-  const tNorm = normalizeTimeInput(timeStr);
-  const d = parse(`${dPart}T${tNorm}`, "yyyy-MM-dd'T'HH:mm", new Date());
-  if (Number.isNaN(d.getTime())) {
-    throw new Error("Date ou heure invalide");
-  }
-  return d.toISOString();
 }
 
 const DATE_TIME_ROW_CLASS = "flex min-w-0 flex-row items-end gap-2";

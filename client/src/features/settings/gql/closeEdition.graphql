@@ -1,0 +1,22 @@
+mutation closeEdition(
+  $editionId: Float!
+  $incomeAdjustment: Float!
+  $nextEditionName: String!
+  $nextEditionStartDate: String!
+  $nextEditionEndDate: String!
+) {
+  closeEdition(
+    editionId: $editionId
+    incomeAdjustment: $incomeAdjustment
+    nextEditionName: $nextEditionName
+    nextEditionStartDate: $nextEditionStartDate
+    nextEditionEndDate: $nextEditionEndDate
+  ) {
+    id
+    name
+    active
+    startDate
+    endDate
+    openingBalance
+  }
+}

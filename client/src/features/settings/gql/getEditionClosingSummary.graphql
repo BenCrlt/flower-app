@@ -1,0 +1,10 @@
+query getEditionClosingSummary($id: Float!) {
+  edition(id: $id) {
+    id
+    openingBalance
+    totalIncome
+    totalExpense
+    totalPrevisionnalIncome
+    totalPrevisionnalExpense
+  }
+}
