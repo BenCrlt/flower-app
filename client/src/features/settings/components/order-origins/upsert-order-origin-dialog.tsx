@@ -34,7 +34,7 @@ export interface UpsertOrderOriginSubmitValues {
 interface UpsertOrderOriginDialogProps {
   open: boolean;
   editionId: number;
-  editingOrigin: { id: number; name: string } | null;
+  editingOrigin: { id: number; name: string; isPhysical: boolean } | null;
   isPending: boolean;
   onOpenChange: (open: boolean) => void;
   onSubmit: (values: UpsertOrderOriginSubmitValues) => void;
@@ -64,6 +64,7 @@ export const UpsertOrderOriginDialog = ({
   });
 
   const budgetLineIds = watch("budgetLineIds");
+  const showBudgetLinesSection = !editingOrigin || editingOrigin.isPhysical;
 
   const { data: budgetLinesData, isSuccess: budgetLinesReady } =
     useGetBudgetLinesQuery({
@@ -72,7 +73,7 @@ export const UpsertOrderOriginDialog = ({
         budgetLineType: LineTypeEnum.Income,
         excludeHelloAsso: true,
       },
-      enabled: open && editionId > 0,
+      enabled: open && editionId > 0 && showBudgetLinesSection,
     });
 
   const { isSuccess: orderOriginReady } = useGetOrderOriginQuery({
@@ -92,7 +93,7 @@ export const UpsertOrderOriginDialog = ({
     },
   });
 
-  const budgetSectionReady = budgetLinesReady;
+  const budgetSectionReady = !showBudgetLinesSection || budgetLinesReady;
   const linkedBudgetLinesReady = !editingOrigin || orderOriginReady;
   const formReady = budgetSectionReady && linkedBudgetLinesReady;
   const showBudgetLinesSpinner =
@@ -151,49 +152,51 @@ export const UpsertOrderOriginDialog = ({
             <FieldError errors={[errors.name]} />
           </Field>
 
-          <FieldGroup>
-            <FieldLabel>Produits à la caisse (recettes)</FieldLabel>
-            <FieldDescription>
-              Choisissez les lignes budgétaires proposées lors des ventes pour
-              ce point de vente (édition en cours, hors HelloAsso).
-            </FieldDescription>
-            {showBudgetLinesSpinner ? (
-              <div className="flex items-center gap-2 py-6 text-muted-foreground">
-                <Spinner />
-                <span className="text-sm">Chargement des lignes…</span>
-              </div>
-            ) : budgetLinesData?.budgetLines.length === 0 ? (
-              <p className="text-sm text-muted-foreground">
-                Aucune ligne de recette disponible pour cette édition.
-              </p>
-            ) : (
-              <div className="max-h-56 space-y-2 overflow-y-auto rounded-md border p-3">
-                {budgetLinesData?.budgetLines.map((line) => {
-                  const checkboxId = `order-origin-budget-line-${line.id}`;
-                  return (
-                    <Field key={line.id} orientation="horizontal">
-                      <Checkbox
-                        id={checkboxId}
-                        checked={budgetLineIds.includes(line.id)}
-                        onCheckedChange={() => toggleBudgetLine(line.id)}
-                      />
-                      <FieldLabel
-                        htmlFor={checkboxId}
-                        className="font-normal leading-snug"
-                      >
-                        <span>{line.name}</span>
-                        {line.category?.name ? (
-                          <span className="block text-xs text-muted-foreground">
-                            {line.category.name}
-                          </span>
-                        ) : null}
-                      </FieldLabel>
-                    </Field>
-                  );
-                })}
-              </div>
-            )}
-          </FieldGroup>
+          {showBudgetLinesSection && (
+            <FieldGroup>
+              <FieldLabel>Produits à la caisse (recettes)</FieldLabel>
+              <FieldDescription>
+                Choisissez les lignes budgétaires proposées lors des ventes
+                pour ce point de vente (édition en cours, hors HelloAsso).
+              </FieldDescription>
+              {showBudgetLinesSpinner ? (
+                <div className="flex items-center gap-2 py-6 text-muted-foreground">
+                  <Spinner />
+                  <span className="text-sm">Chargement des lignes…</span>
+                </div>
+              ) : budgetLinesData?.budgetLines.length === 0 ? (
+                <p className="text-sm text-muted-foreground">
+                  Aucune ligne de recette disponible pour cette édition.
+                </p>
+              ) : (
+                <div className="max-h-56 space-y-2 overflow-y-auto rounded-md border p-3">
+                  {budgetLinesData?.budgetLines.map((line) => {
+                    const checkboxId = `order-origin-budget-line-${line.id}`;
+                    return (
+                      <Field key={line.id} orientation="horizontal">
+                        <Checkbox
+                          id={checkboxId}
+                          checked={budgetLineIds.includes(line.id)}
+                          onCheckedChange={() => toggleBudgetLine(line.id)}
+                        />
+                        <FieldLabel
+                          htmlFor={checkboxId}
+                          className="font-normal leading-snug"
+                        >
+                          <span>{line.name}</span>
+                          {line.category?.name ? (
+                            <span className="block text-xs text-muted-foreground">
+                              {line.category.name}
+                            </span>
+                          ) : null}
+                        </FieldLabel>
+                      </Field>
+                    );
+                  })}
+                </div>
+              )}
+            </FieldGroup>
+          )}
 
           <DialogFooter>
             <Button

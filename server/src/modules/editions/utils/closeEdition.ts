@@ -10,7 +10,7 @@ import {
 } from "../../../db/schema/index.js";
 import { getUnknownCategory } from "../../budget/utils/getUnknownCategory.js";
 import { AppGraphQLContext } from "../../graphql/context.js";
-import { getClosureOrigin } from "../../sale/utils/getClosureOrigin.js";
+import { getUnknownOrigin } from "../../sale/utils/getUnknownOrigin.js";
 import { getTotalExpense } from "./getTotalExpense.js";
 import { loadTotalIncome } from "./getTotalncome.js";
 
@@ -56,11 +56,11 @@ export async function closeEdition(
 
   const unknownCategory =
     incomeAdjustment !== 0 ? await getUnknownCategory() : null;
-  const closureOrigin =
-    incomeAdjustment !== 0 ? await getClosureOrigin() : null;
+  const unknownOrigin =
+    incomeAdjustment !== 0 ? await getUnknownOrigin() : null;
 
   return db.transaction(async (tx) => {
-    if (incomeAdjustment !== 0 && unknownCategory && closureOrigin) {
+    if (incomeAdjustment !== 0 && unknownCategory && unknownOrigin) {
       const [adjustmentBudgetLine] = await tx
         .insert(budgetLinesTable)
         .values({
@@ -84,7 +84,7 @@ export async function closeEdition(
         .insert(ordersTable)
         .values({
           editionId: closedEdition.id,
-          originId: closureOrigin.id,
+          originId: unknownOrigin.id,
           authorId,
           paymentMethod: "cash",
         })

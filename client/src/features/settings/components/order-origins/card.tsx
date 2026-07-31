@@ -26,6 +26,7 @@ export const OrderOriginsCard = () => {
   const [editingOrigin, setEditingOrigin] = useState<{
     id: number;
     name: string;
+    isPhysical: boolean;
   } | null>(null);
   const [deletingOrigin, setDeletingOrigin] = useState<{
     id: number;
@@ -79,7 +80,11 @@ export const OrderOriginsCard = () => {
     setIsFormOpen(true);
   };
 
-  const handleEditClick = (origin: { id: number; name: string }) => {
+  const handleEditClick = (origin: {
+    id: number;
+    name: string;
+    isPhysical: boolean;
+  }) => {
     setEditingOrigin(origin);
     setIsFormOpen(true);
   };
