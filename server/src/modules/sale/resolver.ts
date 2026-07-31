@@ -89,10 +89,12 @@ export const orderOriginResolver = resolver.of(orderOriginsTable, {
     .resolve(deleteOrderOrigin),
 
   budgetLines: field(budgetLinesTable.$list())
+    .input(z.object({ editionId: z.number().min(1) }))
     .derivedFrom("id")
-    .load(async (orderOrigins) =>
+    .load(async (orderOrigins, { editionId }) =>
       loadBudgetLinesFromOrderOrigin(
         orderOrigins.map((orderOrigin) => orderOrigin.id),
+        editionId,
       ),
     ),
 });

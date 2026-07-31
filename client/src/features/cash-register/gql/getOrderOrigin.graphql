@@ -1,9 +1,9 @@
-query getOrderOrigin($id: Float!) {
+query getOrderOrigin($id: Float!, $editionId: Float!) {
   orderOrigin(id: $id) {
     id
     name
     isPhysical
-    budgetLines {
+    budgetLines(editionId: $editionId) {
       id
       name
       estimatedUnitPrice

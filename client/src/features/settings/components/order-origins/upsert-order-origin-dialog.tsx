@@ -76,7 +76,7 @@ export const UpsertOrderOriginDialog = ({
     });
 
   const { isSuccess: orderOriginReady } = useGetOrderOriginQuery({
-    variables: { id: editingOrigin?.id ?? 0 },
+    variables: { id: editingOrigin?.id ?? 0, editionId },
     enabled: open && !!editingOrigin?.id,
     onComplete: (data) => {
       const linkedIds =

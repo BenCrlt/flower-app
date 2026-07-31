@@ -136,7 +136,7 @@ type Mutation {
 }
 
 type OrderOriginsItem {
-  budgetLines: [BudgetLinesItem!]!
+  budgetLines(editionId: Float!): [BudgetLinesItem!]!
   id: Int!
   isPhysical: Boolean!
   name: String!
