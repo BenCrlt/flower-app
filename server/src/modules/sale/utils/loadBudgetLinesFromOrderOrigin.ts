@@ -1,18 +1,31 @@
-import { inArray } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 import {
-  BudgetLine,
+  budgetLinesTable,
   orderOriginBudgetLinesTable,
 } from "../../../db/schema/index.js";
 import { db } from "../../../index.js";
+import { BudgetLine } from "../../../db/schema/budget-lines.js";
 
 export async function loadBudgetLinesFromOrderOrigin(
   orderOriginIds: number[],
+  editionId: number,
 ): Promise<BudgetLine[][]> {
-  const budgetLines = await db.query.orderOriginBudgetLinesTable
-    .findMany({
-      where: inArray(orderOriginBudgetLinesTable.orderOriginId, orderOriginIds),
-      with: { budgetLine: true },
+  const budgetLines = await db
+    .select({
+      orderOriginId: orderOriginBudgetLinesTable.orderOriginId,
+      budgetLine: budgetLinesTable,
     })
+    .from(orderOriginBudgetLinesTable)
+    .innerJoin(
+      budgetLinesTable,
+      eq(orderOriginBudgetLinesTable.budgetLineId, budgetLinesTable.id),
+    )
+    .where(
+      and(
+        inArray(orderOriginBudgetLinesTable.orderOriginId, orderOriginIds),
+        eq(budgetLinesTable.editionId, editionId),
+      ),
+    )
     .then((results) =>
       results.reduce(
         (acc, row) =>

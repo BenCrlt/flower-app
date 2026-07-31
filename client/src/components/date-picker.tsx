@@ -31,6 +31,7 @@ interface Props {
   handleSelectDateRange: (dateRange: StrictDateRange) => void;
   maxDate?: Date;
   quickFilters?: DateRangeQuickFilter[];
+  disableFutureDates?: boolean;
 }
 
 export function DateRangePicker({
@@ -38,6 +39,7 @@ export function DateRangePicker({
   handleSelectDateRange,
   maxDate,
   quickFilters,
+  disableFutureDates = true,
 }: Props) {
   const [open, setOpen] = React.useState(false);
 
@@ -85,7 +87,7 @@ export function DateRangePicker({
           onSelect={onSelectDateRange}
           numberOfMonths={2}
           disabled={(date) =>
-            date > new Date() ||
+            (disableFutureDates && date > new Date()) ||
             date < new Date("1900-01-01") ||
             (!!maxDate && date > maxDate)
           }

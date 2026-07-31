@@ -116,6 +116,7 @@ type Mutation {
   addInvoice(authorId: String!, editionId: Float!, name: String!, note: String, payments: [AddInvoicePaymentsInput!]!, status: InvoiceStatus!, totalAmount: Float!, vendorId: Float!, withoutTVA: Boolean): InvoicesItem
   addOrUpdateOrderOrigin(budgetLineIds: [Float!], id: Float, name: String!): OrderOriginsItem
   addOrUpdateVendor(address: String, description: String, email: String, id: Float, name: String!, phone: String): VendorsItem
+  closeEdition(editionId: Float!, incomeAdjustment: Float, nextEditionEndDate: String!, nextEditionName: String!, nextEditionStartDate: String!): EditionsItem
   deleteBudgetCategory(id: Float!): BudgetCategoriesItem
   deleteBudgetLine(id: Float!): BudgetLinesItem
   deleteEdition(id: Float!): EditionsItem
@@ -135,7 +136,7 @@ type Mutation {
 }
 
 type OrderOriginsItem {
-  budgetLines: [BudgetLinesItem!]!
+  budgetLines(editionId: Float!): [BudgetLinesItem!]!
   id: Int!
   isPhysical: Boolean!
   name: String!

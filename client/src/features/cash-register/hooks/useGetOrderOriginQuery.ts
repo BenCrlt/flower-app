@@ -18,7 +18,7 @@ export function useGetOrderOriginQuery({
   onComplete,
 }: UseGetOrderOriginProps) {
   return useQuery({
-    queryKey: ["orderOrigin", variables.id],
+    queryKey: ["orderOrigin", variables.id, variables.editionId],
     queryFn: () =>
       gqlFetch({ document: GetOrderOriginDocument, variables, onComplete }),
     enabled,

@@ -288,7 +288,7 @@ export const CashRegisterContextProvider = ({
   );
 
   const { data: orderOriginData } = useGetOrderOriginQuery({
-    variables: { id: selectedOriginId ?? 0 },
+    variables: { id: selectedOriginId ?? 0, editionId: edition.id },
     enabled: selectedOriginId !== null,
     onComplete: ({ orderOrigin }) => {
       const catalog = buildCatalogFromBudgetLines(

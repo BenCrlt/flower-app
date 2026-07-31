@@ -7,6 +7,7 @@ import {
 } from "@/components/ui/card";
 import { TypographyH3, TypographyP } from "@/components/ui/typography";
 import { AddUserDialog } from "./add-user-dialog";
+import { CloseEditionDialog } from "./close-edition-dialog";
 
 export const DangerZoneCard = () => {
   return (
@@ -24,6 +25,7 @@ export const DangerZoneCard = () => {
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2 w-fit">
           <AddUserDialog />
+          <CloseEditionDialog />
         </div>
       </CardContent>
     </Card>
