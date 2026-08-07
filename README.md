@@ -8,7 +8,7 @@ Pensée pour une équipe bénévole qui organise un festival d'une édition à l
 
 - **Éditions** — une édition active à la fois, avec solde d'ouverture, dates et historique des éditions précédentes.
 - **Budget** — lignes de recettes/dépenses par catégorie, montants estimés vs réalisés, produits à prix libre.
-- **Caisse enregistreuse** — interface de vente tactile par origine (bar, restauration, boutique, billetterie…), paiement espèces et CB via intégration SumUp.
+- **Caisse enregistreuse** — interface de vente tactile par origine (bar, restauration, boutique, billetterie…), paiement espèces/CB.
 - **Ventes** — historique des commandes et des ventes, ventilé par origine et par ligne budgétaire.
 - **Factures & paiements** — suivi des factures fournisseurs (en attente / payée / annulée) avec pièces jointes stockées sur Google Drive.
 - **Tableau de bord** — vue d'ensemble des recettes, dépenses et solde de l'édition en cours.
