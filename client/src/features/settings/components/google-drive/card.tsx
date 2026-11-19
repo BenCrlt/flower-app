@@ -29,11 +29,14 @@ export function GoogleDriveCard() {
   });
 
   const config = data?.googleDriveConfig;
-  const [folderId, setFolderId] = useState("");
+  const remoteFolderId = config?.invoiceFolderId ?? "";
+  const [folderId, setFolderId] = useState(remoteFolderId);
+  const [prevRemoteFolderId, setPrevRemoteFolderId] = useState(remoteFolderId);
 
-  useEffect(() => {
-    setFolderId(config?.invoiceFolderId ?? "");
-  }, [config?.invoiceFolderId]);
+  if (remoteFolderId !== prevRemoteFolderId) {
+    setPrevRemoteFolderId(remoteFolderId);
+    setFolderId(remoteFolderId);
+  }
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
