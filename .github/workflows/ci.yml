@@ -1,0 +1,132 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [master]
+  workflow_dispatch:
+
+# Annule les runs précédents sur la même branche/PR (économise des minutes)
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  # Détecte quelles parties du monorepo ont changé
+  changes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      client: ${{ steps.filter.outputs.client }}
+      server: ${{ steps.filter.outputs.server }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            shared: &shared
+              - '.github/workflows/ci.yml'
+              - '.github/actions/**'
+            client:
+              - *shared
+              - 'client/**'
+            server:
+              - *shared
+              - 'server/**'
+
+  # ---------------------------------------------------------------- client
+
+  client-lint:
+    name: Client · lint
+    needs: changes
+    if: needs.changes.outputs.client == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          workdir: client
+      - run: pnpm lint
+
+  client-build:
+    name: Client · build
+    needs: changes
+    if: needs.changes.outputs.client == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: client
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          workdir: client
+      - run: pnpm build
+
+  # ---------------------------------------------------------------- server
+
+  server-lint:
+    name: Server · lint
+    needs: changes
+    if: needs.changes.outputs.server == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          workdir: server
+      - run: pnpm lint
+
+  server-build:
+    name: Server · build
+    needs: changes
+    if: needs.changes.outputs.server == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: server
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup
+        with:
+          workdir: server
+      - run: pnpm build
+
+  # ---------------------------------------------------------------- gate
+
+  # Job unique à déclarer comme "required check" dans la protection de
+  # branche : il passe si tous les jobs ont réussi OU ont été skippés.
+  # Penser à ajouter ici tout nouveau job.
+  ci-ok:
+    name: CI OK
+    needs:
+      - changes
+      - client-lint
+      - client-build
+      - server-lint
+      - server-build
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Vérifie le résultat des jobs
+        run: |
+          if [[ "${{ contains(needs.*.result, 'failure') || contains(needs.*.result, 'cancelled') }}" == "true" ]]; then
+            echo "Au moins un job a échoué"
+            exit 1
+          fi

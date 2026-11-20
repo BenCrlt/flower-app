@@ -1,32 +1,10 @@
 import { Spinner } from "@/components/ui/spinner";
-import {
-  createContext,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from "react";
+import { useMemo, useState, type ReactNode } from "react";
+import { EditionContext, type EditionBaseInfo } from "./EditionContext";
 import { useGetEditionsQuery } from "./hooks/useGetEditions";
 import { NoEditions } from "./no-editions";
 
 const EDITION_KEY = "edition";
-
-export type EditionBaseInfo = {
-  id: number;
-  name: string;
-  active: boolean;
-  startDate: string;
-  endDate: string;
-  openingBalance: number;
-};
-
-export interface EditionContextValue {
-  edition: EditionBaseInfo;
-  handleSetEdition: (edition: EditionBaseInfo) => void;
-  editions: EditionBaseInfo[];
-}
-
-export const EditionContext = createContext<EditionContextValue | null>(null);
 
 export function EditionProvider({ children }: { children: ReactNode }) {
   const [edition, setEdition] = useState<EditionBaseInfo | null>(() => {
@@ -74,17 +52,4 @@ export function EditionProvider({ children }: { children: ReactNode }) {
       {children}
     </EditionContext.Provider>
   );
-}
-
-export function useEdition(): EditionContextValue {
-  const context = useContext(EditionContext);
-  if (!context) {
-    throw new Error("useEdition must be used within an EditionProvider");
-  }
-
-  if (!context.edition) {
-    throw new Error("useEdition need at least one edition");
-  }
-
-  return context as EditionContextValue;
 }

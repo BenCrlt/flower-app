@@ -9,7 +9,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import { formatPriceToEuros } from "@/utils/PriceUtils";
-import { ReactElement, useEffect, useState } from "react";
+import { ReactElement, useState } from "react";
 
 const MIN_AMOUNT = 0.01;
 const MAX_AMOUNT = 500;
@@ -49,12 +49,16 @@ export function FreePriceAmountSheet({
   onConfirm,
 }: Props): ReactElement {
   const [amountInput, setAmountInput] = useState("");
+  const [prevOpen, setPrevOpen] = useState(open);
 
-  useEffect(() => {
+  // Réinitialise la saisie à chaque ouverture (ajustement pendant le rendu,
+  // cf. https://react.dev/learn/you-might-not-need-an-effect)
+  if (open !== prevOpen) {
+    setPrevOpen(open);
     if (open) {
       setAmountInput("");
     }
-  }, [open]);
+  }
 
   const parsedAmount = parseAmount(amountInput);
   const canConfirm = isValidAmount(parsedAmount);

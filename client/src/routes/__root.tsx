@@ -4,7 +4,7 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar";
-import { EditionProvider } from "@/features/edition/EditionContext";
+import { EditionProvider } from "@/features/edition/EditionProvider";
 import { authClient } from "@/lib/auth-client";
 import {
   createRootRoute,

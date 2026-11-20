@@ -6,7 +6,7 @@ import { useEdition } from "@/features/edition/EditionContext";
 import { BudgetCategoriesItem, GetOrdersQuery } from "@/generated/graphql";
 import { ColumnDef } from "@tanstack/react-table";
 import { subMonths } from "date-fns";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { getColumns, SalesTableRow } from "../components/columns";
 import {
   filterSalesForChart,
@@ -65,9 +65,9 @@ export function useSalesPanel(): UseSalesPanelResult {
   const { edition } = useEdition();
   const [originIdsFilter, setOriginIdsFilter] = useState<number[]>([]);
   const [selectedCategoryIds, setSelectedCategoryIds] = useState<number[]>([]);
-  const [selectedBudgetLineIds, setSelectedBudgetLineIds] = useState<number[]>(
-    [],
-  );
+  const [rawSelectedBudgetLineIds, setSelectedBudgetLineIds] = useState<
+    number[]
+  >([]);
   const [dateRange, setDateRange] = useState<StrictDateRange>({
     from: subMonths(new Date(), 2),
     to: new Date(),
@@ -84,7 +84,7 @@ export function useSalesPanel(): UseSalesPanelResult {
     },
   });
 
-  const orders = data?.orders ?? [];
+  const orders = useMemo(() => data?.orders ?? [], [data]);
 
   const handleSelectOrigin = (originId: number, checked: boolean) => {
     setOriginIdsFilter((previous) => {
@@ -164,16 +164,15 @@ export function useSalesPanel(): UseSalesPanelResult {
     );
   }, [orders, selectedCategoryIds]);
 
-  useEffect(() => {
-    setSelectedBudgetLineIds((previous) => {
-      if (!previous.length) {
-        return previous;
-      }
-      const validIds = new Set(articleOptions.map((article) => article.id));
-      const next = previous.filter((id) => validIds.has(id));
-      return next.length === previous.length ? previous : next;
-    });
-  }, [articleOptions]);
+  // Ne garde que les articles encore proposés (dérivé, plutôt qu'un effet
+  // qui corrige l'état après coup)
+  const selectedBudgetLineIds = useMemo(() => {
+    if (!rawSelectedBudgetLineIds.length) {
+      return rawSelectedBudgetLineIds;
+    }
+    const validIds = new Set(articleOptions.map((article) => article.id));
+    return rawSelectedBudgetLineIds.filter((id) => validIds.has(id));
+  }, [rawSelectedBudgetLineIds, articleOptions]);
 
   const chartFilteredSales = useMemo(
     () =>
@@ -204,7 +203,7 @@ export function useSalesPanel(): UseSalesPanelResult {
 
   const dateRangeQuickFilters = useMemo<DateRangeQuickFilter[]>(
     () => buildSalesDateRangeQuickFilters(edition),
-    [edition.endDate, edition.startDate],
+    [edition],
   );
 
   return {
