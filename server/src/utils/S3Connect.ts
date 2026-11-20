@@ -36,7 +36,7 @@ export class S3Connect {
       });
       return await this.client.send(command);
     } catch (e: unknown) {
-      throw new Error("AWS SDK error - PutFile" + e);
+      throw new Error("AWS SDK error - PutFile" + e, { cause: e });
     }
   }
 
