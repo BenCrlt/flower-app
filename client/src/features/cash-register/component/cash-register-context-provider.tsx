@@ -201,11 +201,11 @@ export const CashRegisterContextProvider = ({
     [persistCartLines],
   );
 
-  function clearCart() {
+  const clearCart = useCallback(() => {
     setCartLines([]);
     setSelectedCategory(null);
     localStorage.setItem(cartStorageKey, JSON.stringify([]));
-  }
+  }, [cartStorageKey]);
 
   const { mutate: validateOrder } = useValidateOrderMutation({
     onError: (error) => {
@@ -424,7 +424,7 @@ export const CashRegisterContextProvider = ({
         localStorage.removeItem(CASH_REGISTER_ORIGIN_ID_KEY);
       }
     },
-    [selectedOriginId],
+    [selectedOriginId, clearCart],
   );
 
   const onValidateOrder = useCallback(
