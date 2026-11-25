@@ -114,8 +114,7 @@ export const CashRegisterContextProvider = ({
 
     try {
       const parsed = JSON.parse(storedCartRaw) as
-        | StoredCartLine[]
-        | LegacyStoredCartItem[];
+        StoredCartLine[] | LegacyStoredCartItem[];
 
       if (!Array.isArray(parsed)) {
         return [];
