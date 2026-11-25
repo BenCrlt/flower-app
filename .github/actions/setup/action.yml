@@ -1,0 +1,29 @@
+name: Setup pnpm + install
+description: Installe pnpm et Node, restaure le cache pnpm et installe les dépendances d'un sous-projet.
+
+inputs:
+  workdir:
+    description: Dossier du sous-projet
+    required: true
+  node-version:
+    description: Version de Node.js
+    required: false
+    default: "24"
+
+runs:
+  using: composite
+  steps:
+    - uses: pnpm/action-setup@v4
+      with:
+        package_json_file: ${{ inputs.workdir }}/package.json
+
+    - uses: actions/setup-node@v4
+      with:
+        node-version: ${{ inputs.node-version }}
+        cache: pnpm
+        cache-dependency-path: ${{ inputs.workdir }}/pnpm-lock.yaml
+
+    - name: Install dependencies
+      shell: bash
+      working-directory: ${{ inputs.workdir }}
+      run: pnpm install --frozen-lockfile

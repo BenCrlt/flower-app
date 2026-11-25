@@ -22,7 +22,7 @@ interface Props {
   editingCategory?: GetBudgetCategoriesQuery["budgetCategories"][number];
 }
 
-export const DEFAULT_CATEGORY = {
+const DEFAULT_CATEGORY = {
   name: "",
   color: "#3b82f6",
 };

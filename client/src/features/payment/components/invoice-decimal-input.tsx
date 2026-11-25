@@ -1,11 +1,5 @@
 import { Input } from "@/components/ui/input";
-import {
-  ComponentProps,
-  ReactElement,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { ComponentProps, ReactElement, useState } from "react";
 
 const PARTIAL_DECIMAL_PATTERN = /^\d*[,.]?\d*$/;
 
@@ -42,16 +36,22 @@ export function InvoiceDecimalInput({
   value,
   onChange,
   inputMode,
+  onFocus,
+  onBlur,
   ...props
 }: Props): ReactElement {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [text, setText] = useState(() => formatDecimalValue(value));
+  const [prevValue, setPrevValue] = useState(value);
+  const [isFocused, setIsFocused] = useState(false);
 
-  useEffect(() => {
-    if (inputRef.current !== document.activeElement) {
+  // Resynchronise le texte quand la valeur change de l'extérieur, sauf
+  // pendant la saisie (ajustement pendant le rendu plutôt qu'un effet)
+  if (value !== prevValue) {
+    setPrevValue(value);
+    if (!isFocused) {
       setText(formatDecimalValue(value));
     }
-  }, [value]);
+  }
 
   const commitValue = (raw: string) => {
     const parsed = parseDecimalValue(raw);
@@ -66,7 +66,6 @@ export function InvoiceDecimalInput({
 
   return (
     <Input
-      ref={inputRef}
       type="text"
       inputMode={inputMode}
       value={text}
@@ -85,8 +84,16 @@ export function InvoiceDecimalInput({
           onChange(parsed);
         }
       }}
-      onBlur={() => commitValue(text)}
       {...props}
+      onFocus={(e) => {
+        setIsFocused(true);
+        onFocus?.(e);
+      }}
+      onBlur={(e) => {
+        setIsFocused(false);
+        commitValue(text);
+        onBlur?.(e);
+      }}
     />
   );
 }
